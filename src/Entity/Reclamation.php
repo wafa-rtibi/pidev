@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ReclamationRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
@@ -15,25 +16,25 @@ class Reclamation
     private ?int $id ;
 
     #[ORM\Column(length: 255)]
+    #} #[Assert\DateTime(message: 'This value is not a valid datetime')]{#}
     private ?DateTime $date_reclamation ;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message:"is required")]
     private ?string $objet_reclamation ;
 
     #[ORM\Column(length: 2000)]
+    #[Assert\NotBlank(message:"is required")]
+    #[Assert\Length(max: 2000, maxMessage: "La description ne doit pas dépasse 2000 caractères")]
     private ?string $description_reclamation ;
 
-    #[ORM\Column(length: 255)]
-    private ?string $statut_reclamation ;
 
-    #[ORM\Column(length: 255)]
-    private ?string $reponse_reclamation ;
-
-    #[ORM\Column(length: 255)]
-    private ?DateTime $date_reponse ;
 
     #[ORM\ManyToOne(inversedBy: 'reclamations')]
     private ?Utilisateur $reclamateur ;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $statut_reclamation = null;
 
     public function getId(): ?int
     {
@@ -57,7 +58,7 @@ class Reclamation
         return $this->objet_reclamation;
     }
 
-    public function setObjetReclamation(string $objet_reclamation): static
+    public function setObjetReclamation(?string $objet_reclamation): self
     {
         $this->objet_reclamation = $objet_reclamation;
 
@@ -76,42 +77,6 @@ class Reclamation
         return $this;
     }
 
-    public function getStatutReclamation(): ?string
-    {
-        return $this->statut_reclamation;
-    }
-
-    public function setStatutReclamation(string $statut_reclamation): static
-    {
-        $this->statut_reclamation = $statut_reclamation;
-
-        return $this;
-    }
-
-    public function getReponseReclamation(): ?string
-    {
-        return $this->reponse_reclamation;
-    }
-
-    public function setReponseReclamation(string $reponse_reclamation): static
-    {
-        $this->reponse_reclamation = $reponse_reclamation;
-
-        return $this;
-    }
-
-    public function getDateReponse(): ?DateTime
-    {
-        return $this->date_reponse;
-    }
-
-    public function setDateReponse(DateTime $date_reponse): static
-    {
-        $this->date_reponse = $date_reponse;
-
-        return $this;
-    }
-
     public function getReclamateur(): ?Utilisateur
     {
         return $this->reclamateur;
@@ -120,6 +85,18 @@ class Reclamation
     public function setReclamateur(?Utilisateur $reclamateur): static
     {
         $this->reclamateur = $reclamateur;
+
+        return $this;
+    }
+
+    public function getStatutReclamation(): ?string
+    {
+        return $this->statut_reclamation;
+    }
+
+    public function setStatutReclamation(?string $statut_reclamation): static
+    {
+        $this->statut_reclamation = $statut_reclamation;
 
         return $this;
     }

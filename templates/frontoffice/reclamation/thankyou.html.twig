@@ -1,12 +1,12 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
 <!-- Start Hero Section -->
-			<div class="hero">
+			{# <div class="hero">
 				<div class="container">
 					<div class="row justify-content-between">
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
-								<h1>Cart</h1>
+								<h1></h1>
 							</div>
 						</div>
 						<div class="col-lg-7">
@@ -14,7 +14,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			</div> #}
 		<!-- End Hero Section -->
 
 		
@@ -30,8 +30,8 @@
             </svg>
           </span>
           <h2 class="display-3 text-black">Thank you!</h2>
-          <p class="lead mb-5">You order was successfuly completed.</p>
-          <p><a href="shop.html" class="btn btn-sm btn-outline-black">Back to shop</a></p>
+          <p class="lead mb-5">Thank you for submitting your reclamation! We appreciate your commitment to improving sustainability and environmental responsibility</p>
+          <p><a href="{{path('app_home')}}" class="btn btn-sm btn-outline-black">Back to Home</a></p>
         </div>
       </div>
     </div>
