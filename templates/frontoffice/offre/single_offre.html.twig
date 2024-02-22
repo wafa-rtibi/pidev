@@ -42,12 +42,20 @@
 							<li><strong> Publication Date : </strong>	{{ offre.getDatePublication()|date('Y-m-d H:i:s') }} </li>
 							<li><strong> Posted By : </strong> {{offreur.getNom()}}</li>
 						</ul> 
-                        {% if mine == false %}
-                        	<a class="btn" href="{{path('app_demande_send',{'id_offre': offre.id})}}" >Trade</a>
+                        {% if mine == false  %}
+						
+						     {% if msg == true %}
+							       <a class="btn" href="#" >Already sended</a>
+								  {% else %}
+										<a class="btn" href="{{path('app_demande_send',{'id_offre': offre.id})}}" >Trade</a>
+							 {% endif %}
+							 
+						{% endif %}
+						
                         
-						<a href="{{path('app_chat')}}" class="btn">To negotiate</a>
-                        {% endif %}
                         
+						
+                       
 					
 					</div>
 				</div>

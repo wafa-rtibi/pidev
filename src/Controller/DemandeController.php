@@ -22,7 +22,7 @@ class DemandeController extends AbstractController
 
     #[Route('/demande/recu/{update}', name: 'app_demande_recu')]
 
-    public function afficherDemandeRecu(UtilisateurRepository $repo, DemandeOffreRepository $rep,$update): Response
+    public function afficherDemandeRecu(UtilisateurRepository $repo, DemandeOffreRepository $rep,$update,ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
 
@@ -44,7 +44,13 @@ class DemandeController extends AbstractController
             foreach ($demandes_recu as $demande) {
                 if($demande->getStatut() == 'refusé' ) {
                     unset($demandes_recu[array_search($demande, $demandes_recu)]);
+                    $em=$doctrine->getManager();
+                    $em->remove($demande);
+                    $em->flush();
+
+                    
             }}
+
         }
 
         return $this->render('frontoffice/offre/demandeRecuList.html.twig', [
@@ -57,7 +63,7 @@ class DemandeController extends AbstractController
 
     #[Route('/demande/envoye/{update}', name: 'app_demande_envoye')]
 
-    public function afficherDemandeEnvoye(UtilisateurRepository $repo, DemandeOffreRepository $rep,$update): Response
+    public function afficherDemandeEnvoye(UtilisateurRepository $repo, DemandeOffreRepository $rep,$update,ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
 
@@ -70,15 +76,20 @@ class DemandeController extends AbstractController
 
         $demandes = $current_user->getDemandeOffres();
         $demandes= $demandes->toArray();
-
+        $message="";
         if($update=="true"){
             foreach ($demandes as $demande) {
                 if($demande->getStatut() == 'refusé' ) {
                     unset($demandes[array_search($demande,$demandes)]);
+                    $em=$doctrine->getManager();
+                    $em->remove($demande);
+                    $em->flush();
+
             }}
         }
         return $this->render('frontoffice/offre/demandeEnvoyeList.html.twig', [
             'demansesEnvoye' => $demandes,
+            
         ]);
     }
 
@@ -129,7 +140,7 @@ class DemandeController extends AbstractController
 
     #[Route('/demande/send/{id_offre}', name: 'app_demande_send')]
 
-    public function sendDemande($id_offre, ManagerRegistry $doctrine, UtilisateurRepository $rep): Response
+    public function sendDemande($id_offre, ManagerRegistry $doctrine, UtilisateurRepository $rep,DemandeOffreRepository $repo): Response
     {
         $demande = new DemandeOffre();
         $user = $this->getUser();
@@ -140,7 +151,9 @@ class DemandeController extends AbstractController
         }
         $offre = $doctrine->getRepository(Offre::class)->find($id_offre);
         $demandeur = $rep->findOneByEmail($email);
-        //l'ajout 
+     
+       
+              //l'ajout 
         $demande->setStatut('en attende');
         $demande->setDateCreation(new DateTime());
         $demande->setOffre($offre);
@@ -150,12 +163,14 @@ class DemandeController extends AbstractController
         $em->flush();
 
         $demandeur->addDemandeOffre($demande);
+       
+        
+      
 
 
         return $this->render('frontoffice/offre/demandeEnvoyeList.html.twig', [
-            'demande' => $demande,
-            'offre' => $offre,
-        ]);
+            'demandes' => $demande,
+            'offre' => $offre,]);
     }
 
    

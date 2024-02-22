@@ -10,6 +10,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\OffreType;
 use App\Entity\Offre;
+use App\Repository\DemandeOffreRepository;
 use App\Repository\OffreRepository;
 use App\Repository\UtilisateurRepository;
 use App\Service\WordFilterService;
@@ -59,7 +60,7 @@ class OffreController extends AbstractController
         // $offreur = $doctrine->getRepository(Utilisateur::class)->find($id);
         $form = $this->createForm(OffreType::class, $offre);
         $form->handleRequest($req);
-       
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             // houni filtrage des mauvaises mots b service eli sna3tou
@@ -134,12 +135,12 @@ class OffreController extends AbstractController
         }
 
         $offreur = $rep->findOneByEmail($email);
-    
-       
+
+
         $offre = $repo->findByUserAndOffre($id_offre, $offreur->getId());
         $offre = $offre[0];
 
-      
+
         // houni ki maydakhalech des images jdod yqodou el qdom mawwjoudin
         $image1 = $offre->getImageFile1();
         $image2 = $offre->getImageFile2();
@@ -237,9 +238,9 @@ class OffreController extends AbstractController
 
     //afficher un seule offre
     #[Route('/offre/single/{id_offre}', name: 'app_offre_details')]
-    public function afficherDetailsOffre( $id_offre, OffreRepository $rep,UtilisateurRepository $repo): Response
+    public function afficherDetailsOffre($id_offre, OffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi): Response
     {
-        $mine=false;
+        $mine = false;
         $user = $this->getUser();
 
         if ($user) {
@@ -248,18 +249,27 @@ class OffreController extends AbstractController
         }
 
         $user = $repo->findOneByEmail($email);
-         
+
         $offre = $rep->find($id_offre);
 
-        $offreur=$offre->getOffreur();
-        
+        $offreur = $offre->getOffreur();
 
-        if($offreur->getId()== $user->getId()) $mine=true;
+
+        if ($offreur->getId() == $user->getId()) $mine = true;
+        //tester si la demande deja envoye
+        $existe = $repi->findIfSended($offre->getId(), $user->getId());
+
+        if ($existe) {
+            $message = true;
+        } else {
+            $message = false;
+        }
 
         return $this->render('frontoffice/offre/single_offre.html.twig', [
             'offre' => $offre,
-            'mine'=>$mine,
-            'offreur'=>$offreur,
+            'mine' => $mine,
+            'offreur' => $offreur,
+            'msg' => $message,
         ]);
     }
 

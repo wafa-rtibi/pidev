@@ -37,13 +37,17 @@ class DemandeOffreRepository extends ServiceEntityRepository
        ;
    }
 
-//    public function findOneBySomeField($value): ?DemandeOffre
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findIfSended($id_offre, $id_demandeur): ?array
+{
+    return $this->createQueryBuilder('d')
+        ->leftJoin('d.offre', 'o')
+        ->leftJoin('d.demandeur', 'u')
+        ->andWhere('o.id = :id_offre')
+        ->andWhere('u.id = :id_demandeur')
+        ->setParameter('id_offre', $id_offre)
+        ->setParameter('id_demandeur', $id_demandeur)
+        ->getQuery()
+        ->getResult();
+}
+
 }
