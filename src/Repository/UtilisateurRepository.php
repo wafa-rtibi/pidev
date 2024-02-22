@@ -45,4 +45,24 @@ class UtilisateurRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+
+
+public function findOneById($id): ?Utilisateur
+{
+    return $this->createQueryBuilder('u')
+        ->andWhere('u.id = :id')
+        ->setParameter('id', $id)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+}
+
+
+public function search():array{
+    return $this->findAll();
+}
+
+
 }
