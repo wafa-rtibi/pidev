@@ -14,8 +14,8 @@ class DemandeOffre
     #[ORM\Column]
     private ?int $id ;
 
-    #[ORM\Column(length: 255)]
-    private ?bool $statut = false;
+    #[ORM\Column()]
+    private ?string $statut ="en attende";
 
     #[ORM\Column(length: 255)]
     private ?DateTime $date_creation ;
@@ -23,24 +23,27 @@ class DemandeOffre
     #[ORM\ManyToOne(inversedBy: 'demandes')]
     private ?Offre $offre ;
 
+    #[ORM\ManyToOne(inversedBy: 'demandeOffres')]
+    private ?Utilisateur $demandeur = null;
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getStatut(): ?bool
+    public function getStatut(): ?string
     {
         return $this->statut;
     }
 
-    public function setStatut(bool $statut): static
+    public function setStatut(string $statut): static
     {
         $this->statut = $statut;
 
         return $this;
     }
 
-    public function getDateCreation(): ?DateTime
+    public function getDateCreation()
     {
         return $this->date_creation;
     }
@@ -60,6 +63,18 @@ class DemandeOffre
     public function setOffre(?Offre $offre): static
     {
         $this->offre = $offre;
+
+        return $this;
+    }
+
+    public function getDemandeur(): ?Utilisateur
+    {
+        return $this->demandeur;
+    }
+
+    public function setDemandeur(?Utilisateur $demandeur): static
+    {
+        $this->demandeur = $demandeur;
 
         return $this;
     }

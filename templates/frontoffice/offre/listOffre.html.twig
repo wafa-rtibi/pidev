@@ -1,0 +1,108 @@
+{#Houni bech na3mel Pagination lel page #}
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>Offers</h1>
+					</div>
+				</div>
+
+				{# search bar #}
+
+				<div class="container">
+
+					<div class="row height d-flex justify-content-center align-items-center">
+
+						<div class="col-md-6">
+
+							<div class="form searchBar">
+								<i class="fa fa-search"></i>
+								<form action="{{ path('app_all_offre') }}" method="get">
+									<input type="text" name='searchTerm' class="form-control form-input" placeholder="Search username,adresse,offername...">
+								</form>
+								<span class="left-pan">
+									<i class="fa fa-microphone"></i>
+								</span>
+							</div>
+
+							<div class="dropdown">
+								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+									Categories
+								</button>
+								<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+									<li>
+										<button class="dropdown-item" type="button">Action</button>
+									</li>
+									<li>
+										<button class="dropdown-item" type="button">Another action</button>
+									</li>
+									<li>
+										<button class="dropdown-item" type="button">Something else here</button>
+									</li>
+								</ul>
+							</div>
+
+
+						</div>
+
+
+					</div>
+
+				</div>
+
+				{# end search bar#}
+			</div>
+		</div>
+	</div>
+	<!-- End Hero Section -->
+
+
+	<div class="untree_co-section product-section before-footer-section">
+		<div class="container">
+			<div
+				class="row">
+
+				{#Boucles For#}
+
+				{% if pagination is empty %}
+					<h1>
+						<strong>Oppss Pas Des Offres Actuellement</strong>
+					</h1>
+				{% else %}
+					{% for offre in pagination %}
+
+						<!-- Start Column 1 -->
+						<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offre_details',{'id_offre': offre.id})}}">
+								<img src="{{asset('/uploads/images/offres/' ~ offre.image1)}}" class="img-fluid product-thumbnail"/>
+								<h3 class="product-title">{{offre.nom}}</h3>
+								<strong class="product-price">{{offre.categorie}}</strong>
+								<span class="icon-cross">
+									<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+								</span>
+							</a>
+						</div>
+						<!-- End Column 1 -->
+
+					{% endfor %}
+				{% endif %}
+
+				{#start Pagination#}
+	
+			{{ knp_pagination_render(pagination) }}
+	
+	{#end Pagination#}
+
+
+			</div>
+		</div>
+		
+	</div>
+
+	
+{% endblock %}

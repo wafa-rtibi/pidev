@@ -7,9 +7,14 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
+
+#[UniqueEntity(fields:"email", message:"There is already an account with this email")]
 #[ORM\Entity(repositoryClass: UtilisateurRepository::class)]
-class Utilisateur
+class Utilisateur implements UserInterface ,PasswordAuthenticatedUserInterface
 {
     
     #[ORM\Id]
@@ -24,16 +29,16 @@ class Utilisateur
     #[ORM\Column(length: 255)]
     private ?string $prenom ;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 180,unique: true)]
     private ?string $email ;
 
     #[ORM\Column(length: 255)]
     private ?string $mdp ;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?DateTime $date_inscription ;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $photo_profil ;
 
     #[ORM\OneToMany(targetEntity: Dons::class, mappedBy: 'donateur')]
@@ -66,10 +71,10 @@ class Utilisateur
     #[ORM\Column(length: 255)]
     private ?int $tel ;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?int $note = 0;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $statut = "débutant";
 
 
@@ -77,16 +82,29 @@ class Utilisateur
     #[ORM\Column(length: 255)]
     private ?array $role = ["utilisateur"];
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?bool $isActive = false;
 
   
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255,nullable:true)]
     private ?string $salt = null;
+
+
+    #[ORM\Column(type: 'boolean',nullable:true)]
+    private $is_verified = false;
+
+    #[ORM\Column(type: 'string', length: 100, nullable: true)]
+    private $resetToken;
 
     #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'participants')]
     private Collection $evenements;
+
+    #[ORM\OneToMany(mappedBy: 'demandeur', targetEntity: DemandeOffre::class)]
+    private Collection $demandeOffres;
+
+    #[ORM\ManyToMany(targetEntity: Offre::class, mappedBy: 'favoris')]
+    private Collection $favoris_offres;
  
     public function __construct()
     {
@@ -97,6 +115,8 @@ class Utilisateur
         $this->blogs = new ArrayCollection();
         $this->intearactionBlog = new ArrayCollection();
         $this->evenements = new ArrayCollection();
+        $this->demandeOffres = new ArrayCollection();
+        $this->favoris_offres = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -476,6 +496,121 @@ class Utilisateur
 
         return $this;
     }
+ 
 
-   
+
+    // hedhouma les methodes mta3 UserInterface :
+
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    public function getRoles(): array
+    {
+       $role= $this->role;
+        $role[]='Utilisateur';
+        return array_unique($role); // array-unique traja3 tableau sans redandance 
+
+    }
+
+    public function getPassword(): string
+    {
+        return (string) $this->mdp;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getUsername(): string
+    {
+        return (string) $this->nom;
+    }
+  // hedhouma besh nest7aqhom fi auth
+ 
+    public function getIsVerified(): ?bool
+    {
+        return $this->is_verified;
+    }
+
+    public function setIsVerified(bool $is_verified): self
+    {
+        $this->is_verified = $is_verified;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->resetToken;
+    }
+
+    public function setResetToken(?string $resetToken): self
+    {
+        $this->resetToken = $resetToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DemandeOffre>
+     */
+    public function getDemandeOffres(): Collection
+    {
+        return $this->demandeOffres;
+    }
+
+    public function addDemandeOffre(DemandeOffre $demandeOffre): static
+    {
+        if (!$this->demandeOffres->contains($demandeOffre)) {
+            $this->demandeOffres->add($demandeOffre);
+            $demandeOffre->setDemandeur($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemandeOffre(DemandeOffre $demandeOffre): static
+    {
+        if ($this->demandeOffres->removeElement($demandeOffre)) {
+            // set the owning side to null (unless already changed)
+            if ($demandeOffre->getDemandeur() === $this) {
+                $demandeOffre->setDemandeur(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Offre>
+     */
+    public function getFavorisOffres(): Collection
+    {
+        return $this->favoris_offres;
+    }
+
+    public function addFavorisOffre(Offre $favorisOffre): static
+    {
+        if (!$this->favoris_offres->contains($favorisOffre)) {
+            $this->favoris_offres->add($favorisOffre);
+            $favorisOffre->addFavori($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFavorisOffre(Offre $favorisOffre): static
+    {
+        if ($this->favoris_offres->removeElement($favorisOffre)) {
+            $favorisOffre->removeFavori($this);
+        }
+
+        return $this;
+    }
+
+  
 }

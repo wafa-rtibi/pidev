@@ -21,28 +21,104 @@ class OffreRepository extends ServiceEntityRepository
         parent::__construct($registry, Offre::class);
     }
 
-//    /**
-//     * @return Offre[] Returns an array of Offre objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('o.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return Offre[] Returns an array of Offre objects
+    //     */
+    public function findByUser($id): array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.offreur', 'u')
+            ->addSelect('u')
+            ->where('u.id = :val')
+            ->setParameter('val', $id)
+            ->orderBy('o.date_publication', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
-//    public function findOneBySomeField($value): ?Offre
-//    {
-//        return $this->createQueryBuilder('o')
-//            ->andWhere('o.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function findByUserAndOffre($id_offre, $id_user): ?array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.offreur', 'u')
+            ->addSelect('u')
+            ->where('u.id = :val2')
+            ->andWhere('o.id = :val1')
+            ->setParameter('val1', $id_offre)
+            ->setParameter('val2', $id_user)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findAllNotReserved(): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.etat = :etat')
+            ->setParameter('etat', 'publié')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    public function findByCategory($category): array
+    {
+        return $this->createQueryBuilder('o')
+            ->andWhere('o.categorie = :val')
+            ->setParameter('val', $category)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function paginationQuery()
+    {
+        return $this->createQueryBuilder('o')
+            ->orderBy('o.id','ASC')
+            ->getQuery(); //retourne une query de doctrine
+        
+    }
+
+
+    public function search($text): array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.offreur', 'u')
+            ->addSelect('u')
+            //nom
+            ->Where('o.nom LIKE :a')
+            ->orWhere('o.nom LIKE :b')
+            ->orWhere('o.nom LIKE :c')
+            ->orWhere('o.nom LIKE :d')
+            //description
+            ->orWhere('o.description LIKE :a')
+            ->orWhere('o.description LIKE :b')
+            ->orWhere('o.description LIKE :c')
+            ->orWhere('o.description LIKE :d')
+            //username
+            ->orWhere('u.nom LIKE :a')
+            ->orWhere('u.nom LIKE :b')
+            ->orWhere('u.nom LIKE :c')
+            ->orWhere('u.nom LIKE :d')
+            //prenom
+            ->orWhere('u.prenom LIKE :a')
+            ->orWhere('u.prenom LIKE :b')
+            ->orWhere('u.prenom LIKE :c')
+            ->orWhere('u.prenom LIKE :d')
+            //email
+            ->orWhere('u.email LIKE :a')
+            ->orWhere('u.email LIKE :b')
+            ->orWhere('u.email LIKE :c')
+            ->orWhere('u.email LIKE :d')
+            //addresse
+            ->orWhere('u.adresse LIKE :a')
+            ->orWhere('u.adresse LIKE :b')
+            ->orWhere('u.adresse LIKE :c')
+            ->orWhere('u.adresse LIKE :d')
+
+            ->setParameter('a', $text)
+            ->setParameter('b', $text . '%') //start with
+            ->setParameter('c', '%' . $text) //end with 
+            ->setParameter('d', '%' . $text . '%') // contient
+            ->getQuery()
+            ->getResult();
+    }
 }

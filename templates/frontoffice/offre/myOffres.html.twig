@@ -1,0 +1,92 @@
+{% extends "base_front.html.twig" %}
+{% block body %}
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<br>
+						<br>
+						<h1>My Offers
+						</h1>
+						<br>
+						<br>
+
+					</div>
+				</div>
+				<div class="col-lg-7">
+					<div class="hero-img-wrap">
+						<img src="{{asset('frontoffice/images/offres.png')}}" class="img-fluid">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Hero Section -->
+	<div class="untree_co-section product-section before-footer-section">
+		<div class="container">
+			<div class="row">
+
+
+				{% if offres is empty %}
+					<div>Oppss Pas Des Offres Actuellement</div>
+				{% else %}
+					{% for offre in offres %}
+						<!-- Start Column 1 -->
+						<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offre_details',{'id_offre': offre.id})}}">
+								{% if offre.image1 is not null %}
+									<img src="{{asset('/uploads/images/offres/' ~ offre.image1)}}" class="img-fluid product-thumbnail"/>
+								{% endif %}
+								<h3 class="product-title">{{offre.categorie}}</h3>
+								<strong class="product-price">{{offre.nom}}</strong>
+								<div class="delete-update">
+
+									<a href="{{path('app_update_offre',{'id_offre': offre.id})}}">
+										<button class="btn btn-dark">
+											Update
+										</button>
+									</a>
+									<!-- Button trigger modal Delete -->
+									<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+										Delete
+									</button>
+
+									<!-- Modal -->
+									<div class="modal fade " id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-dialog-centered">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="exampleModalLabel">Delete Offer</h5>
+													<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body">
+													Are sure ?
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<a href="{{path('app_delete_offre',{'id_offre': offre.id })}}">
+														<button type="button" class="btn btn-primary">delete</button>
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<span class="icon-cross">
+									<i class="fa-solid fa-angles-right fa-xl" style="color: #ffffff;"></i>
+								</span>
+							</a>
+
+						</div>
+						<!-- End Column 1 -->
+
+					{% endfor %}
+				{% endif %}
+
+				{{ knp_pagination_render(offres) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

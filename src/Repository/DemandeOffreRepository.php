@@ -24,17 +24,18 @@ class DemandeOffreRepository extends ServiceEntityRepository
 //    /**
 //     * @return DemandeOffre[] Returns an array of DemandeOffre objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('d')
-//            ->andWhere('d.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('d.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findByOffre($id): array
+   {
+       return $this->createQueryBuilder('d')
+            ->join('d.offre', 'o')
+            ->addSelect('o')
+           ->andWhere('o.id= :val')
+           ->setParameter('val',$id)
+         
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
 //    public function findOneBySomeField($value): ?DemandeOffre
 //    {

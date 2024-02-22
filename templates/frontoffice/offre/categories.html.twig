@@ -1,0 +1,167 @@
+{% extends "base_front.html.twig" %}
+{% block body %}
+<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>Categories </h1>
+								<p>Choose your favorite category</p>
+								<br>
+								<br>
+							</div>
+						</div>
+							<div class="col-lg-7">
+								<div class="hero-img-wrap">
+									<img src="{{asset('frontoffice/images/search.png')}}" class="img-fluid">
+									
+								</div>
+							</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		<div class="untree_co-section product-section before-footer-section">
+		    <div class="container">
+		      	<div class="row">
+
+		      		<!-- Start Column 1 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<a class="product-item" href="{{path('app_offer_categories',{'category':'Biens matériels'})}}">
+							<img src="https://img.freepik.com/photos-gratuite/arrangement-composition-ustensiles-vue-dessus_23-2149491442.jpg?size=626&ext=jpg&ga=GA1.1.1222169770.1704499200&semt=ais" class="img-fluid product-thumbnail"/>
+							<br>
+							<strong class="product-price"> Biens matériels</strong>
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div> 
+					<!-- End Column 1 -->
+						
+					<!-- Start Column 2 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<a class="product-item" href="{{path('app_offer_categories',{'category':'Aliments et produits agricoles'})}}">
+							<img src="{{asset('frontoffice/images/legumes.jpg')}}"class="img-fluid product-thumbnail">
+							<strong class="product-price">Aliments et produits agricoles</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div> 
+					<!-- End Column 2 -->
+
+					<!-- Start Column 3 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offer_categories',{ 'category':'Services'})}}">
+							<img src="https://img.freepik.com/photos-premium/homme-affaires-touchant-service-ecran_218381-4147.jpg" class="img-fluid product-thumbnail">
+							<strong class="product-price">Services</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 3 -->
+
+					<!-- Start Column 4 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<a class="product-item" href="{{path('app_offer_categories',{ 'category':'Habillement et articles personnels'})}}">
+							<img  src="{{asset('frontoffice/images/vetements.jpg')}}"class="img-fluid product-thumbnail">
+							<strong class="product-price">Habillement et articles personnels</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 4 -->
+
+
+					<!-- Start Column 1 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offer_categories',{'category':'Articles ménagers'})}}">
+							<img src="https://img.freepik.com/photos-premium/appareils-menagers-cuisine-table-dans-cuisine_392895-201824.jpg" class="img-fluid product-thumbnail">
+							<strong class="product-price">Articles ménagers</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div> 
+					<!-- End Column 1 -->
+						
+					<!-- Start Column 2 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offer_categories',{ 'category':'Outils et équipements'})}}">
+							<img src="https://www.equipements-maison.fr/wp-content/uploads/2020/10/outils-de-bricolage-debutant-840x473.jpg" class="img-fluid product-thumbnail">
+							<strong class="product-price">Outils et équipements</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div> 
+					<!-- End Column 2 -->
+
+					<!-- Start Column 3 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+							<a class="product-item" href="{{path('app_offer_categories',{'category':'Œuvres d\'art et objets artisanaux'})}}">
+
+							<img src="{{asset('frontoffice/images/art.jpg')}}" class="img-fluid product-thumbnail">
+							<strong class="product-price">Œuvres d'art et objets artisanaux</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 3 -->
+
+					<!-- Start Column 4 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<a class="product-item" href="{{path('app_offer_categories',{'category':'Produits numériques'})}}">
+							<img src="{{asset('frontoffice/images/tech.jpg')}}" class="img-fluid product-thumbnail">
+							<strong class="product-price">Produits numériques</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 4 -->
+
+					<!-- Start Column 5 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+					<a class="product-item" href="{{path('app_offer_categories',{'category':'Articles de loisirs'})}}">
+							<img src="{{asset('frontoffice/images/loisirs.jpg')}}" class="img-fluid product-thumbnail">
+							<strong class="product-price">Articles de loisirs</strong>
+
+							<span class="icon-cross">
+								<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 5 -->
+
+					<!-- Start Column 6 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5">
+						<a class="product-item" href="{{path('app_offer_categories',{'category':'Produits de santé et de bien-être'})}}">
+							<img src="{{asset('frontoffice/images/face.jpg')}}" class="img-fluid product-thumbnail">
+							<strong class="product-price">Produits de santé et de bien-être</strong>
+
+							<span class="icon-cross">
+							<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
+							</span>
+						</a>
+					</div>
+					<!-- End Column 6 -->
+
+
+		      	</div>
+		    </div>
+		</div>
+
+{% endblock %}

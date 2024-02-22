@@ -6,43 +6,100 @@ use App\Repository\OffreRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+
+
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
+/**
+ * @Vich\Uploadable
+ */
+#[Vich\Uploadable]
+
+
 class Offre
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id ;
+    private ?int $id;
 
-    #[ORM\Column(length: 255)]
-    private ?string $nom ;
+
+    #[ORM\Column()]
+    #[Assert\Length(max: 10, maxMessage: "Your title contains more than 10 characters.")]
+    #[Assert\NotBlank(message: "Title is Required ")]
+    private ?string $nom;
 
     #[ORM\Column(length: 255)]
     private ?string $categorie;
 
     #[ORM\Column(length: 255)]
-    private ?string $description ;
+    #[Assert\NotBlank(message: "Description is Required ")]
+    #[Assert\Length(min: 20, minMessage: "Your description does not contain 20 characters.")]
+    private ?string $description;
 
     #[ORM\Column(length: 255)]
-    private ?string $etat ;
+    private ?string $etat = "publié";
 
-    #[ORM\Column(length: 255)]
-    private ?DateTime $date_publication ;
+    #[ORM\Column()]
+    private ?DateTime $date_publication;
+
+    /**
+     * @Vich\UploadableField(mapping="offres_images", fileNameProperty="images")
+     * @var File
+     */
+
+    #[Vich\UploadableField(mapping: "offres_images", fileNameProperty: "image1")]
+   #[Assert\NotBlank(message: "Select a picture for your offer")] 
+    private $imageFile1;
+
+    /**
+     * @Vich\UploadableField(mapping="offres_images", fileNameProperty="images")
+     * @var File
+     */
+
+    #[Vich\UploadableField(mapping: "offres_images", fileNameProperty: "image2")]
+    private $imageFile2 = null;
+
+
+    /**
+     * @Vich\UploadableField(mapping="offres_images", fileNameProperty="images")
+     * @var File
+     */
+    #[Vich\UploadableField(mapping: "offres_images", fileNameProperty: "image3")]
+    private $imageFile3 = null;
+
+    #[ORM\Column(nullable: true)]
+   
+    private $image1 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $image2 = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $image3 = null;
 
     #[ORM\ManyToOne(inversedBy: 'offres')]
-    private ?Utilisateur $offreur ;
+    private ?Utilisateur $offreur;
 
-    #[ORM\Column(length: 5)]
-    private ?array $photos ;
+
 
     #[ORM\OneToMany(targetEntity: DemandeOffre::class, mappedBy: 'offre')]
     private Collection $demandes;
 
+    #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'favoris_offres')]
+    private Collection $favoris;
+
+   
+
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +166,70 @@ class Offre
 
         return $this;
     }
+    public function getImageFile1()
+    {
+        return $this->imageFile1;
+    }
+
+    public function setImageFile1(File $imageFile)
+    {
+        $this->imageFile1 = $imageFile;
+    }
+
+    public function getImageFile2()
+    {
+        return $this->imageFile2;
+    }
+
+    public function setImageFile2(File $imageFile)
+    {
+        $this->imageFile2 = $imageFile;
+    }
+    public function getImageFile3()
+    {
+        return $this->imageFile3;
+    }
+
+    public function setImageFile3(File $imageFile)
+    {
+        $this->imageFile3 = $imageFile;
+    }
+    public function getImage1()
+    {
+        return $this->image1;
+    }
+
+    public function setImage1($image1): static
+    {
+        $this->image1 = $image1;
+
+        return $this;
+    }
+
+    public function getImage2()
+    {
+        return $this->image2;
+    }
+
+    public function setImage2($image2)
+    {
+        $this->image2 = $image2;
+
+        return $this;
+    }
+    public function getImage3()
+    {
+        return $this->image3;
+    }
+
+    public function setImage3($image3): static
+    {
+        $this->image3 = $image3;
+
+        return $this;
+    }
+
+
 
     public function getOffreur(): ?Utilisateur
     {
@@ -122,17 +243,7 @@ class Offre
         return $this;
     }
 
-    public function getPhotos(): ?array
-    {
-        return $this->photos;
-    }
 
-    public function setPhotos(array $photos): static
-    {
-        $this->photos = $photos;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, DemandeOffre>
@@ -152,7 +263,7 @@ class Offre
         return $this;
     }
 
-    public function removeDemande(DemandeOffre $demande): static
+    public function removeDemande($demande): static
     {
         if ($this->demandes->removeElement($demande)) {
             // set the owning side to null (unless already changed)
@@ -163,4 +274,29 @@ class Offre
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Utilisateur>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Utilisateur $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Utilisateur $favori): static
+    {
+        $this->favoris->removeElement($favori);
+
+        return $this;
+    }
+
 }

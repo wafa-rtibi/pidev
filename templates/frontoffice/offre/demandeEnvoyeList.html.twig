@@ -1,0 +1,116 @@
+{% extends "base_front.html.twig" %}
+
+{% block body %}
+
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>
+							<strong>Proposals Sended</strong>
+						</h1>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Hero Section -->
+	{#start demandes #}
+	<div class="untree_co-section before-footer-section">
+
+		<div class="container">
+			<div class="row mb-5">
+			{% if demansesEnvoye is defined %}
+				{% if demansesEnvoye is empty %}
+					<h1>
+						<strong>
+							YOU DONT HAVE ANY PROPOSAL
+						</strong><h1/>
+					{% else %}
+						<form class="col-md-12" method="post">
+							<div class="site-blocks-table">
+
+								<table class="table">
+									<thead>
+										<tr>
+											<th class="product-thumbnail">Picture</th>
+											<th class="product-name">Offer
+											</th>
+											<th class="product-price">Demander</th>
+											<th class="product-quantity">Date</th>
+											<th class="product-total">Status</th>
+
+										</tr>
+									</thead>
+									<tbody>
+
+
+										{% for demande in demansesEnvoye %}
+
+											{% set offre=demande.getOffre() %}
+											{% set demandeur=demande.getDemandeur() %}
+											<tr>
+												<td class="product-thumbnail">
+													<img src="{{asset('/uploads/images/offres/' ~ offre.getImage1() )}}" alt="Image" class="img-fluid">
+												</td>
+												<td class="product-name">
+													<h2 class="h5 text-black">{{offre.getNom()}}</h2>
+												</td>
+												<td>{{demandeur.getNom()}}</td>
+												<td>
+													{{ demande.getDateCreation()|date('Y-m-d H:i:s') }}
+
+
+												</td>
+												
+
+													<td>{{ demande.getStatut() }}</td>
+
+											
+
+											</tr>
+
+										{% endfor %}
+
+									</tbody>
+								</table>
+							</div>
+						</form>
+					</div>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="row mb-5">
+								<div class="col-md-6 mb-3 mb-md-0">
+									<a href="{{path('app_demande_envoye' ,{ 'update' : "true" })}}" class="btn btn-black btn-sm btn-block">Update Page</a>
+								</div>
+								<div class="col-md-6">
+									<a href="{{path('app_demande_recu' ,{ 'update' : "false" })}}" class="btn btn-outline-black btn-sm btn-block">Proposals </a>
+								</div>
+							</div>
+
+							<div class="col-md-6 pl-5">
+								<div class="row justify-content-end">
+									<div class="col-md-7">
+
+									{% endif %}
+									{% endif %}
+									<div class="row">
+										<div class="col-md-12">
+
+											<a href="{{path('app_all_offre')}}" class="btn btn-black btn-lg py-3 btn-block" onclick="window.location='checkout.html'">Continue Trading</a>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			{#end demandes #}
+
+		{% endblock %}
