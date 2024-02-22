@@ -5,3 +5,86 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+add_reclamation:
+    path: '/reclamation/add/{reclamateur_id}'
+    controller: 'App\Controller\ReclamationController::add_reclamation'
+
+delete_reclamation:
+    path: '/reclamation/delete/{reclamateur_id}/{id}'
+    controller: 'App\Controller\ReclamationController::delete_reclamation'
+
+edit_reclamation:
+    path: '/reclamation/edit/{reclamateur_id}/{id}'
+    controller: 'App\Controller\ReclamationController::edit_reclamation'
+
+done_reclamation:
+    path: '/reclamation/thankyou'
+    controller: 'App\Controller\ReclamationController::done_reclamation'
+
+
+listReclamations:
+    path: '/listReclamations/{id}'
+    controller: 'App\Controller\ReclamationController::listReclamations'
+
+
+
+
+dashboard_reclamation:
+    path: '/reclamation/dashboard'
+    controller: 'App\Controller\ReclamationController::dashboard_reclamation'
+
+
+show_reclamation:
+    path: '/reclamation/{reclamateur_id}/{id}'
+    controller: 'App\Controller\ReclamationController::show_reclamation'
+
+show_reclamation_admin:
+    path: '/admin/reclamation/{id}'
+    controller: 'App\Controller\ReclamationController::show_reclamation_admin'
+
+
+    # Pour Les Contrôller de Reponse
+
+
+
+index_reponse:
+    path: '/reponse/admin/user'
+    controller: 'App\Controller\ReponseController::index_reponse'
+
+add_reponse:
+    path: '/reponse/addReponse/{id}'
+    controller: 'App\Controller\ReponseController::addReponse'
+
+done_reponse:
+    path: '/reponse/thankyou'
+    controller: 'App\Controller\ReponseController::done_reponse'
+show_reponse:
+    path: '/reponse/show/{id}'
+    controller: 'App\Controller\ReponseController::show_reponse'
+
+show_reponse_admin:
+    path: '/reponse/admin/show/{id}'
+    controller: 'App\Controller\ReponseController::show_reponse_admin'
+
+edit_reponse:
+    path: '/reponse/edit/{id}'
+    controller: 'App\Controller\ReponseController::edit_reponse'
+
+delete_reponse:
+    path: '/reponse/delete/{id}'
+    controller: 'App\Controller\ReponseController::delete_reponse'
+
+index:
+    path: '/user'
+    controller: 'App\Controller\UserController::index'
+
+
+# user_reclamations:
+    # path: '/user/{username}/reclamations'
+    # controller: 'App\Controller\UserController::userReclamations'
+
+userComplaints:
+    path: /reponse/users/{username}
+    controller : 'App\Controller\ReponseController::userComplaints'
+
+

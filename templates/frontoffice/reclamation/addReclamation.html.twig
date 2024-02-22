@@ -75,52 +75,42 @@
                 </div>
               </div>
 
-
+			
                <!-- Form content -->
-    <div class="form-container">
-        <h2></h2>
+    {# <div class="form-container"> #}
+        {# <h2></h2> #}
+
        {# {{ form_start(form) }}#}
-        {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }} 
-        {{ form_row(form.objet_reclamation) }}
-        {{ form_row(form.description_reclamation) }}
-        {{ form_row(form.date_reclamation) }}
-      
-        {{ form_row(form.save, { 'label': 'Submit' }) }}
-        {{ form_end(form) }}
-        <a href="{{ path('app_home') }}" class="btn">Back to Home</a>
-    </div>
+        {# {{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}  #}
+        {# {{form_row(form.type) }} #}
+        {# {{ form_row(form.description_reclamation) }} #}
+        {# {{ form_row(form.save, { 'label': 'Submit' }) }} #}
+        {# {{ form_end(form) }} #}
+        {# <a href="{{ path('app_home') }}" class="btn">Back to Home</a> #}
+    {# </div> #}
 
-             {#} <form>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="text-black" for="fname">First name</label>
-                      <input type="text" class="form-control" id="fname">
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-group">
-                      <label class="text-black" for="lname">Last name</label>
-                      <input type="text" class="form-control" id="lname">
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="text-black" for="email">Email address</label>
-                  <input type="email" class="form-control" id="email">
-                </div>
-
-                <div class="form-group mb-5">
-                  <label class="text-black" for="message">Message</label>
-                  <textarea name="" class="form-control" id="message" cols="30" rows="5"></textarea>
-                </div>
-
-              {# <button type="submit" class="btn btn-primary-hover-outline" onClick="{{ path('app_reclamation_done') }}">Send Message</button> #}
-
-               {# code fel controller onSubmit #}
-                 
-          
-             {# </form>{#}
+      <!-- Form content -->
+                        <div class="col-lg-12">
+                            <div class="form-container">
+                                <h2>Submit Your Reclamation</h2>
+                                {{ form_start(form,{'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'id': 'reclamation-form'}} ) }}
+                                <div class="mb-3">
+                                    {{ form_row(form.type, {'attr': {'class': 'form-control'}}) }}
+                                </div>
+                                {# <div class="mb-3"> #}
+                                    {# {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 4}}) }} #}
+                                {# </div> #}
+                                <div class="mb-3">
+                                {# Set the rows attribute to limit the visible lines in the textarea #}
+                              {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 96px;'}}) }}
+                                </div>
+                                <div class="mb-3">
+                                    {{ form_row(form.save, { 'label': 'Submit', 'attr': {'class': 'btn btn-primary'}}) }}
+                                </div>
+                                {{ form_end(form) }}
+                                <a href="{{ path('app_home') }}" class="btn btn-secondary">Back to Home</a>
+                            </div>
+                        </div>
 
             </div>
 
@@ -134,6 +124,7 @@
     </div>
   </div>
 
-  <!-- End Contact Form -->
 
+  <!-- End Contact Form --> 
+ 
 {% endblock %}

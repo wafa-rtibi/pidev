@@ -1,0 +1,46 @@
+{% extends 'dashAdminReclam.html.twig' %}
+{% block body %}
+    <div class="container">
+        <h1 class="text-center">Tableau des Réclamations</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        <th>Email</th>
+                        <th>Date de Réclamation</th>
+                        <th>Type de Réclamation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reclamation in tableauReclamations %}
+                        <tr>
+                            <td>{{ reclamation.nom }}</td>
+                            <td>{{ reclamation.prenom }}</td>
+                            <td>{{ reclamation.email }}</td>
+                            <td>{{ reclamation.dateReclamation|date('Y-m-d H:i:s') }}</td>
+                            <td>{{ reclamation.typeReclamation }}</td>
+                            <td>
+                                <div class="d-flex justify-content-center">
+                                    <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-primary mx-2">Ajouter Réponse</a>
+                                    <a href="{{ path('app_reclamation_show_admin', {'id': reclamation.id}) }}" class="btn btn-info mx-2">Voir Détails</a>
+
+
+                                        {# {% if reclamation.getReponse() is not null %} #}
+                                        {# <a href="{{ path('app_reponse_edit', {'id': reclamation.getReponse().id}) }}" class="btn btn-warning mx-2">Modifier Réponse</a> #}
+                                        {# <a href="{{ path('app_delete_reponse', {'id': reclamation.getReponse().id}) }}" class="btn btn-danger mx-2" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?')">Supprimer Réponse</a> #}
+                                        {# {% else %} #}
+                                        {# <span class="text-muted">Pas de réponse</span> #}
+                                        {# {% endif %} #}
+                                    
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

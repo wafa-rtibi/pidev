@@ -17,14 +17,14 @@
 		<meta name="keywords" content="bootstrap, bootstrap4"/>
 		{% block css %}
 			<!-- Bootstrap CSS -->
+			
 			<link href="{{asset('frontoffice/css/bootstrap.min.css')}}" rel="stylesheet">
 			<link href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/css/tiny-slider.css')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/css/style.css')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/scss/style.scss')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/css/error.css')}}" rel="stylesheet">
-
-
+		
 		{% endblock %}
 
 		<title>
@@ -65,7 +65,7 @@
 							<a class="nav-link" href="{{path('app_blog')}}">Blog</a>
 						</li>
 						<li>
-							<a class="nav-link" href="{{path('app_reclamation')}}">Contact us</a>
+							 {# <a class="nav-link" href="{{path('app_reclamation',{'reclamateur_id':utilisateur.id})}}">Contact us</a>  #}
 						</li>
 					</ul>
 
@@ -566,7 +566,7 @@
 						<a href="{{path('app_blog')}}">Blog</a>
 					</li>
 					<li>
-						<a href="{{path('app_reclamation')}}">Contact us</a>
+						{# <a href="{{path('app_reclamation')}}">Contact us</a> #}
 					</li>
 				</ul>
 			</div>
@@ -631,4 +631,14 @@
 		</div>
 
 	</div>
-</div></div></footer><!-- End Footer Section -->{% block js %}<script src="{{asset('frontoffice/js/bootstrap.bundle.min.js')}}"></script><script src="{{asset('frontoffice/js/tiny-slider.js')}}"></script><script src="{{asset('frontoffice/js/custom.js')}}"></script><script src="{{asset('frontoffice/js/notification.js')}}"></script>{% endblock %}</body></html>
+</div></div></footer><!-- End Footer Section -->
+{% block js %}
+<script src="{{asset('frontoffice/js/echtheb.js')}}">
+<script src="{{asset('frontoffice/js/bootstrap.bundle.min.js')}}">
+</script><script src="{{asset('frontoffice/js/tiny-slider.js')}}">
+</script><script src="{{asset('frontoffice/js/custom.js')}}">
+</script><script src="{{asset('frontoffice/js/notification.js')}}">
+</script>
+{% endblock %}
+</body>
+</html>

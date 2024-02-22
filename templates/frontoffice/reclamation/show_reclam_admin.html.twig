@@ -1,0 +1,57 @@
+{% extends 'base_front.html.twig' %}
+{% block body %}
+
+ <!-- Start Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Reclamation</h1>
+                    <p class="mb-4">"Concerned about sustainability? Use our reclamation interface to report any issues or suggest improvements."</p>
+                    <p><a href="{{ path('app_home') }}" class="btn btn-secondary me-2">Home</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+                </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="hero-img-wrap">
+                    <img src="{{ asset('frontoffice/images/reclam-removebg-preview.png') }}" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Start Response Display Section -->
+<div class="untree_co-section">
+    <div class="container">
+        <div class="block">
+            <div class="row justify-content-center">
+                <div class="col-md-8 col-lg-8 pb-4">
+                    <div class="container">
+                        <h2>Reclamation Details</h2>
+                        <div class="card">
+                            <div class="card-body">
+                                {# <h5 class="card-title">Reclamation Details</h5> #}
+                                <p class="card-text">ID: {{ reclamation.id }}</p>
+                                <p class="card-text">Type: {{ reclamation.getType() }}</p>
+                                <p class="card-text">Reclamateur: {{ reclamation.getReclamateur().getnom() }}</p>
+                                <p class="card-text">Description: {{ reclamation.getDescriptionReclamation() }}</p>
+                                <p class="card-text">Date Response: {{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d') : '' }}</p>
+                            </div>
+                            <div class="card-footer text-center">  
+                               
+                                                               <a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>
+
+                                {# <a href="{{ path('app_list', {'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-secondary">Back to List</a> #}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Response Display Section -->
+
+{% endblock %}

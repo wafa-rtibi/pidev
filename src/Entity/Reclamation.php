@@ -16,16 +16,14 @@ class Reclamation
     private ?int $id ;
 
     #[ORM\Column(length: 255)]
-    #} #[Assert\DateTime(message: 'This value is not a valid datetime')]{#}
+    #[Assert\NotBlank(message:"Date of reclamation is required")]
     private ?DateTime $date_reclamation ;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"is required")]
-    private ?string $objet_reclamation ;
 
     #[ORM\Column(length: 2000)]
-    #[Assert\NotBlank(message:"is required")]
-    #[Assert\Length(max: 2000, maxMessage: "La description ne doit pas dépasse 2000 caractères")]
+    
+    #[Assert\NotBlank(message:"Description is required")]
+    #[Assert\Length(max:2000, maxMessage:"Description must be at most {{ limit }} characters long")]
     private ?string $description_reclamation ;
 
 
@@ -34,7 +32,13 @@ class Reclamation
     private ?Utilisateur $reclamateur ;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $statut_reclamation = null;
+    private ?string $statut_reclamation="Sent successfully";
+
+    #[ORM\Column(length: 255)]
+    private ?string $type ;
+
+    #[ORM\OneToOne(mappedBy: 'reclam_reponse', cascade: ['persist', 'remove'])]
+    private ?Reponse $reponse = null;
 
     public function getId(): ?int
     {
@@ -53,17 +57,7 @@ class Reclamation
         return $this;
     }
 
-    public function getObjetReclamation(): ?string
-    {
-        return $this->objet_reclamation;
-    }
-
-    public function setObjetReclamation(?string $objet_reclamation): self
-    {
-        $this->objet_reclamation = $objet_reclamation;
-
-        return $this;
-    }
+  
 
     public function getDescriptionReclamation(): ?string
     {
@@ -100,4 +94,39 @@ class Reclamation
 
         return $this;
     }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): static
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getReponse(): ?Reponse
+    {
+        return $this->reponse;
+    }
+
+    public function setReponse(?Reponse $reponse): static
+    {
+        // unset the owning side of the relation if necessary
+        if ($reponse === null && $this->reponse !== null) {
+            $this->reponse->setReclamReponse(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($reponse !== null && $reponse->getReclamReponse() !== $this) {
+            $reponse->setReclamReponse($this);
+        }
+
+        $this->reponse = $reponse;
+
+        return $this;
+    }
+
 }
