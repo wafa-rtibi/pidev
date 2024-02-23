@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240214160332 extends AbstractMigration
+final class Version20240221230234 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -28,6 +28,7 @@ final class Version20240214160332 extends AbstractMigration
         $this->addSql('CREATE TABLE demande_offre (id INT AUTO_INCREMENT NOT NULL, offre_id INT DEFAULT NULL, statut TINYINT(1) NOT NULL, date_creation DATETIME NOT NULL, INDEX IDX_595805464CC8505A (offre_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE dons (id INT AUTO_INCREMENT NOT NULL, donateur_id INT NOT NULL, organisation_id INT NOT NULL, date DATETIME NOT NULL, compagne_collect VARCHAR(255) NOT NULL, montant DOUBLE PRECISION NOT NULL, INDEX IDX_E4F955FAA9C80E3 (donateur_id), INDEX IDX_E4F955FA9E6B1585 (organisation_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE evenement (id INT AUTO_INCREMENT NOT NULL, agenda_id INT DEFAULT NULL, titre VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, lieu VARCHAR(255) NOT NULL, lien VARCHAR(255) NOT NULL, date_debut DATETIME NOT NULL, date_fin DATETIME NOT NULL, type VARCHAR(255) NOT NULL, type_event VARCHAR(255) NOT NULL, categorie VARCHAR(255) NOT NULL, INDEX IDX_B26681EEA67784A (agenda_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE evenement_utilisateur (evenement_id INT NOT NULL, utilisateur_id INT NOT NULL, INDEX IDX_8C897598FD02F13 (evenement_id), INDEX IDX_8C897598FB88E14F (utilisateur_id), PRIMARY KEY(evenement_id, utilisateur_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE offre (id INT AUTO_INCREMENT NOT NULL, offreur_id INT DEFAULT NULL, nom VARCHAR(255) NOT NULL, categorie VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, etat VARCHAR(255) NOT NULL, date_publication DATETIME NOT NULL, photos JSON NOT NULL COMMENT \'(DC2Type:json)\', INDEX IDX_AF86866FB05122F8 (offreur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE organisation (id INT AUTO_INCREMENT NOT NULL, nom_organisation VARCHAR(255) NOT NULL, description VARCHAR(255) NOT NULL, rib VARCHAR(24) NOT NULL, adresse VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE reclamation (id INT AUTO_INCREMENT NOT NULL, reclamateur_id INT DEFAULT NULL, date_reclamation DATETIME NOT NULL, objet_reclamation VARCHAR(255) NOT NULL, description_reclamation VARCHAR(2000) NOT NULL, statut_reclamation VARCHAR(255) NOT NULL, reponse_reclamation VARCHAR(255) NOT NULL, date_reponse DATETIME NOT NULL, INDEX IDX_CE6064046A3605A6 (reclamateur_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -44,6 +45,8 @@ final class Version20240214160332 extends AbstractMigration
         $this->addSql('ALTER TABLE dons ADD CONSTRAINT FK_E4F955FAA9C80E3 FOREIGN KEY (donateur_id) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE dons ADD CONSTRAINT FK_E4F955FA9E6B1585 FOREIGN KEY (organisation_id) REFERENCES organisation (id)');
         $this->addSql('ALTER TABLE evenement ADD CONSTRAINT FK_B26681EEA67784A FOREIGN KEY (agenda_id) REFERENCES agenda (id)');
+        $this->addSql('ALTER TABLE evenement_utilisateur ADD CONSTRAINT FK_8C897598FD02F13 FOREIGN KEY (evenement_id) REFERENCES evenement (id) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE evenement_utilisateur ADD CONSTRAINT FK_8C897598FB88E14F FOREIGN KEY (utilisateur_id) REFERENCES utilisateur (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE offre ADD CONSTRAINT FK_AF86866FB05122F8 FOREIGN KEY (offreur_id) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE reclamation ADD CONSTRAINT FK_CE6064046A3605A6 FOREIGN KEY (reclamateur_id) REFERENCES utilisateur (id)');
         $this->addSql('ALTER TABLE utilisateur ADD CONSTRAINT FK_1D1C63B3FD02F13 FOREIGN KEY (evenement_id) REFERENCES evenement (id)');
@@ -61,6 +64,8 @@ final class Version20240214160332 extends AbstractMigration
         $this->addSql('ALTER TABLE dons DROP FOREIGN KEY FK_E4F955FAA9C80E3');
         $this->addSql('ALTER TABLE dons DROP FOREIGN KEY FK_E4F955FA9E6B1585');
         $this->addSql('ALTER TABLE evenement DROP FOREIGN KEY FK_B26681EEA67784A');
+        $this->addSql('ALTER TABLE evenement_utilisateur DROP FOREIGN KEY FK_8C897598FD02F13');
+        $this->addSql('ALTER TABLE evenement_utilisateur DROP FOREIGN KEY FK_8C897598FB88E14F');
         $this->addSql('ALTER TABLE offre DROP FOREIGN KEY FK_AF86866FB05122F8');
         $this->addSql('ALTER TABLE reclamation DROP FOREIGN KEY FK_CE6064046A3605A6');
         $this->addSql('ALTER TABLE utilisateur DROP FOREIGN KEY FK_1D1C63B3FD02F13');
@@ -72,6 +77,7 @@ final class Version20240214160332 extends AbstractMigration
         $this->addSql('DROP TABLE demande_offre');
         $this->addSql('DROP TABLE dons');
         $this->addSql('DROP TABLE evenement');
+        $this->addSql('DROP TABLE evenement_utilisateur');
         $this->addSql('DROP TABLE offre');
         $this->addSql('DROP TABLE organisation');
         $this->addSql('DROP TABLE reclamation');

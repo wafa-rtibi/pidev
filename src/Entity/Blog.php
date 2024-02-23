@@ -2,47 +2,61 @@
 
 namespace App\Entity;
 
+use Symfony\Component\HttpFoundation\File\File;
 use App\Repository\BlogRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+/**
+ * @Vich\Uploadable
+ */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id ;
+    private ?int $id = null ;
 
 
     #[ORM\Column(length: 255)]
-    private ?string $contenu ;
+    private ?string $contenu= null ;
 
     #[ORM\Column(length: 255)]
-    private ?string $titre ;
+    private ?string $titre= null ;
 
     #[ORM\Column()]
     private ? DateTime $date_publication ;
 
-   
+   /**
+    * @ORM\Column(type="string", length=255, nullable=true)
+    */
+    private ?string $image = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $langue = null;
+    /**
+     * @Vich\UploadableField(mapping="blog_images", fileNameProperty="images")
+     * @var File
+     */
+
+
+    #[Vich\UploadableField(mapping: "blog_images", fileNameProperty: "image")]
+    #[Assert\NotBlank(message: "Select a picture for your blog")]
+     private $imageFile1;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
-    private ?Utilisateur $auteur ;
+    private ?Utilisateur $auteur= null ;
 
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'blog')]
-    private Collection $comantaires;
+    private Collection $comantaires ;
 
     #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'intearactionBlog')]
     private Collection $interactions;
 
-    #[ORM\Column()]
-    private ? bool $statut = false ;
-
+   
    
 
     public function __construct()
@@ -92,20 +106,31 @@ class Blog
 
         return $this;
     }
-
-  
-
-    public function getLangue(): ?string
+    public function setImageFile1(File $imageFile)
     {
-        return $this->langue;
+        $this->imageFile1 = $imageFile;
     }
 
-    public function setLangue(string $langue): static
+    public function getImageFile()
     {
-        $this->langue = $langue;
+        return $this->imageFile1;
+    }
+
+    public function setImage($image): static
+    {
+        $this->image = $image;
+
 
         return $this;
     }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+
+   
 
     public function getAuteur(): ?Utilisateur
     {
@@ -173,21 +198,6 @@ class Blog
         return $this;
     }
 
-    public function getStatut(): ?bool
-    {
-        return $this->statut;
-    }
-
-    public function setStatut(bool $statut): static
-    {
-        $this->statut = $statut;
-
-        return $this;
-    }
-
-  
-
-   
 
    
 }

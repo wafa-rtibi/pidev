@@ -1,4 +1,157 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
 
+<style>   
+:root {
+    --box-x-padding: 2rem;
+    --box-y-padding: 2rem;
+}
+
+@media (min-width: 40em) {
+    :root {
+        --box-y-padding: 4rem;
+    }
+}
+
+@media (min-width: 60em) {
+    :root {
+        --box-x-padding: 3rem;
+        --box-y-padding: 6rem;
+    }
+}
+
+@media (min-width: 40em) {
+    section {
+        display: grid;
+        grid-template-rows: repeat(3, auto);
+        grid-template-columns: 4fr 4fr 5fr;
+        grid-template-areas: '. . title' 'img img content' 'img img .';
+        max-width: 1000px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+
+    h1 {
+        grid-area: title;
+        padding-top: var(--box-y-padding);
+        padding-left: var(--box-x-padding);
+    }
+
+    .content {
+        grid-area: content;
+        padding-bottom: var(--box-y-padding);
+        padding-left: var(--box-x-padding);
+        padding-right: var(--box-x-padding);
+    }
+
+    .img {
+        grid-area: img;
+    }
+}
+
+/* Non-important styles */
+
+
+body {
+    padding: 1em;
+}
+
+h1 {
+    font-size: 4em;
+    margin: 0 0 1rem;
+    font-family: serif;
+    position: relative;
+}
+
+h1::after {
+    content: '';
+    position: absolute;
+    width: 6rem;
+    background-color: hsl(0, 0, 80%);
+    height: 2px;
+    top: 0;
+    left: 0;
+}
+
+@media (min-width: 40em) {
+    h1::after {
+        left: var(--box-x-padding);
+        top: var(--box-y-padding);
+    }
+}
+
+.content {
+    color: hsl(0, 0, 30%);
+    margin-bottom: var(--box-y-padding);
+}
+
+@media (min-width: 40em) {
+    .content {
+        margin-bottom: 0;
+    }
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--box-y-padding);
+    line-height: 1.5;
+}
+
+.img {
+    position: relative;
+}
+
+.img a {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+img {
+    max-width: 100%;
+    vertical-align: middle;
+    box-shadow: 0 .2em 1.2em hsla(20, 20%, 20%, 10%);
+}
+
+.attribution {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #ea4c89; /* dribbble pink */
+    color: white;
+    padding: .5em 1em;
+}
+
+</style>
+
+<section>
+    <h1>Nature</h1>
+    <div class="content">
+        <p>Nature's exquisite beauty resides in its simplicity and complexity, intertwining to create a tapestry of wonder. From the delicate flutter of a butterfly's wings to the towering strength of ancient redwoods, every element of the natural world tells a story of resilience and harmony. In its embrace, we find solace, inspiration, and a reminder of our interconnectedness with all living things. Let us cherish and protect this precious gift, for in the delicate balance of nature lies the essence of life itself.</p>
+    </div>
+    <div class="img">
+        <img src="{{asset('frontoffice/images/nature.jpg')}}" alt="Nature Image">
+        <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>mohamed trabelsi</span></a>
+    </div>
+    
+</section>
+<br><br><br><br><br><br><br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'base_front.html.twig' %}
+{% block body %}
+
+
+<div class="container">
+    <h1>Create New Blog Post</h1>
+{{ form_start(form, {method: 'post', action: '/createblog'}) }}
+        <div class="form-group col-md-6">
+            {{ form_row(form.titre) }}
+        </div>
+        <div class="form-group col-md-6">
+            {{ form_row(form.contenu) }}
+        </div>    
+ <a href="{{path('app_blog')}}">{{ form_row(form.ADD) }}</a>
+ 
+
+    {{ form_end(form) }}
+<br><br><br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+h1 {
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+}
+
+input[type="text"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+button[type="submit"] {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+</style>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

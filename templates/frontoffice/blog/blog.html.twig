@@ -8,13 +8,13 @@
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
 								<h1>Blog</h1>
-								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-								<p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+								<p class="mb-4"> "Stay informed and inspired with our collection of articles on sustainability and community at Troky!"</p>
+								<p><a href="{{path('create_blog')}}" class="btn btn-secondary me-2">Create</a><a href="{{path('blog_list')}}" class="btn btn-white-outline">My blog</a></p>
 							</div>
 						</div>
 						<div class="col-lg-7">
 							<div class="hero-img-wrap">
-								<img src="images/couch.png" class="img-fluid">
+								<img src="{{asset('frontoffice/images/blog.png')}}" class="img-fluid">
 							</div>
 						</div>
 					</div>
@@ -32,11 +32,12 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
+							<a href="{{path('single_blog')}}" class="post-thumbnail"><img src="{{asset('frontoffice/images/nature.jpg')}}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">First Time Home Owner Ideas</a></h3>
+								<h3><a href="#">Nature</a></h3>
 								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
+								<span>Nature's exquisite beauty resides in its simplicity and complexity...</span> <br>
+									<span>by <a href="#">mohamed trabelsi</a></span> <span>on <a href="#">jan 19, 2024</a></span>
 								</div>
 							</div>
 						</div>
@@ -44,11 +45,12 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
+							<a href="{{path('single_blog')}}" class="post-thumbnail"><img src="{{asset('frontoffice/images/cleanfeaurniture.jpg')}}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
 								<div class="meta">
-									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
+								<span>To keep your furniture clean, regularly dust surfaces and spot clean stains promptly. Use coasters to prevent water rings and protect from scratches. For wood furniture, avoid direct sunlight and moisture, and polish occasionally. Consider using furniture covers for added protection.</span>
+									<span>by <a href="#">nour soltani</a></span> <span>on <a href="#">fev 16, 2024</a></span>
 								</div>
 							</div>
 						</div>
@@ -56,11 +58,12 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/product_2.jpg')}}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
 								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
+								<span></span>
+									<span>by <a href="#">wejden talbi</a></span> <span>on <a href="#">janv 30, 2024</a></span>
 								</div>
 							</div>
 						</div>
@@ -68,11 +71,22 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">First Time Home Owner Ideas</a></h3>
 								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
+								<span>Set a Budget
+
+                                            <br>Start with Essentials
+<br>Personalize Your Space
+<br>Focus on Functionality
+<br>DIY Projects
+<br>Curb Appeal
+<br>Energy Efficiency
+<br>Safety First
+<br>Storage Solutions
+
+Take Your Time</span><br>
+									<span>by <a href="#">ghada mahmoudi</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
 								</div>
 							</div>
 						</div>
@@ -80,11 +94,18 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/pain.jpg')}}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
+								<h3><a href="#">Here's a simple pancake recipe :
+
+<br>Ingredients:
+
+<br>1 cup all-purpose flour
+<br>2 tablespoons sugar
+<br>1 teaspoon baking powder
+<br>1/2 teaspoon baking soda..</a></h3><br>
 								<div class="meta">
-									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
+									<span>by <a href="#">ahmed khammassi</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
 								</div>
 							</div>
 						</div>
@@ -92,52 +113,16 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/maldive.jpg')}}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
-								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
+								<h3><a href="#">maldive
+								Welcome to the Maldives, a stunning tropical paradise in the Indian Ocean. With its white sandy beaches, crystal-clear waters, and vibrant marine life, it's the perfect destination for relaxation and adventure. Whether you're lounging on the beach, snorkeling in the coral reefs, or enjoying a romantic sunset, every moment in the Maldives is pure magic.</a></h3>
 								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
+									<span>by <a href="#">saida beji</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
 								</div>
 							</div>
 						</div>
 					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">First Time Home Owner Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Robert Fox</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
-								<div class="meta">
-									<span>by <a href="#">Kristin Watson</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
 				</div>
 			</div>
 		</div>
@@ -145,7 +130,7 @@
 
 		
 
-		<!-- Start Testimonial Slider -->
+		<!-- Start Testimonial Slider 
 		<div class="testimonial-section before-footer-section">
 			<div class="container">
 				<div class="row">
@@ -186,7 +171,7 @@
 										</div>
 									</div>
 								</div> 
-								<!-- END item -->
+								<!-- END item 
 
 								<div class="item">
 									<div class="row justify-content-center">
@@ -209,7 +194,7 @@
 										</div>
 									</div>
 								</div> 
-								<!-- END item -->
+								<!-- END item 
 
 								<div class="item">
 									<div class="row justify-content-center">
@@ -232,9 +217,9 @@
 										</div>
 									</div>
 								</div> 
-								<!-- END item -->
+								<!-- END item 
 
-							</div>
+							</div>-->
 
 						</div>
 					</div>
