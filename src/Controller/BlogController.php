@@ -19,21 +19,28 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\File;
 class BlogController extends AbstractController
 {
     #[Route('/blog', name: 'app_blog')]
-    public function index(): Response
+    public function index(BlogRepository $blogRepository): Response
     {
+        $blogs = $blogRepository->findAll(); // Récupérer tous les blogs depuis la base de données
         return $this->render('frontoffice/blog/blog.html.twig', [
-            'controller_name' => 'BlogController',
+            'blogs' => $blogs, // Passer les blogs au modèle Twig
         ]);
     }
 
-    #[Route('/single_blog', name: 'single_blog')]
-    public function index1(): Response
+    #[Route('/blog/{id}', name: 'single_blog')]
+    public function show($id): Response
     {
+        $entityManager = $this->getDoctrine()->getManager();
+        $blog = $entityManager->getRepository(Blog::class)->find($id);
+
+        if (!$blog) {
+            throw $this->createNotFoundException('The blog post does not exist');
+        }
+
         return $this->render('frontoffice/blog/single_blog.html.twig', [
-            'controller_name' => 'BlogController',
+            'blog' => $blog,
         ]);
     }
-
 
     #[Route('/createblog', name: 'create_blog')] 
     public function addblog(Request $request, EntityManagerInterface $entityManager,  ManagerRegistry $doctrine): Response

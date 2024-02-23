@@ -1,6 +1,41 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
 
+
+    <section>
+        <h1>{{ blog.titre }}</h1>
+        <div class="content">
+            <p>{{ blog.contenu }}</p>
+        </div>
+        <div class="img">
+            <img src="{{ asset('frontoffice/images/nature.jpg') }}" alt="Blog Image">
+            <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a>
+        </div>
+    </section>
+<br><br><br><br><br><br><br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>   
 :root {
     --box-x-padding: 2rem;
@@ -53,10 +88,11 @@
 
 
 body {
-    padding: 1em;
+    padding: 0em;
 }
 
 h1 {
+    color: black;
     font-size: 4em;
     margin: 0 0 1rem;
     font-family: serif;
@@ -81,7 +117,7 @@ h1::after {
 }
 
 .content {
-    color: hsl(0, 0, 30%);
+    color: black;
     margin-bottom: var(--box-y-padding);
 }
 
@@ -92,6 +128,7 @@ h1::after {
 }
 
 p {
+    color: black;
     margin-top: 0;
     margin-bottom: var(--box-y-padding);
     line-height: 1.5;
@@ -121,37 +158,6 @@ img {
     color: white;
     padding: .5em 1em;
 }
-
 </style>
-
-<section>
-    <h1>Nature</h1>
-    <div class="content">
-        <p>Nature's exquisite beauty resides in its simplicity and complexity, intertwining to create a tapestry of wonder. From the delicate flutter of a butterfly's wings to the towering strength of ancient redwoods, every element of the natural world tells a story of resilience and harmony. In its embrace, we find solace, inspiration, and a reminder of our interconnectedness with all living things. Let us cherish and protect this precious gift, for in the delicate balance of nature lies the essence of life itself.</p>
-    </div>
-    <div class="img">
-        <img src="{{asset('frontoffice/images/nature.jpg')}}" alt="Nature Image">
-        <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>mohamed trabelsi</span></a>
-    </div>
-    
-</section>
-<br><br><br><br><br><br><br><br><br><br>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 {% endblock %}

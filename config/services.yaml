@@ -8,6 +8,10 @@ parameters:
     app.path.blog_images: /uploads/images/blog
 
 services:
+    # Autowire the Blog entity
+    App\Entity\Blog:
+        autowire: true
+
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

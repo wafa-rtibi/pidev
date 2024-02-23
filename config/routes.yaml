@@ -1,3 +1,7 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+single_blog:
+    path: '/blog/{id}'
+    controller: 'App\Controller\BlogController::show'

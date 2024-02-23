@@ -14,13 +14,8 @@ class BlogType extends AbstractType
     {
         $builder
             ->add('titre')
-            ->add('contenu')
-            ->add('imageFile', VichImageType::class, [
-                'required' => true,
-                'label' => 'image '
-            ]);
-
-            
+            ->add('contenu');
+            //->add('image', VichImageType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

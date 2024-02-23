@@ -26,10 +26,19 @@
 
 		<!-- Start Blog Section -->
 		<div class="blog-section">
-			<div class="container">
-				
-				<div class="row">
-
+    <div class="container">
+        <div class="row">
+            {% for blog in blogs %}
+                <div class="col-md-6">
+                    <div class="post-entry">
+                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('frontoffice/images/nature.jpg') }}" alt="Image" class="img-fluid">
+                        <h2>{{ blog.titre }}</h2>
+                        <p>{{ blog.contenu }}</p></a>
+                        <!-- Other blog details -->
+                    </div>
+                </div>
+            {% endfor %}
+				{# <div class="row">
 					<div class="col-12 col-sm-6 col-md-4 mb-5">
 						<div class="post-entry">
 							<a href="{{path('single_blog')}}" class="post-thumbnail"><img src="{{asset('frontoffice/images/nature.jpg')}}" alt="Image" class="img-fluid"></a>
@@ -41,88 +50,7 @@
 								</div>
 							</div>
 						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="{{path('single_blog')}}" class="post-thumbnail"><img src="{{asset('frontoffice/images/cleanfeaurniture.jpg')}}" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
-								<div class="meta">
-								<span>To keep your furniture clean, regularly dust surfaces and spot clean stains promptly. Use coasters to prevent water rings and protect from scratches. For wood furniture, avoid direct sunlight and moisture, and polish occasionally. Consider using furniture covers for added protection.</span>
-									<span>by <a href="#">nour soltani</a></span> <span>on <a href="#">fev 16, 2024</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/product_2.jpg')}}" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
-								<div class="meta">
-								<span></span>
-									<span>by <a href="#">wejden talbi</a></span> <span>on <a href="#">janv 30, 2024</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<div class="post-content-entry">
-								<h3><a href="#">First Time Home Owner Ideas</a></h3>
-								<div class="meta">
-								<span>Set a Budget
-
-                                            <br>Start with Essentials
-<br>Personalize Your Space
-<br>Focus on Functionality
-<br>DIY Projects
-<br>Curb Appeal
-<br>Energy Efficiency
-<br>Safety First
-<br>Storage Solutions
-
-Take Your Time</span><br>
-									<span>by <a href="#">ghada mahmoudi</a></span> <span>on <a href="#">Dec 19, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/pain.jpg')}}" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Here's a simple pancake recipe :
-
-<br>Ingredients:
-
-<br>1 cup all-purpose flour
-<br>2 tablespoons sugar
-<br>1 teaspoon baking powder
-<br>1/2 teaspoon baking soda..</a></h3><br>
-								<div class="meta">
-									<span>by <a href="#">ahmed khammassi</a></span> <span>on <a href="#">Dec 15, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="{{asset('frontoffice/images/maldive.jpg')}}" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">maldive
-								Welcome to the Maldives, a stunning tropical paradise in the Indian Ocean. With its white sandy beaches, crystal-clear waters, and vibrant marine life, it's the perfect destination for relaxation and adventure. Whether you're lounging on the beach, snorkeling in the coral reefs, or enjoying a romantic sunset, every moment in the Maldives is pure magic.</a></h3>
-								<div class="meta">
-									<span>by <a href="#">saida beji</a></span> <span>on <a href="#">Dec 12, 2021</a></span>
-								</div>
-							</div>
-						</div>
-					</div>
+					</div> #}
 				</div>
 			</div>
 		</div>
@@ -219,13 +147,13 @@ Take Your Time</span><br>
 								</div> 
 								<!-- END item 
 
-							</div>-->
+							</div>
 
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>-->
 		<!-- End Testimonial Slider -->
 
 		
