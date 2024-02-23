@@ -33,11 +33,11 @@
                         <div class="card">
                             <div class="card-body">
                                 {# <h5 class="card-title">Reclamation Details</h5> #}
-                                <p class="card-text">ID: {{ reclamation.id }}</p>
-                                <p class="card-text">Type: {{ reclamation.getType() }}</p>
-                                <p class="card-text">Reclamateur: {{ reclamation.getReclamateur().getnom() }}</p>
-                                <p class="card-text">Description: {{ reclamation.getDescriptionReclamation() }}</p>
-                                <p class="card-text">Date Response: {{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d') : '' }}</p>
+                                <p class="card-text">ID: {{ reclam.id }}</p>
+                                <p class="card-text">Type: {{ reclam.type }}</p>
+                                <p class="card-text">Reclamateur: {{ reclamation.nom }}</p>
+                                <p class="card-text">Description: {{ reclam.DescriptionReclamation }}</p>
+                                <p class="card-text">Date Response: {{ reclam.dateReclamation ? reclam.dateReclamation|date('Y-m-d') : '' }}</p>
                             </div>
                             <div class="card-footer text-center">  
                                

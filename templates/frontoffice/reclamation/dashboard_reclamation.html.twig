@@ -24,8 +24,15 @@
                             <td>{{ reclamation.typeReclamation }}</td>
                             <td>
                                 <div class="d-flex justify-content-center">
-                                    <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-primary mx-2">Ajouter Réponse</a>
-                                    <a href="{{ path('app_reclamation_show_admin', {'id': reclamation.id}) }}" class="btn btn-info mx-2">Voir Détails</a>
+
+
+
+
+
+
+                                     <a href="{{ path('app_reponse_new', {'id': reclamation.id}) }}" class="btn btn-primary mx-2">Ajouter Réponse</a> 
+                                    
+                                    {# <a href="{{ path('app_reclamation_show_admin', {'reclamateur_id': reclamation.getReclamateur().id,'id': reclamation.id}) }}" class="btn btn-info mx-2">Voir Détails</a>  #}
 
 
                                         {# {% if reclamation.getReponse() is not null %} #}

@@ -12,6 +12,8 @@ use App\Entity\Reclamation;
 use App\Entity\Utilisateur;
 use App\Form\ReclamationType;
 use App\Repository\ReclamationRepository;
+use App\Repository\UtilisateurRepository;
+
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -77,21 +79,42 @@ class ReponseController extends AbstractController
 
     // Pour afficher la reponse du reclamation au admin
     //delon id de la reponse
-    #[Route('/reponse/admin/show/{id}', name: 'app_reponse_admin_show')]
-    public function show_reponse_admin(Reponse $reponse): Response
+    #[Route('/reponse/admin/show/{reclamateur_id}/{id}', name: 'app_reponse_admin_show')]
+    public function show_reponse_admin($id, $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReponseRepository $reponseRepository): Response
     {
+
+        $user = $utilisateurRepository->find($reclamateur_id);
+
+        $reponse = $reponseRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
         return $this->render('frontoffice/reponse/show_reponse_admin.html.twig', [
-            'reponse' => $reponse,
+            'rep' => $reponse,
+            'reponse' => $user,
+            
         ]);
     }
     
     // Pour afficher la reponse du reclamation au client
     //selon l'id de la reponse
-    #[Route('/reponse/show/{id}', name: 'app_reponse_show')]
-    public function show_reponse(Reponse $reponse): Response
-    {
+    #[Route('/reponse/show/{reclamateur_id}/{id}', name: 'app_reponse_show')]
+    public function show_reponse($id, $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReponseRepository $reponseRepository): Response
+    {  
+        $user = $utilisateurRepository->find($reclamateur_id);
+
+        $reponse = $reponseRepository->find($id);
+        
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
         return $this->render('frontoffice/reponse/show.html.twig', [
-            'reponse' => $reponse,
+            'rep' => $reponse,
+            'reponse' => $user,
+            
         ]);
     }
      

@@ -7,9 +7,21 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+use App\Validator\Constraints\CustomNotBlank;
+
+
+
+
+
+
+
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
 class Reclamation
+
 {
+
+    
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -20,11 +32,13 @@ class Reclamation
     private ?DateTime $date_reclamation ;
 
 
-    #[ORM\Column(length: 2000)]
+   
+    #[ORM\Column(length: 200)]
     
     #[Assert\NotBlank(message:"Description is required")]
-    #[Assert\Length(max:2000, maxMessage:"Description must be at most {{ limit }} characters long")]
+    #[Assert\Length(max:200, maxMessage:"Description must be at most 200 characters long")]
     private ?string $description_reclamation ;
+
 
 
 
@@ -34,8 +48,11 @@ class Reclamation
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $statut_reclamation="Sent successfully";
 
-    #[ORM\Column(length: 255)]
-    private ?string $type ;
+
+   
+
+ #[ORM\Column(length: 255)]
+ private ?string $type = null ;
 
     #[ORM\OneToOne(mappedBy: 'reclam_reponse', cascade: ['persist', 'remove'])]
     private ?Reponse $reponse = null;

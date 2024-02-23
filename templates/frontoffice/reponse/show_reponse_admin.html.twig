@@ -43,12 +43,16 @@
 									<p class="card-text">Date Response:
 										{{ reponse.dateReponse ? reponse.dateReponse|date('Y-m-d') : '' }}</p>
 								</div>
-								<div class="card-footer text-center">
+
+
+						
+
+								{# <div class="card-footer text-center"> #}
 
                                 <a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>
 
 									{# <a href="{{ path('app_list',{'reclamateur_id': reponse.getReclamReponse().getReclamateur().id}) }}" class="btn btn-secondary">Back to List</a> #}
-								</div>
+								{# </div> #}
 							</div>
 						</div>
 					</div>

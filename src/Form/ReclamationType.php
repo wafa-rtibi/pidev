@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-
+use App\Validator\Constraints\CustomNotBlank;
 
 
 class ReclamationType extends AbstractType
@@ -18,7 +18,6 @@ class ReclamationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-           
            
             //->add('description_reclamation')
             ->add('description_reclamation', TextareaType::class, [
@@ -31,7 +30,9 @@ class ReclamationType extends AbstractType
                     'arnaque'=>'arnaque',
                     'autre'=>'autre',
 
-                  ]
+                  ],
+                  'placeholder' => 'Choose a type',
+                  
             ])
            
             ->add('save',SubmitType::class)

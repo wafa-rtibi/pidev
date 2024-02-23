@@ -98,6 +98,8 @@ class ReclamationController extends AbstractController
         ]);
     }
 
+    
+
 
 
 
@@ -196,20 +198,37 @@ class ReclamationController extends AbstractController
     }
 
     //afficher une reclamation pour admin
-    #[Route('/admin/reclamation/{id}', name: 'app_reclamation_show_admin')]
-    public function show_reclamation_admin(Reclamation $reclamation): Response
-    {
+    #[Route('/admin/reclamation/{reclamateur_id}/{id}', name: 'app_reclamation_show_admin')]
+    public function show_reclamation_admin($id,int $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReclamationRepository $reclamationRepository): Response
+    {   
+
+        $user = $utilisateurRepository->find($reclamateur_id);
+        $reclamation = $reclamationRepository->find($id);
+        
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+
         return $this->render('frontoffice/reclamation/show_reclam_admin.html.twig', [
-            'reclamation' => $reclamation,
+            'reclamation' => $user,
+            'reclam'=>$reclamation
         ]);
     }
 
     //show reclamation pour client 
     #[Route('/reclamation/{reclamateur_id}/{id}', name: 'app_reclamation_show')]
-    public function show_reclamation(Reclamation $reclamation): Response
-    {
+    public function show_reclamation( $id,int $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReclamationRepository $reclamationRepository): Response
+     
+    {    $user = $utilisateurRepository->find($reclamateur_id);
+         $reclamation = $reclamationRepository->find($id);
+
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+       
         return $this->render('frontoffice/reclamation/show_reclam_client.html.twig', [
-            'reclamation' => $reclamation,
+            'reclamation' => $user,
+            'reclam'=>$reclamation
         ]);
     }
 

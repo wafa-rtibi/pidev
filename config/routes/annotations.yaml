@@ -5,6 +5,8 @@ controllers:
 kernel:
     resource: ../../src/Kernel.php
     type: annotation
+
+    
 add_reclamation:
     path: '/reclamation/add/{reclamateur_id}'
     controller: 'App\Controller\ReclamationController::add_reclamation'
@@ -39,7 +41,7 @@ show_reclamation:
     controller: 'App\Controller\ReclamationController::show_reclamation'
 
 show_reclamation_admin:
-    path: '/admin/reclamation/{id}'
+    path: '/admin/reclamation/{id}/{reclamateur_id}'
     controller: 'App\Controller\ReclamationController::show_reclamation_admin'
 
 
