@@ -1,0 +1,39 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}Dons index{% endblock %}
+
+{% block content %}
+    <h1>La liste des dons</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Compagne_collect</th>
+                <th>Montant</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for don in dons %}
+            <tr>
+                <td>{{ don.id }}</td>
+                <td>{{ don.date ? don.date|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ don.compagneCollect }}</td>
+                <td>{{ don.montant }}</td>
+                <td>
+                    <a href="{{ path('app_donation_show', {'id': don.id}) }}">show</a>
+                    <a href="{{ path('app_donation_edit', {'id': don.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_donation_new') }}">Create new</a>
+{% endblock %}

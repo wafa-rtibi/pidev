@@ -1,0 +1,11 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}New Organisation{% endblock %}
+
+{% block content %}
+    <h1>Create new Organisation</h1>
+
+    {{ include('backoffice/organisation/_form.html.twig') }}
+
+    <a href="{{ path('app_organisation_crud_index') }}">back to list</a>
+{% endblock %}

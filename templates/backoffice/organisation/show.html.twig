@@ -1,0 +1,38 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}Organisation{% endblock %}
+
+{% block content %}
+    <h1>Organisation</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ organisation.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom_organisation</th>
+                <td>{{ organisation.nomOrganisation }}</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>{{ organisation.description }}</td>
+            </tr>
+            <tr>
+                <th>Rib</th>
+                <td>{{ organisation.rib }}</td>
+            </tr>
+            <tr>
+                <th>Adresse</th>
+                <td>{{ organisation.adresse }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_organisation_crud_index') }}">back to list</a>
+
+    <a href="{{ path('app_organisation_crud_edit', {'id': organisation.id}) }}">edit</a>
+
+    {{ include('backoffice/organisation/_delete_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}Dons{% endblock %}
+
+{% block content %}
+    <h1>Dons</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ don.id }}</td>
+            </tr>
+            <tr>
+                <th>Date</th>
+                <td>{{ don.date ? don.date|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Compagne_collect</th>
+                <td>{{ don.compagneCollect }}</td>
+            </tr>
+            <tr>
+                <th>Montant</th>
+                <td>{{ don.montant }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_donations_crud_index') }}">back to list</a>
+
+    <a href="{{ path('app_donation_edit', {'id': don.id}) }}">edit</a>
+
+    {{ include('backoffice/donation/_delete_form.html.twig') }}
+{% endblock %}

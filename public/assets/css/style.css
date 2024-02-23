@@ -1,0 +1,44 @@
+.bg-background  {
+    background : #FBD2A0 !important
+}
+
+.navbar-nav {
+    font-size: 1.2rem;
+  }
+  
+  .navbar-nav .nav-link {
+    padding: 1rem;
+  }
+  
+  @media (max-width: 991px) {
+    .navbar-nav .dropdown-menu {
+      position: static;
+      display: none;
+      margin-top: 0;
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .navbar-nav .dropdown-menu.show {
+      display: block;
+      border: none;
+    }
+    .navbar-nav .dropdown-menu a {
+      padding: 1rem;
+    }
+  }
+  
+  .navbar-nav > li:not(:last-child) {
+    margin-right: 1.5rem;
+  }
+
+
+@media screen and (min-width: 992px) {
+  .navbar , .best-seller {
+    margin-left: 50px;
+    margin-right: 50px;
+  }
+}
+
+
+  

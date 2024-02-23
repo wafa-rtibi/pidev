@@ -1,0 +1,41 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}Organisation index{% endblock %}
+
+{% block content %}
+    <h1>Organisation index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nom_organisation</th>
+                <th>Description</th>
+                <th>Rib</th>
+                <th>Adresse</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for organisation in organisations %}
+            <tr>
+                <td>{{ organisation.id }}</td>
+                <td>{{ organisation.nomOrganisation }}</td>
+                <td>{{ organisation.description }}</td>
+                <td>{{ organisation.rib }}</td>
+                <td>{{ organisation.adresse }}</td>
+                <td>
+                    <a href="{{ path('app_organisation_crud_show', {'id': organisation.id}) }}">show</a>
+                    <a href="{{ path('app_organisation_crud_edit', {'id': organisation.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_organisation_crud_new') }}">Create new</a>
+{% endblock %}

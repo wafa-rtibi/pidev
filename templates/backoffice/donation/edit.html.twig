@@ -1,0 +1,13 @@
+{% extends 'backoffice/index.html.twig' %}
+
+{% block title %}Edit Dons{% endblock %}
+
+{% block content %}
+    <h1>Edit Dons</h1>
+
+    {{ include('backoffice/donation/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_donations_crud_index') }}">back to list</a>
+
+    {{ include('backoffice/donation/_delete_form.html.twig') }}
+{% endblock %}
