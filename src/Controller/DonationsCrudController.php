@@ -28,8 +28,11 @@ class DonationsCrudController extends AbstractController
         $don = new Dons();
         $form = $this->createForm(DonsType::class, $don);
         $form->handleRequest($request);
+        
+        $dateActuelle = new \DateTime();
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $don->setDate($dateActuelle);
             $entityManager->persist($don);
             $entityManager->flush();
 

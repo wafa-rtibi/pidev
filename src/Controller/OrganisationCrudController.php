@@ -14,6 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/organisation/crud')]
 class OrganisationCrudController extends AbstractController
 {
+    
     #[Route('/', name: 'app_organisation_crud_index', methods: ['GET'])]
     public function index(OrganisationRepository $organisationRepository): Response
     {
@@ -78,4 +79,7 @@ class OrganisationCrudController extends AbstractController
 
         return $this->redirectToRoute('app_organisation_crud_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    
 }

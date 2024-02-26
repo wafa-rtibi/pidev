@@ -5,9 +5,9 @@
 {% block content %}
     <h1>Edit Organisation</h1>
 
-    {{ include('organisation/_form.html.twig', {'button_label': 'Update'}) }}
+    {{ include('backoffice/organisation/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_organisation_crud_index') }}">back to list</a>
 
-    {{ include('organisation/_delete_form.html.twig') }}
+    {{ include('backoffice/organisation/_delete_form.html.twig') }}
 {% endblock %}

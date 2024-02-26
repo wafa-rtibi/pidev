@@ -6,6 +6,7 @@ use App\Repository\OrganisationRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: OrganisationRepository::class)]
 class Organisation
@@ -22,6 +23,15 @@ class Organisation
     private ?string $description ;
 
     #[ORM\Column(length: 24)]
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Le RIB ne peut pas être vide.")
+     * @Assert\Length(
+     *      min = 12,
+     *      minMessage = "Le RIB doit faire au moins {{ limit }} caractères."
+     * )
+     */
     private ?string $rib ;
 
     #[ORM\Column(length: 255)]
@@ -72,7 +82,7 @@ class Organisation
         return $this->rib;
     }
 
-    public function setRib(string $rib): static
+    public function setRib(string $rib): self
     {
         $this->rib = $rib;
 

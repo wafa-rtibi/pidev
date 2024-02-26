@@ -13,16 +13,18 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 
+use Symfony\Component\Form\FormView;
 class DonsType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+        /*
             ->add('date', DateTimeType::class, [
                 'label' => 'Date',
                 'widget' => 'single_text',
                 'attr' => ['class' => 'form-control']
-            ])
+            ])*/
             ->add('compagne_collect', TextType::class, [
                 'label' => 'Compagne Collect',
                 'attr' => ['class' => 'form-control']
