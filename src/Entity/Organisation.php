@@ -24,7 +24,7 @@ class Organisation
 
     #[ORM\Column(length: 24)]
 
-    /**
+    /*
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank(message="Le RIB ne peut pas être vide.")
      * @Assert\Length(
