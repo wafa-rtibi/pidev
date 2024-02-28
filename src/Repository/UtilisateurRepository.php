@@ -59,7 +59,15 @@ public function findOneById($id): ?Utilisateur
     ;
 }
 
-
+public function findOneByEmail($email): ?Utilisateur
+{
+    return $this->createQueryBuilder('u')
+        ->andWhere('u.email = :val')
+        ->setParameter('val', $email)
+        ->getQuery()
+        ->getOneOrNullResult()
+    ;
+}
 public function search():array{
     return $this->findAll();
 }

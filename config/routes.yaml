@@ -5,7 +5,21 @@ user_list:
     path: /user-list
     controller: App\Controller\UserController::userList
 
+app_edit_user:
+    path: /edituser/{id}
+    controller: App\Controller\UserController::edituser # Replace with your actual controller name
 
-# app_edit_user: 
-#     path: /user-edit
-#     controller: App\Controller\UserController::useredit
+app_list_user:
+    path: /listuser
+    controller: App\Controller\UserController::listuser
+
+
+app_user_profile:
+    path: /profile
+    controller: App\Controller\UserController::profile
+    methods: ['GET']
+
+
+app_register:
+  path: /register
+  controller: App\Controller\RegistrationController::register

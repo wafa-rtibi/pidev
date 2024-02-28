@@ -27,47 +27,47 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
         ]);
     }
-    #[Route('/signin', name: 'app_sign_in')]
-    public function signIn(): Response
-    {
-        return $this->render('backoffice/auth/signIn.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
+    // #[Route('/signin', name: 'app_sign_in')]
+    // public function signIn(): Response
+    // {
+    //     return $this->render('backoffice/auth/signIn.html.twig', [
+    //         'controller_name' => 'UserController',
+    //     ]);
+    // }
 
-    #[Route('/signup', name: 'app_sign_up')]
-    public function signup(Request $request, ManagerRegistry $doctrine,UserPasswordHasherInterface $userPasswordHasher ): Response
-    {
-        $user = new Utilisateur();
-        $registerform = $this->createForm(RegistrationFormType::class, $user);
-        $registerform->add('Signup',SubmitType::class); 
-        $registerform->handleRequest($request);
+    // #[Route('/signup', name: 'app_sign_up')]
+    // public function signup(Request $request, ManagerRegistry $doctrine,UserPasswordHasherInterface $userPasswordHasher ): Response
+    // {
+    //     $user = new Utilisateur();
+    //     $registerform = $this->createForm(RegistrationFormType::class, $user);
+    //     $registerform->add('Signup',SubmitType::class); 
+    //     $registerform->handleRequest($request);
 
 
      
-        if ($registerform->isSubmitted() && $registerform->isValid()) {
-            // encode the plain password
-            // $user->setMdp(
-            //     $userPasswordHasher->hashPassword(
-            //         $user,
-            //         $form->get('mdp')->getData()
-            //     )
-            // );
+    //     if ($registerform->isSubmitted() && $registerform->isValid()) {
+    //         // encode the plain password
+    //         // $user->setMdp(
+    //         //     $userPasswordHasher->hashPassword(
+    //         //         $user,
+    //         //         $form->get('mdp')->getData()
+    //         //     )
+    //         // );
 
-            $user->setdateinscription(new \DateTime('now'));
+    //         $user->setdateinscription(new \DateTime('now'));
 
-            $entityManager =$doctrine->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
+    //         $entityManager =$doctrine->getManager();
+    //         $entityManager->persist($user);
+    //         $entityManager->flush();
 
-            return   $this->json($user) ;
+    //         return   $this->json($user) ;
 
-        }
-        return $this->render('backoffice/auth/signup.html.twig', [
-            'registerform' => $registerform->createView(),
-        ]);
+    //     }
+    //     return $this->render('backoffice/auth/signup.html.twig', [
+    //         'registerform' => $registerform->createView(),
+    //     ]);
            
-    }
+    // }
     #[Route('/adduser', name: 'app_add_user')] 
     public function adduser(Request $request, ManagerRegistry $doctrine , EntityManagerInterface $entityManager ): Response
      {
@@ -144,9 +144,11 @@ class UserController extends AbstractController
             'controller_name' => 'UserController',
             'users' => $users,
 
-        ]);
+        ]);    
     }
  
+
+
 
     #[Route('/edituser/{id}', name: 'app_edit_user')]         
 public function edituser(Request $request, int $id, EntityManagerInterface $entityManager): Response
@@ -185,14 +187,25 @@ public function edituser(Request $request, int $id, EntityManagerInterface $enti
         $userRepository = $entityManager->getRepository(Utilisateur::class);
         $user = $userRepository->find($id);
       
-        if (!$user) {
-            throw $this->createNotFoundException('User not found');
-        }
         
         $entityManager =$doctrine->getManager();
         $entityManager->remove($user);
         $entityManager->flush();  
-        return $this->redirectToRoute('backoffice/user/user-list.html.twig');
+        return $this->redirectToRoute('app_list_user');
     
 }
+
+
+#[Route('/profile', name: 'app_user_profile')]
+public function profile(): Response
+{
+    // Get the current user (assuming you are using Symfony's security)
+    $user = $this->getUser();
+
+    return $this->render('user/profile.html.twig', [
+        'user' => $user,
+    ]);
+}
+
+
 }

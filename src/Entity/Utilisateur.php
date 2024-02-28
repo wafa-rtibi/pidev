@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: "utilisateur")]
 #[Vich\Uploadable]
 
-class Utilisateur implements UserInterface
+class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(length: 255)]
     #[ORM\Id]
@@ -29,7 +29,7 @@ class Utilisateur implements UserInterface
 
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"The name cannot be empty.")]
+    // #[Assert\NotBlank(message:"The name cannot be empty.")]
     #[Assert\Length(
         min:2,
         max:25,
@@ -39,7 +39,7 @@ class Utilisateur implements UserInterface
     private ?string $nom ;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message:"The first name cannot be empty.")]
+    // #[Assert\NotBlank(message:"The first name cannot be empty.")]
     #[Assert\Length(
         min:2,
         max:25,
@@ -67,7 +67,7 @@ class Utilisateur implements UserInterface
     private ?string $Username;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "The password cannot be empty.")]
+    // #[Assert\NotBlank(message: "The password cannot be empty.")]
     #[Assert\Length(
         min: 6,
         minMessage: "The password must be at least {{ limit }} characters.",
@@ -610,8 +610,13 @@ class Utilisateur implements UserInterface
         return $this->Username;
     }
 
-    public function setUsername(string $Username): static
+    public function setUsername(?string $Username): static
     {
+        // Si la valeur du username est nulle, générez-le en combinant nom et prénom
+        if ($Username === null) {
+            $Username = strtolower($this->getNom() . '_' . $this->getPrenom());
+        }
+
         $this->Username = $Username;
 
         return $this;
