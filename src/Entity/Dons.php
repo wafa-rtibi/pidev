@@ -21,8 +21,7 @@ class Dons
     #[ORM\JoinColumn(nullable: false)]
     private ?Utilisateur $donateur ;
 
-    #[ORM\Column(length: 255)]
-    private ?string $compagne_collect ;
+    
 
     #[ORM\Column()]
     private ?float $montant ;
@@ -60,18 +59,6 @@ class Dons
     public function setDonateur(?Utilisateur $donateur): static
     {
         $this->donateur = $donateur;
-
-        return $this;
-    }
-
-    public function getCompagneCollect(): ?string
-    {
-        return $this->compagne_collect;
-    }
-
-    public function setCompagneCollect(string $compagne_collect): static
-    {
-        $this->compagne_collect = $compagne_collect;
 
         return $this;
     }

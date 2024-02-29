@@ -1,11 +1,24 @@
-{% extends 'backoffice/index.html.twig' %}
+{% extends 'base_back.html.twig' %}
 
 {% block title %}New Organisation{% endblock %}
 
-{% block content %}
+{% block navigate %} {% endblock %}
+
+{% block body %}
     <h1>Create new Organisation</h1>
 
-    {{ include('backoffice/organisation/_form.html.twig') }}
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        {# Affichage des erreurs de validation pour le champ RIB
+        {% if form_errors(form.rib)|length > 0 %}
+            <div class="alert alert-danger">
+                {{ form_errors(form.rib) }}
+            </div>
+        {% endif %}#}
+
+        <button type="submit">Submit</button>
+    {{ form_end(form) }}
 
     <a href="{{ path('app_organisation_crud_index') }}">back to list</a>
 {% endblock %}

@@ -10,8 +10,7 @@
             <tr>
                 <th>Id</th>
                 <th>Date et Heure</th>
-                <th>Compagne_collect</th>
-                <th>Montant</th>
+               <th>Montant</th>
                 <th>actions</th
             </tr>
         </thead>
@@ -20,7 +19,6 @@
             <tr>
                 <td>{{ don.id }}</td>
                 <td>{{ don.date ? don.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ don.compagneCollect }}</td>
                 <td>{{ don.montant }}</td>
                 <td>
                     <a href="{{ path('app_donation_show', {'id': don.id}) }}">show</a>

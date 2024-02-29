@@ -22,17 +22,22 @@ class Organisation
     #[ORM\Column(length: 255)]
     private ?string $description ;
 
-    #[ORM\Column(length: 24)]
+   
 
-    /*
-     * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Le RIB ne peut pas être vide.")
-     * @Assert\Length(
-     *      min = 12,
-     *      minMessage = "Le RIB doit faire au moins {{ limit }} caractères."
-     * )
-     */
-    private ?string $rib ;
+    #[ORM\Column(length: 12)]
+/**
+ * @ORM\Column(type="string", length=12)
+ * @Assert\NotBlank(message="Le RIB ne peut pas être vide.")
+ * @Assert\Length(
+ *      min = 12,
+ *      max = 12,
+ *      
+ *      allowEmptyString = false
+ * )
+ */
+private ?string $rib;
+
+
 
     #[ORM\Column(length: 255)]
     private ?string $adresse ;

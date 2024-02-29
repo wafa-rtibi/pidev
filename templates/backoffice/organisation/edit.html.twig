@@ -1,8 +1,10 @@
-{% extends 'backoffice/index.html.twig' %}
+{% extends 'base_back.html.twig' %}
 
 {% block title %}Edit Organisation{% endblock %}
 
-{% block content %}
+{% block navigate %} {% endblock %}
+
+{% block body %}
     <h1>Edit Organisation</h1>
 
     {{ include('backoffice/organisation/_form.html.twig', {'button_label': 'Update'}) }}
@@ -11,3 +13,5 @@
 
     {{ include('backoffice/organisation/_delete_form.html.twig') }}
 {% endblock %}
+
+
