@@ -35,14 +35,18 @@ class Blog
    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private ?string $image = null;
+    
+     #[ORM\Column()]
+    private  $image ;
 
 
    /**
      * @Vich\UploadableField(mapping="blog_images", fileNameProperty="image")
+     * 
      * @var File|null
      */
-    private $imageFile = null;
+    #[Vich\UploadableField(mapping: "blog_images", fileNameProperty: "image")]
+     private $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
     private ?Utilisateur $auteur= null ;
@@ -103,26 +107,26 @@ class Blog
 
         return $this;
     }
-    // public function setImageFile1(File $imageFile)
-    // {
-    //     $this->imageFile = $imageFile;
-    // }
+    public function setImageFile(File $imageFile)
+    {
+        $this->imageFile = $imageFile;
+    }
 
-    // public function getImageFile()
-    // {
-    //     return $this->imageFile;
-    // }
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
 
-    // public function setImage($image): static
-    // {
-    //     $this->image = $image;
-    //     return $this;
-    // }
+    public function setImage($image): static
+    {
+        $this->image = $image;
+        return $this;
+    }
 
-    // public function getImage()
-    // {
-    //     return $this->image;
-    // }
+    public function getImage()
+    {
+        return $this->image;
+    }
 
 
    

@@ -2,16 +2,17 @@
 {% block body %}
 
 
-    <section>
-        <h1>{{ blog.titre }}</h1>
-        <div class="content">
-            <p>{{ blog.contenu }}</p>
-        </div>
-        <div class="img">
-            <img src="{{ asset('frontoffice/images/nature.jpg') }}" alt="Blog Image">
-            <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a>
-        </div>
-    </section>
+ <section>
+    <h1>{{ blog.titre }}</h1>
+    <div class="content">
+        <p>{{ blog.contenu }}</p>
+    </div>
+    <div class="img">
+        <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image">
+        <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a>
+    </div>
+</section>
+
 <br><br><br><br><br><br><br><br><br><br>
 
 
@@ -158,6 +159,7 @@ img {
     color: white;
     padding: .5em 1em;
 }
+
 </style>
 
 {% endblock %}

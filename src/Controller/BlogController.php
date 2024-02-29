@@ -16,6 +16,8 @@ use App\Entity\Blog; // Import your BlogPost entity
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Field\File;
+use App\Entity\Commentaire;
+use App\Form\CommentType;
 class BlogController extends AbstractController
 {
     #[Route('/blog', name: 'app_blog')]
@@ -28,19 +30,20 @@ class BlogController extends AbstractController
     }
 
     #[Route('/blog/{id}', name: 'single_blog')]
-    public function show($id): Response
+    public function show(Blog $blog, ManagerRegistry $doctrine,$id): Response
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $blog = $entityManager->getRepository(Blog::class)->find($id);
 
-        if (!$blog) {
-            throw $this->createNotFoundException('The blog post does not exist');
-        }
+        $blog=$doctrine->getRepository(Blog::class)->find($id);
 
-        return $this->render('frontoffice/blog/single_blog.html.twig', [
-            'blog' => $blog,
-        ]);
-    }
+        // $comment = new Commentaire();
+    // $comment->setBlog($blog); // Set the blog post associated with the comment
+
+
+    return $this->render('frontoffice/blog/single_blog.html.twig', [
+        'blog' => $blog,
+        
+    ]);
+}
 
     #[Route('/createblog', name: 'create_blog')] 
     public function addblog(Request $request, EntityManagerInterface $entityManager,  ManagerRegistry $doctrine): Response

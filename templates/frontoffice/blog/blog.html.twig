@@ -31,7 +31,7 @@
             {% for blog in blogs %}
                 <div class="col-md-6">
                     <div class="post-entry">
-                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('frontoffice/images/nature.jpg') }}" alt="Image" class="img-fluid">
+                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
                         <h2>{{ blog.titre }}</h2>
                         <p>{{ blog.contenu }}</p></a>
                         <!-- Other blog details -->

@@ -11,7 +11,10 @@
         <div class="form-group col-md-6">
             {{ form_row(form.contenu) }}
         </div>    
- <a href="{{path('app_blog')}}">{{ form_row(form.ADD) }}</a>
+         <div class="form-group col-md-6">
+            {{ form_row(form.imageFile) }}
+        </div>   
+ <a href="{{path('app_blog')}}" >{{ form_row(form.ADD) }}</a>
  
 
     {{ form_end(form) }}
@@ -60,7 +63,7 @@ textarea {
 
 button[type="submit"] {
     display: block;
-    width: 100%;
+    width: 10%;
     padding: 10px;
     background-color: #007bff;
     color: #fff;

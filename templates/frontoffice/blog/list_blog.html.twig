@@ -2,7 +2,7 @@
 {% block body %}
       <h1> Blog list</h1>
 
-    <ul>
+    {# <ul>
         {% for blog in blogs %}
             <li>
                 {{ blog.titre }}
@@ -10,6 +10,28 @@
                 <a href="{{ path('delete_blog', {'id': blog.id}) }}">Delete</a>
             </li>
         {% endfor %}
-    </ul>
+    </ul> #}
+
+
+<!-- Start Blog Section -->
+		<div class="blog-section">
+    <div class="container">
+        <div class="row">
+            {% for blog in blogs %}
+            <li>
+                <div class="col-md-6">
+                    <div class="post-entry">
+                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
+                        <h2>{{ blog.titre }}</h2>
+                        <p>{{ blog.contenu }}</p></a>
+                    </div>
+                </div>
+                <a href="{{ path('edit_blog', {'id': blog.id}) }}">Modify</a>
+                <a href="{{ path('delete_blog', {'id': blog.id}) }}">Delete</a>
+            </li>
+            {% endfor %}
+
+
+
     <br><br><br><br><br><br><br><br><br><br><br>
 {% endblock %}
