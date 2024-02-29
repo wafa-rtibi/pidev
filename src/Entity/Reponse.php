@@ -38,6 +38,12 @@ class Reponse
     #[ORM\ManyToOne(inversedBy: 'reponses')]
     private ?Administrateur $admin = null;
 
+
+    //variable zitou jedid o njarreb fih
+
+    #[ORM\Column]
+    private ?bool $vu = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +93,18 @@ class Reponse
     public function setAdmin(?Administrateur $admin): static
     {
         $this->admin = $admin;
+
+        return $this;
+    }
+
+    public function isVu(): ?bool
+    {
+        return $this->vu;
+    }
+
+    public function setVu(bool $vu): static
+    {
+        $this->vu = $vu;
 
         return $this;
     }

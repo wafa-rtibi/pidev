@@ -1,29 +1,7 @@
-{% extends 'base_front.html.twig' %}
+{% extends 'dashAdminReclam.html.twig' %}
 {% block body %}
 
-	<!-- Start Hero Section -->
-	<div class="hero">
-		<div class="container">
-			<div class="row justify-content-between">
-				<div class="col-lg-5">
-					<div class="intro-excerpt">
-						<h1>Reclamation</h1>
-						<p class="mb-4">"Concerned about sustainability? Use our reclamation interface to report any issues or suggest improvements."</p>
-						<p>
-							<a href="{{ path('app_home') }}" class="btn btn-secondary me-2">Home</a>
-							<a href="#" class="btn btn-white-outline">Explore</a>
-						</p>
-					</div>
-				</div>
-				<div class="col-lg-7">
-					<div class="hero-img-wrap">
-						<img src="{{ asset('frontoffice/images/reclam-removebg-preview.png') }}" class="img-fluid">
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Hero Section -->
+	
 
 	<!-- Start Response Display Section -->
 	<div class="untree_co-section">
@@ -32,27 +10,28 @@
 				<div class="row justify-content-center">
 					<div class="col-md-8 col-lg-8 pb-4">
 						<div class="container">
-							<h2>Reclamation Response</h2>
+							<h2>Response Details</h2>
+							<div style="height: 30px;"></div>
 							<div class="card">
 								<div class="card-body">
-									<h5 class="card-title">Response Details</h5>
+									{# <h5 class="card-title">Response Details</h5> #}
 									<p class="card-text">Id:
 										{{ reponse.id }}</p>
 									<p class="card-text">Description:
-										{{ reponse.description }}</p>
+										{{ rep.description }}</p>
 									<p class="card-text">Date Response:
-										{{ reponse.dateReponse ? reponse.dateReponse|date('Y-m-d') : '' }}</p>
+										{{ rep.dateReponse ? rep.dateReponse|date('Y-m-d') : '' }}</p>
 								</div>
 
 
-						
+								<div style="height: 100px;"></div>
 
-								{# <div class="card-footer text-center"> #}
+								<div class="card-footer text-center">
 
-                                <a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>
+									<a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>
 
 									{# <a href="{{ path('app_list',{'reclamateur_id': reponse.getReclamReponse().getReclamateur().id}) }}" class="btn btn-secondary">Back to List</a> #}
-								{# </div> #}
+								</div>
 							</div>
 						</div>
 					</div>
@@ -62,5 +41,5 @@
 	</div>
 	<!-- End Response Display Section -->
 
-{% endblock %}
+ {% endblock %} 
 

@@ -61,20 +61,26 @@ done_reponse:
     path: '/reponse/thankyou'
     controller: 'App\Controller\ReponseController::done_reponse'
 show_reponse:
-    path: '/reponse/show/{id}'
+    path: '/reponse/show/{reclamateur_id}/{id}'
     controller: 'App\Controller\ReponseController::show_reponse'
 
 show_reponse_admin:
-    path: '/reponse/admin/show/{id}'
+    path: '/reponse/admin/show/{reclamateur_id}/{id}'
     controller: 'App\Controller\ReponseController::show_reponse_admin'
 
 edit_reponse:
-    path: '/reponse/edit/{id}'
+    path: '/reponse/edit/{reclamateur_id}/{id}'
     controller: 'App\Controller\ReponseController::edit_reponse'
 
 delete_reponse:
     path: '/reponse/delete/{id}'
     controller: 'App\Controller\ReponseController::delete_reponse'
+
+showAndAddResponse:
+    path: '/reclamation/show_and_add_response/{reclamateur_id}/{id}'
+    controller: 'App\Controller\ReponseController::showAndAddResponse'
+
+
 
 index:
     path: '/user'

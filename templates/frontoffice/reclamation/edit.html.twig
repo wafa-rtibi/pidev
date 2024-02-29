@@ -87,21 +87,28 @@
 
 
 						<!-- Form content -->
-						
-							<div class="col-lg-12"> <div class="form-container">
+
+						<div class="col-lg-12">
+							<div class="form-container">
 								<h2>Edit Your Reclamation</h2>
 								{{ form_start(form,{'attr': {'novalidate': 'novalidate', 'class': 'needs-validation', 'id': 'reclamation-form'}}
 								) }}
 								<div class="mb-3">
 									{{ form_row(form.type, {'attr': {'class': 'form-control'}}) }}
 								</div>
-								<div
-									class="mb-3"> 
-									{{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 96px;'}}) }}
-								</div>
+								 <div  
+								 class="mb-3">   
+								 {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 96px;'}}) }}  #}
+
+
+								 </div>  
+
+
 								<div class="mb-3">
 									{{ form_row(form.save, { 'label': 'Save Changes', 'attr': {'class': 'btn btn-primary'}}) }}
 								</div>
+
+
 								{{ form_end(form) }}
 								<a href="{{ path('app_home') }}" class="btn btn-secondary">Back to Home</a>
 							</div>
@@ -120,5 +127,5 @@
 </div>
 
 
-<!-- End Contact Form -->
-{% endblock %}
+<!-- End Contact Form -->{% endblock %}
+

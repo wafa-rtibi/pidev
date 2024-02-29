@@ -24,16 +24,52 @@
 		</div>
 	</div>
 	<!-- End Hero Section -->
+<!-- Ajoutez des champs de formulaire pour le filtrage -->
 
+ 
 
 	<!-- Start Contact Form -->
 	<div class="untree_co-section">
 		<div class="container">
 			<div class="block">
 				<div class="row justify-content-center">
-					<div class="col-md-8 col-lg-8 pb-4">
+					<div class="col-md-8 col-lg-12 pb-4">
 						<div class="container">
 							<h2>List of Reclamations</h2>
+
+
+
+
+
+		<form action="{{ path('app_list', {'reclamateur_id': user.id}) }}" method="get" class="mb-4">
+    <div class="form-row">
+        <!-- Champ de filtrage par type -->
+        <div class="col-md-3 mb-2">
+            <select name="type" class="form-control">
+                <option value="">All</option>
+                <option value="Type1" {% if app.request.query.get('type') == 'Type1' %}selected{% endif %}>arnaque</option>
+                <option value="Type2" {% if app.request.query.get('type') == 'Type2' %}selected{% endif %}>conflit</option>
+                <!-- Ajouter d'autres options de type si nécessaire -->
+            </select>
+        </div>
+
+        <!-- Champ de filtrage par statut -->
+        <div class="col-md-3 mb-2">
+            <select name="statut" class="form-control">
+                <option value="">All</option>
+                <option value="Resolved" {% if app.request.query.get('statut') == 'Resolved' %}selected{% endif %}>Resolved</option>
+                <option value="Sent successfully" {% if app.request.query.get('statut') == 'Sent successfully' %}selected{% endif %}>Sent successfully</option>
+                <!-- Ajouter d'autres options de statut si nécessaire -->
+            </select>
+        </div>
+
+        <!-- Bouton de soumission -->
+        <div class="col-md-2 mb-2">
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </div>
+    </div>
+</form>
+
 							<div class="table-responsive">
 								<table class="table complaint-table">
 									<thead>
@@ -92,6 +128,11 @@
 		</div>
 	</div>
 	<!-- End Contact Form -->
+
+ 
+    
+      
+
 
 {% endblock %}
 

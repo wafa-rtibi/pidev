@@ -1,0 +1,61 @@
+{% extends 'dashAdminReclam.html.twig' %}
+
+{% block body %}
+	<div
+		class="container">
+		{# Bloc pour afficher les détails de la réclamation #}
+		<div class="row justify-content-center">
+			<div class="col-md-8">
+				<div class="card mt-5">
+					<div class="card-body">
+						<h2 class="card-title text-center mb-4">Reclamation Details</h2>
+						<p class="card-text">
+							<strong>ID:</strong>
+							{{ reclamation.id }}</p>
+						<p class="card-text">
+							<strong>Type:</strong>
+							{{ reclamation.type }}</p>
+						<p class="card-text">
+							<strong>Description:</strong>
+							{{ reclamation.DescriptionReclamation }}</p>
+						<p class="card-text">
+							<strong>Date Reclamation:</strong>
+							{{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d') : '' }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		{# Bloc pour soumettre une réponse à la réclamation #}
+		<div class="row justify-content-center mt-5">
+			<div class="col-md-8">
+				<div class="card">
+					<div class="card-body">
+						<h2 class="card-title text-center mb-4">Submit Your Reclamation Response</h2>
+						<form method="post" id="reclamation-response-form" class="needs-validation" novalidate>
+							<div
+								class="mb-3">
+								{# Champ pour la description de la réponse #}
+								{{ form_row(form.description, {'attr': {'class': 'form-control', 'placeholder': 'Description'}}) }}
+							</div>
+							<div
+								class="mb-3">
+								{# Bouton pour soumettre la réponse #}
+								{{ form_row(form.save, { 'label': 'Submit', 'attr': {'class': 'btn btn-primary btn-block'}}) }}
+							</div>
+							{# Fin du formulaire #}
+							{{ form_end(form) }}
+						</form>
+						<div class="card-footer text-center">
+
+									<a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>
+
+									{# <a href="{{ path('app_list',{'reclamateur_id': reponse.getReclamReponse().getReclamateur().id}) }}" class="btn btn-secondary">Back to List</a> #}
+								</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
+

@@ -19,9 +19,6 @@ use App\Validator\Constraints\CustomNotBlank;
 class Reclamation
 
 {
-
-    
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -52,6 +49,7 @@ class Reclamation
    
 
  #[ORM\Column(length: 255)]
+ #[Assert\NotBlank(message: "Type is required")]
  private ?string $type = null ;
 
     #[ORM\OneToOne(mappedBy: 'reclam_reponse', cascade: ['persist', 'remove'])]

@@ -18,6 +18,23 @@ body {
   color: #6a6a6a;
   font-size: 14px;
   background-color: #eff2f1; }
+
+
+
+  /*emna*/
+  .alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+
  .col-12 .col-md-4 .col-lg-3 .mb-5 .mb-md-0 {
     border-radius: 25px;
 
@@ -56,8 +73,8 @@ a {
   position: absolute; /* Position absolue */
   bottom: 0; /* Alignement au bas */
   width: 100%; /* Largeur de 100% */
+  
 }
-
     .text-center {
       text-align: center; /* Pour centrer le texte */
   }
@@ -774,4 +791,4 @@ textarea {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: rgba(59, 93, 80, 0.2); }
+    background: rgba(59, 93, 80, 0.2); } 
