@@ -9,10 +9,75 @@
     </div>
     <div class="img">
         <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image">
-        <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a>
+        {# <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a> #}
+    </div>
+    
+{# Display existing comments #}
+    {# <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+            <li>{{ comment.content }}</li>
+        {% endfor %}
+    </ul>
+
+    {# Add a form for users to submit new comments #}
+    {# <h2>Add a Comment</h2>
+    <form action="{{ path('submit_comment', {'id': blog.id}) }}" method="post">
+        {{ form_widget(commentForm.contenu) }} {# Assuming you have a 'content' field in your Comment entity #}
+        {# <button type="submit">Submit</button>
+    </form>   #}
+    {# <!-- delete -->
+    <a href="{{ path('delete_commentfront', {'id': commentaire.id}) }}" class="delete-action">
+        <i class="fas fa-trash delete-icon" style="color:red;"></i>
+    </a>
+    <!-- édit -->
+    <a href="{{ path('edit_commentfront', {'id': commentaire.id}) }}" class="edit-action">
+        <i class="fas fa-pencil-alt edit-icon" style="color:blue;"></i>
+    </a> #}
+   <div class="share-buttons">
+   <br>
+        <span class="fa fa-brands fa-facebook-f" style="color:blue"></span><a href="#" onclick="shareOnFacebook('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Facebook</a>
+        <span class="fa fa-brands fa-twitter"style="color:#1DA1F2"></span><a href="#" onclick="shareOnTwitter('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Twitter</a>
     </div>
 </section>
 
+<script>
+    function shareOnFacebook(title, url) {
+        // Initialize Facebook SDK
+        window.fbAsyncInit = function() {
+            FB.init({
+                appId: '365303653002910', 
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v11.0'
+            });
+
+            // Share link on Facebook
+            FB.ui({
+                method: 'share',
+                href: url,
+                quote: title
+            });
+        };
+
+        // Load the Facebook SDK asynchronously
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = 'https://connect.facebook.net/en_US/sdk.js';
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    }
+
+    function shareOnTwitter(title, url) {
+        // Construct the tweet URL
+        var tweetUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+
+        // Open the Twitter sharing window
+        window.open(tweetUrl, '_blank');
+    }
+</script>
 <br><br><br><br><br><br><br><br><br><br>
 
 

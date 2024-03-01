@@ -5,3 +5,10 @@
 single_blog:
     path: '/blog/{id}'
     controller: 'App\Controller\BlogController::show'
+
+# config/routes.yaml
+
+submit_comment:
+    path: '/blog/{id}/comment'
+    controller: App\Controller\BlogController::submitComment
+    methods: ['POST']

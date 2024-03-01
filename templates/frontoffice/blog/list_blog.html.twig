@@ -1,18 +1,17 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
-      <h1> Blog list</h1>
-
-    {# <ul>
-        {% for blog in blogs %}
-            <li>
-                {{ blog.titre }}
-                <a href="{{ path('edit_blog', {'id': blog.id}) }}">Modify</a>
-                <a href="{{ path('delete_blog', {'id': blog.id}) }}">Delete</a>
-            </li>
-        {% endfor %}
-    </ul> #}
-
-
+<div class="container">
+            <div class="row height d-flex justify-content-center align-items-center"style="margin-left: 20;">
+              <div class="col-md-6">
+                <div class="form">
+                  <i class="fa fa-search"></i>
+                  <input type="text" class="form-control form-input" placeholder="Search anything...">
+                  <span class="left-pan"><i class="fa fa-microphone"></i></span>
+                </div>               
+              </div>
+            </div>
+          </div>
+      <br><h1> Blog list</h1>
 <!-- Start Blog Section -->
 		<div class="blog-section">
     <div class="container">
@@ -26,12 +25,62 @@
                         <p>{{ blog.contenu }}</p></a>
                     </div>
                 </div>
-                <a href="{{ path('edit_blog', {'id': blog.id}) }}">Modify</a>
-                <a href="{{ path('delete_blog', {'id': blog.id}) }}">Delete</a>
-            </li>
+                <a href="{{ path('edit_blog', {'id': blog.id}) }}"style="padding: 4px 10px; border: 2px solid blue; border-radius: 5px;color: blue; font-weight: bold;">Modify</a>
+                <a href="{{ path('delete_blog', {'id': blog.id}) }}"style="padding: 4px 10px; border: 2px solid red; border-radius: 5px;color: red; font-weight: bold;">Delete</a>
+            </li><br><br>
             {% endfor %}
 
+<style>
 
+.height{
 
-    <br><br><br><br><br><br><br><br><br><br><br>
+    height: 10vh;
+}
+
+.form{
+
+    position: relative;
+}
+
+.form .fa-search{
+
+    position: absolute;
+    top:20px;
+    left: 20px;
+    color: #9ca3af;
+
+}
+
+.form span{
+
+    position: absolute;
+    right: 17px;
+    top: 13px;
+    padding: 2px;
+    border-left: 1px solid #d1d5db;
+
+}
+
+.left-pan{
+    padding-left: 7px;
+}
+
+.left-pan i{
+   
+   padding-left: 10px;
+}
+
+.form-input{
+
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
+
+.form-input:focus{
+
+    box-shadow: none;
+    border:none;
+}
+</style>            
 {% endblock %}
