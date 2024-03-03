@@ -790,7 +790,7 @@
         <!--Nav Start-->
         <nav class="nav navbar navbar-expand-lg navbar-light iq-navbar">
           <div class="container-fluid navbar-inner">
-            <a href="backoffice/html/dashboard/index.html" class="navbar-brand">
+            <a  class="navbar-brand">
                 <!--Logo start-->
                 <!--logo End-->
                 
@@ -827,7 +827,7 @@
                 </svg>
                 </i>
             </div>
-            <div class="input-group search-input">
+            {# <div class="input-group search-input">
               <span class="input-group-text" id="search-input">
                 <svg class="icon-18" width="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></circle>
@@ -835,7 +835,26 @@
                 </svg>
               </span>
               <input type="search" class="form-control" placeholder="Search...">
-            </div>
+            </div> #}
+
+   <form action="{{ path('app_list_user') }}" method="get" class="d-flex justify-content-between align-items-center">
+  <div class="input-group search-input">
+      <input type="search" id="search-input" name="search" class="form-control border-0 rounded-start ps-3" placeholder="Rechercher un utilisateur">
+
+    <span class="input-group-text search-icon" type="submit"  id="search-input">
+      <svg class="icon-16" width="17" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="11.7669" cy="11.7666" r="8.98856" stroke="currentColor" stroke-width="1.2" ></circle>
+        <path d="M18.0186 18.4851L21.5426 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </span>
+  </div>
+  {# <button type="submit" class="btn btn-primary rounded-end">Rechercher</button> #}
+</form>
+
+
+
+
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon">
                   <span class="mt-2 navbar-toggler-bar bar1"></span>
@@ -1041,11 +1060,23 @@
          <div class="card">
            <div class="card-header d-grid grid-template-columns: 1fr auto;">
   <div class="header-title">
-   <div class="card-header d-flex justify-content-between align-items-center">
+   <div class="card-header d-flex justify-content-between align-items-right">
     <div class="header-title">
         <h4 class="card-title">User List</h4>
     </div>
     <a href="{{ path('app_add_user') }}" class="btn btn-primary">Add User</a>
+    <
+    <form action="{{ path('app_list_user') }}" method="get" class="d-flex justify-content-between align-items-center">
+        <div class="form-group mx-2 mb-0">
+            <select class="form-control" name="status" id="status">
+                <option value="" selected disabled hidden>Statut</option>
+                <option value="active">Actif</option>
+                <option value="inactive">Inactif</option>
+                <!-- Add more status options if needed -->
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary rounded-end">Filtrer</button>
+    </form>
 </div>
 
 
@@ -1062,7 +1093,6 @@
                            <th>Email</th>
                            <th>Address</th>
                            <th>Status</th>
-                           <th>RIB</th>
                            <th>Registration Date</th>
                            <th style="min-width: 100px">Action</th>
                         </tr>
@@ -1080,10 +1110,9 @@
                             <td>{{ user.tel }}</td>
                             <td>{{ user.email }}</td>
                             <td>{{ user.adresse }}</td>
-                            <td><span class="badge bg-primary">{{ user.isActive }}</span></td>
-                            <td>{{ user.rib }}</td>
+                            <td><span class="badge bg-success">{{ user.isActive }}</span></td>
                             <td>{{ user.dateinscription|date('Y/m/d') }}</td>
-                            <td>
+                            <td>  
                               <div class="flex align-items-center list-user-action">
                                  <a class="btn btn-sm btn-icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"title="Add" href="{{ path('app_add_user') }}">
                                     <span class="btn-inner">

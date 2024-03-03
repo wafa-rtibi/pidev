@@ -64,14 +64,7 @@ class UserType extends AbstractType
         //     'attr' => ['class' => 'form-control', 'placeholder' => 'Password'],
         //     'required' => true,
         // ])
-        ->add('rib'
-        , NumberType::class, [
-            'attr' => ['class' => 'form-control', 'placeholder' => '12345678901201234567890123'],
-            'label' => 'RIB (Bank Identification Statement):',
-            'required' => false,
-            
-        ]
-        )
+      
       
         ->add('Username', TextType::class, [
             'label' => 'Username:',

@@ -95,17 +95,17 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     // #[ORM\Column(length:255, nullable: true)]
     // private ?DateTime $updatedAt = null;
     
-    #[ORM\Column(length: 255)]
-    // #[Assert\Length(
-    //     min: 23,
-    //     max: 23,
-    //     exactMessage: "The RIB must be exactly {{ limit }} characters."
-    // )]
-    // #[Assert\Regex(
-    //     pattern: "/^[0-9]+$/",
-    //     message: "The RIB must contain only numeric characters."
-    // )]
-    private ?string $rib;
+    // #[ORM\Column(length: 255)]
+    // // #[Assert\Length(
+    // //     min: 23,
+    // //     max: 23,
+    // //     exactMessage: "The RIB must be exactly {{ limit }} characters."
+    // // )]
+    // // #[Assert\Regex(
+    // //     pattern: "/^[0-9]+$/",
+    // //     message: "The RIB must contain only numeric characters."
+    // // )]
+    // private ?string $rib;
 
     #[ORM\Column(length: 255)]
     private ?string $adresse;
@@ -469,17 +469,17 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getRib(): ?int
-    {
-        return $this->rib;
-    }
+    // public function getRib(): ?int
+    // {
+    //     return $this->rib;
+    // }
 
-    public function setRib(int $rib): self
-    {
-        $this->rib = $rib;
+    // public function setRib(int $rib): self
+    // {
+    //     $this->rib = $rib;
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
     public function getAdresse(): ?string
     {
@@ -529,7 +529,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     //     return $this;
     // }
 
-    public function getroles(): ?array
+    public function getRoles(): ?array
     {   
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
@@ -539,7 +539,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
     }
 
-    public function setroles(array $roles): self
+    public function setRoles(array $roles): self
     {
         $this->roles = $roles;
 
@@ -560,7 +560,9 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
     public function getSalt(): ?string
     {
-        return $this->salt;
+        // return $this->salt;
+        return null;
+
     }
 
     public function setSalt(string $salt): self
@@ -614,7 +616,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     {
         // Si la valeur du username est nulle, générez-le en combinant nom et prénom
         if ($Username === null) {
-            $Username = strtolower($this->getNom() . '_' . $this->getPrenom());
+            $Username = strtolower($this->getNom() . ' ' . $this->getPrenom());
         }
 
         $this->Username = $Username;

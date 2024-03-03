@@ -165,7 +165,7 @@ class RegistrationFormType extends AbstractType
                     ],
                 ],
                 'second_options' => [
-                    'label' => 'Password confirmation',
+                    'label' => 'Password Confirm',
                     'attr' => [
                         'autocomplete' => 'new-password',
                         'class' => 'form-control',

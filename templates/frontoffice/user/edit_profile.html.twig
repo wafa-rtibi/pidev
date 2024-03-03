@@ -1,0 +1,39 @@
+{# templates/user/edit_profile.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier mon profil{% endblock %}
+
+{% block body %}
+    <h1>Modifier mon profil</h1>
+
+    {{ form_start(edit_profile_form) }}
+
+    <div class="form-group">
+        {{ form_label(edit_profile_form.nom) }}
+        {{ form_widget(edit_profile_form.nom) }}
+    </div>
+
+    <div class="form-group">
+        {{ form_label(edit_profile_form.email) }}
+        {{ form_widget(edit_profile_form.email) }}
+    </div>
+
+    {# Formulaire pour modifier les informations supplémentaires (optionnel) #}
+    {% if avatar is not null %}
+        <div class="form-group">
+            {{ form_label(edit_profile_form.avatar) }}
+            {{ form_widget(edit_profile_form.avatar) }}
+        </div>
+    {% endif %}
+    {% if address is not null %}
+        <div class="form-group">
+            {{ form_label(edit_profile_form.address) }}
+            {{ form_widget(edit_profile_form.address) }}
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Modifier</button>
+
+    {{ form_end(edit_profile_form) }}
+{% endblock %}

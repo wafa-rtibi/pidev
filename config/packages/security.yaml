@@ -5,7 +5,12 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        #users_in_memory: { memory: null }
+        
+        app_user_provider:
+            entity:
+                class: App\Entity\Utilisateur
+                property: email
 
     # security:
     #     csrf_protection: true
@@ -15,13 +20,37 @@ security:
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            custom_authenticator: App\Security\LoginFormAuthenticator
+            # guard:
+            #     authenticators:
+            #         - App\Security\LoginFormAuthenticator
+            provider: app_user_provider
+            entry_point: form_login
             form_login:
-                login_path: app_login
-                check_path: app_login
-                enable_csrf: true
-            logout:
-                path: app_logout
+                  login_path: app_login
+                  check_path: app_login
+                  default_target_path: app_home
+
+            #     username_parameter: email
+            #     password_parameter: password
+            #     enable_csrf: true
+            #     # always_use_default_target_path: true
+            #     use_referer: true
+            #     failure_path: app_login  #login_failure_route_name
+            #     target_path_parameter: go_to
+            #     failure_path_parameter: back_to
+
+            logout: 
+                  path: app_logout
+                  target: /
+            
+            # remember_me:
+            #     secret: '%kernel.secret%'
+            #     always_remember_me: true
+ 
+
+                # path: app_logout
+                # custom_authenticator: App\Security\LoginFormAuthenticator
                 # where to redirect after logout
                 # target: app_any_route
 
@@ -33,12 +62,13 @@ security:
 
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        # access_control:
+        #    - { path: ^/listuser, roles: ROLE_ADMIN }
+        #    - { path: ^/home, roles: ROLE_USER }
 
 when@test:
     security:
+        hide_user_not_found: false
         password_hashers:
             # By default, password hashers are resource intensive and take time. This is
             # important to generate secure password hashes. In tests however, secure hashes
@@ -60,3 +90,4 @@ when@test:
             migrate_from:
                 - bcrypt # uses the "bcrypt" hasher with the default options
                 - legacy # uses the "legacy" hasher configured above
+
