@@ -1,0 +1,131 @@
+{% extends "base_front.html.twig" %}
+{% block body %}
+<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>
+							<strong>Proposals For {{offre.getNom()}}</strong>
+						</h1>
+					</div>
+				</div>
+				  <div class="col-lg-7">
+					<div class="hero-img-wrap">
+                         <img src="{{asset('/uploads/images/offres/' ~ offre.getImage1() )}}" alt="Image" class="img-fluid image">
+                    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Hero Section -->
+	{#start demandes #}
+	<div class="untree_co-section before-footer-section">
+
+		<div class="container">
+
+			<div class="row mb-5">
+				<div class="row mb-5">
+					{% if demandesRecu is defined %}
+
+						{% if demandesRecu is empty %}
+							<div class="container mt-5">
+						<h1>
+								<strong>
+									YOU DONT HAVE ANY PROPOSAL
+								</strong><h1/>
+						</div>
+							{% else %}
+								<form class="col-md-12" method="post">
+									<div class="site-blocks-table">
+
+										<table class="table">
+											<thead>
+												<tr>
+													<th class="product-thumbnail">Picture</th>
+													<th class="product-name">Offer
+													</th>
+													<th class="product-price">Demander</th>
+													<th class="product-quantity">Date</th>
+                                                    <th class="product-quantity">Message</th>
+													<th class="product-total">Status</th>
+                                                    <th class="product-quantity">Action</th>
+
+												</tr>
+											</thead>
+											<tbody>
+
+
+												{% for demande in demandesRecu %}
+
+													{% set offre=demande.getOpposite() %}
+													{% set demandeur=demande.getDemandeur() %}
+													<tr>
+														<td class="product-thumbnail">
+															<img src="{{asset('/uploads/images/offres/' ~ offre.getImage1() )}}" alt="Image" class="img-fluid" style=" width:160px; height:160px;">
+														</td>
+														<td class="product-name">
+															<h2 class="h5 text-black">{{offre.getNom()}}</h2>
+														</td>
+														<td>{{demandeur.getNom()}}</td>
+														<td>
+															{{ demande.getDateCreation()|date('Y-m-d') }}
+
+
+														</td>
+                                                        <td>
+															{{ demande.getMessage() }}
+
+
+														</td>
+                                                        
+														{% if demande.getStatut() in ['accepté', 'refusé'] %}
+
+															<td>{{ demande.getStatut() }}
+
+																{% if  demande.getStatut() in ['accepté'] %}
+																	<a href="{{path('app_chat')}}" class="btn btn-info">Chat</a>
+																{% endif %}
+															</td>
+
+														{% else %}
+
+															<td>
+																<a href="{{path('app_demande_accepte', {'id_demande': demande.id })}}" class="btn btn-info">Accept</a>
+																<a href="{{path('app_demande_refus',{'id_demande': demande.id })}}" class="btn btn-danger">Refuse</a>
+															</td>
+														{% endif %}
+                                                         <td>
+															<a href="{{path('app_offre_details',{'id_offre': offre.id})}}"> show details </a>
+
+														</td>
+													</tr>
+
+												{% endfor %}
+
+											</tbody>
+										</table>
+									</div>
+								</form>
+							</div>
+
+
+											{% endif %}
+										{% endif %}							
+						</div>
+					</div>
+				</div>
+
+				{#end demandes #}
+            </div>
+        </div>
+    </div>  
+
+    <style>
+     .image{
+        width:200px;
+        height: 200px;
+     }
+    </style>      
+{% endblock %}

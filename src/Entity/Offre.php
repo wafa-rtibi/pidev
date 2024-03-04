@@ -30,7 +30,7 @@ class Offre
 
 
     #[ORM\Column()]
-    #[Assert\Length(max: 10, maxMessage: "Your title contains more than 10 characters.")]
+    #[Assert\Length(max: 30, maxMessage: "Your title contains more than 10 characters.")]
     #[Assert\NotBlank(message: "Title is Required ")]
     private ?string $nom;
 
@@ -53,7 +53,7 @@ class Offre
      * @var File
      */
 
-    #[Vich\UploadableField(mapping: "offres_images", fileNameProperty: "image1")]
+   #[Vich\UploadableField(mapping: "offres_images", fileNameProperty: "image1")]
    #[Assert\NotBlank(message: "Select a picture for your offer")] 
     private $imageFile1;
 
@@ -93,6 +93,11 @@ class Offre
 
     #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'favoris_offres')]
     private Collection $favoris;
+
+    #[ORM\Column()]
+    private ?int $vues = 0 ;
+
+ 
 
    
 
@@ -298,5 +303,19 @@ class Offre
 
         return $this;
     }
+
+    public function getVues(): ?int
+    {
+        return $this->vues;
+    }
+
+    public function setVues(?int $vues): static
+    {
+        $this->vues = $vues;
+
+        return $this;
+    }
+
+  
 
 }

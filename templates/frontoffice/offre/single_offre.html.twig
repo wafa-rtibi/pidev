@@ -1,68 +1,126 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
-<!-- Start Hero Section -->
-<div class="hero">
-    <div class="container">
-        <div class="row justify-content-between">
-            <div class="col-lg-5">
-                <div class="intro-excerpt">
-                    <h1><strong>Offer Details </strong></h1>     
-					</div>  
-            </div>
-        </div>
-    </div>
-</div>
-<!-- End Hero Section -->
-
-<!-- Start We Help Section -->
-		<div class="we-help-section">
-			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-7 mb-5 mb-lg-0">
-						<div class="imgs-grid">
-							<div class="grid grid-1"><img src="{{asset("/uploads/images/offres/" ~ offre.image1)}}" alt="image1"></div>
-							{% if offre.image2 is not null %}
-							<div class="grid grid-2"><img src="{{asset("/uploads/images/offres/" ~ offre.image2)}}" alt="image2"></div>
-							{% endif %}
-							
-							{% if offre.image2 is not null %}
-							<div class="grid grid-3"><img src="{{asset("/uploads/images/offres/" ~ offre.image3)}}" alt="image3"></div>
-							{% endif %}
-							
-							
-						</div>
-					</div>
-					<div class="col-lg-5 ps-lg-5">
-						<h2 class="section-title mb-4">{{offre.getNom()}}</h2>
-						<p>{{offre.getDescription()}}</p>
-
-						<ul class="list-unstyled custom-list my-4">
-							<li><strong> Adresse : </strong> {{offreur.getAdresse()}}</li>
-							<li><strong> Category : </strong> {{offre.getCategorie()}}</li>
-							<li><strong> Publication Date : </strong>	{{ offre.getDatePublication()|date('Y-m-d H:i:s') }} </li>
-							<li><strong> Posted By : </strong> {{offreur.getNom()}}</li>
-						</ul> 
-                        {% if mine == false  %}
-						
-						     {% if msg == true %}
-							       <a class="btn" href="#" >Already sended</a>
-								  {% else %}
-										<a class="btn" href="{{path('app_demande_send',{'id_offre': offre.id})}}" >Trade</a>
-							 {% endif %}
-							 
-						{% endif %}
-						
-                        
-                        
-						
-                       
-					
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>
+							<strong>Offer Details
+							</strong>
+						</h1>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- End We Help Section -->
+	</div>
+	<!-- End Hero Section -->
+
+	<!-- Start We Help Section -->
+	<div class="we-help-section">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-7 mb-5 mb-lg-0">
+					<div class="imgs-grid">
+						<div class="grid grid-1"><img src="{{asset("/uploads/images/offres/" ~ offre.image1)}}" alt="image1"></div>
+						{% if offre.image2 is not null %}
+							<div class="grid grid-2"><img src="{{asset("/uploads/images/offres/" ~ offre.image2)}}" alt="image2"></div>
+						{% endif %}
+
+						{% if offre.image2 is not null %}
+							<div class="grid grid-3"><img src="{{asset("/uploads/images/offres/" ~ offre.image3)}}" alt="image3"></div>
+						{% endif %}
 
 
+					</div>
+				</div>
+				<div class="col-lg-5 ps-lg-5">
+					<h2 class="section-title mb-4">{{offre.getNom()}}</h2>
+					<p>{{offre.getDescription()}}</p>
+
+					<ul class="list-unstyled custom-list my-4">
+						<li>
+							<strong>
+								Adresse :
+							</strong>
+							{{offreur.getAdresse()}}</li>
+						<li>
+							<strong>
+								Category :
+							</strong>
+							{{offre.getCategorie()}}</li>
+						<li>
+							<strong>
+								Publication Date :
+							</strong>
+							{{ offre.getDatePublication()|date('Y-m-d') }}
+						</li>
+						<li>
+							<strong>
+								Posted By :
+							</strong>
+							{{offreur.getNom()}}</li>
+					</ul>
+					{% if mine == false  %}
+
+
+						{% if msg == true %}
+							<a class="btn" href="#">Already sended</a>
+
+						{% else %}
+							{# <a class="btn" href="{{path('app_demande_send',{'id_offre': offre.id})}}" >Trade</a>  #}
+
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">Trade</button>
+
+							<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h1 class="modal-title fs-5" id="exampleModalLabel">New Trade</h1>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<form method="GET" action="{{ path('app_demande_send',{'id_offre': offre.id}) }}" novalidate>
+												<div class="mb-3">
+													<label for="recipient-name" class="col-form-label">My Offers:</label>
+													<select class="form-select custom-select-color" name="selectedOffer">
+														<option value="" selected disabled>choose offer to trade</option>
+														{% for o in offres %}
+															<option value="{{ o.id }}">{{ o.nom }}</option>
+														{% endfor %}
+													</select>
+												</div>
+												<div class="mb-3">
+													<label for="message-text" class="col-form-label">Message:</label>
+													<textarea class="form-control" id="message-text" name="message"></textarea>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+													<button type="submit" class="btn btn-primary">Send message</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						{% endif %}
+
+						{% if offre not in favoris %}
+							<a class="btn" href="{{ path('app_like',{'id_offre': offre.id })}}">Add to Favorite</a>
+						{% endif %}
+
+
+					{% else %}
+						<a class="btn" href="{{path('app_demande_offre',{'id_offre' : offre.id })}}">Proposals about this offer</a>
+					{% endif %}
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End We Help Section -->
 
 {% endblock %}

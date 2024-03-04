@@ -1,4 +1,3 @@
-{#Houni bech na3mel Pagination lel page #}
 {% extends 'base_front.html.twig' %}
 
 {% block body %}
@@ -11,59 +10,44 @@
 						<h1>Offers</h1>
 					</div>
 				</div>
+        	{# search bar #}
+					
+					<div class="form searchBar" >
+    <i class="fa fa-search"></i>
+    <form action="{{ path('app_all_offre') }}" method="get" class="d-flex">
+        <input type="text" name='searchTerm' class="form-control form-input mr-2" placeholder="Search username, address, offer name...">
+        <span class="left-pan">
+            <i class="fa fa-microphone"></i>
+        </span>
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
+                Categories
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <li>
+                    <button class="dropdown-item" type="button">Action</button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button">Another action</button>
+                </li>
+                <li>
+                    <button class="dropdown-item" type="button">Something else here</button>
+                </li>
+            </ul>
+        </div>
+    </form>
+</div>
 
-				{# search bar #}
-
-				<div class="container">
-
-					<div class="row height d-flex justify-content-center align-items-center">
-
-						<div class="col-md-6">
-
-							<div class="form searchBar">
-								<i class="fa fa-search"></i>
-								<form action="{{ path('app_all_offre') }}" method="get">
-									<input type="text" name='searchTerm' class="form-control form-input" placeholder="Search username,adresse,offername...">
-								</form>
-								<span class="left-pan">
-									<i class="fa fa-microphone"></i>
-								</span>
-							</div>
-
-							<div class="dropdown">
-								<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-bs-toggle="dropdown" aria-expanded="false">
-									Categories
-								</button>
-								<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-									<li>
-										<button class="dropdown-item" type="button">Action</button>
-									</li>
-									<li>
-										<button class="dropdown-item" type="button">Another action</button>
-									</li>
-									<li>
-										<button class="dropdown-item" type="button">Something else here</button>
-									</li>
-								</ul>
-							</div>
-
-
-						</div>
-
-
-					</div>
-
-				</div>
-
+				
 				{# end search bar#}
 			</div>
 		</div>
 	</div>
 	<!-- End Hero Section -->
-
+	
 
 	<div class="untree_co-section product-section before-footer-section">
-		<div class="container">
+		
 			<div
 				class="row">
 
@@ -74,35 +58,194 @@
 						<strong>Oppss Pas Des Offres Actuellement</strong>
 					</h1>
 				{% else %}
-					{% for offre in pagination %}
-
-						<!-- Start Column 1 -->
-						<div class="col-12 col-md-4 col-lg-3 mb-5">
-							<a class="product-item" href="{{path('app_offre_details',{'id_offre': offre.id})}}">
-								<img src="{{asset('/uploads/images/offres/' ~ offre.image1)}}" class="img-fluid product-thumbnail"/>
-								<h3 class="product-title">{{offre.nom}}</h3>
-								<strong class="product-price">{{offre.categorie}}</strong>
-								<span class="icon-cross">
-									<i class="fa-solid fa-angle-right fa-xl" style="color: #ffffff;"></i>
-								</span>
-							</a>
-						</div>
-						<!-- End Column 1 -->
-
-					{% endfor %}
-				{% endif %}
-
-				{#start Pagination#}
+				
+				
+					<div class="container_card">
+  {% for offre in pagination %}
+    {% set offreur = offre.getOffreur() %}
+ 
+    <div class="card">
+      <div class="card__header">
+        <div class="like-and-views">
+          <div class="like">
+            {% if offre in favoris %}
+              <a type="btn" href="{{ path('app_deslike', {'id_offre': offre.id }) }}">
+                <i class="fa-solid fa-heart fa-lg" style="color: #b50819;"></i> {{offre.getFavoris()|length }}
+              </a>
+            {% else %}
+              <a href="{{ path('app_like', {'id_offre': offre.id }) }}">
+               <i class="fa-regular fa-heart fa-lg"></i> {{offre.getFavoris()|length }}
+              </a>
+            {% endif %}
+          </div>
+          <div class="views">
+            <i class="fa-regular fa-eye fa-lg"></i>
+            {{ offre.getVues() }}
+          </div>
+        </div>
+      </div>
 	
-			{{ knp_pagination_render(pagination) }}
-	
-	{#end Pagination#}
+	 <a   href="{{path('app_offre_details',{'id_offre': offre.id})}}">
+      <img src="{{ asset('/uploads/images/offres/' ~ offre.image1) }}" alt="card__image" class="card__image">
+      <div class="card__body">
+    
+       <span class="tag tag-brown">{{ offre.categorie }}</span>
+   
+       
+        <h4>{{ offre.getNom() }}</h4>
+        <p> {% if offre.getDescription()| length >= 80  %}
+         {{ offre.getDescription() |slice(0, 80) }} </p>
+        <a href="{{path('app_offre_details',{'id_offre': offre.id})}}"   style="text-decoration: underline;">read more<a>
+        {% else %}
+          {{ offre.getDescription()}}
+        {% endif %}
+        
+      </div>
+      <div class="card__footer">
+        <div class="user">
+          <img src="{{ offreur.getPhotoProfil() }}" alt="user__image" class="user__image">
+          <div class="user__info">
+            <h5>{{ offreur.getNom() }}</h5>
+          </div>
+        </div>
+      </div>
+	   <a>
+	  
+    </div>
+	 
+  {% endfor %}
+</div>
+						{% endif %}
 
+						{#start Pagination#}
+             <div class="d-flex justify-content-center">
+             {% do pagination.setPageRange(2) %}
+             {{knp_pagination_render(pagination,'frontoffice/offre/pagination.html.twig')}}
+             </div>
+						{#end Pagination#}
+
+
+					</div>
+				</div>
 
 			</div>
-		</div>
-		
-	</div>
 
 	
-{% endblock %}
+<style>
+a {
+  text-decoration: none;
+ 
+ }
+ 
+.container_card {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-block: 2rem;
+  gap: 2rem;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: clamp(20rem, calc(20rem + 2vw), 22rem);
+  overflow: hidden;
+  box-shadow: 0 .1rem 1rem rgba(0, 0, 0, 0.1);
+  border-radius: 1em;
+  background: #ECE9E6;
+  background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+  &:hover {
+      transform: translateY(-.5%);
+      box-shadow: 0 4rem 8rem rgba(0, 0, 0, .2);
+    }
+}
+
+.card__header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+}
+
+.card__header .like-and-views {
+  display: flex;
+}
+
+.card__header .like,
+.card__header .views {
+  margin-right: 1rem;
+}
+
+.card__image {
+  width: 100%;
+  height: 300px; 
+  display: block;
+  object-fit: cover;
+}
+
+.card__body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.tag {
+  align-self: flex-start;
+  padding: .25em .75em;
+  border-radius: 1em;
+  font-size: .75rem;
+}
+
+.tag + .tag {
+  margin-left: .5em;
+}
+
+.tag-blue {
+  background: #56CCF2;
+  background: linear-gradient(to bottom, #2F80ED, #56CCF2);
+  color: #fafafa;
+}
+
+.tag-brown {
+  background: #D1913C;
+  background: linear-gradient(to bottom, #FFD194, #D1913C);
+  color: #fafafa;
+}
+
+.tag-red {
+  background: #cb2d3e;
+  background: linear-gradient(to bottom, #ef473a, #cb2d3e);
+  color: #fafafa;
+}
+
+.card__body h4 {
+  font-size: 1.5rem;
+  text-transform: capitalize;
+}
+
+.card__footer {
+  display: flex;
+  padding: 1rem;
+  margin-top: auto;
+}
+
+.user {
+  display: flex;
+  gap: .5rem;
+}
+
+.user__image {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+}
+
+.user__info > small {
+  color: #666;
+}
+</style>
+		{% endblock %}

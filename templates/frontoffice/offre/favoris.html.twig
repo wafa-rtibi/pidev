@@ -1,0 +1,206 @@
+{% extends "base_front.html.twig" %}
+{% block body %}
+
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt">
+						<h1>
+							<strong>Favoris</strong>
+						</h1>
+					</div>
+
+				</div>
+				<div class="col-lg-7">
+					<div class="hero-img-wrap"></div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- End Hero Section -->
+
+	<div class="untree_co-section product-section before-footer-section">
+		<div class="container">
+			<div class="row">
+
+				{% if favoris is empty  %}
+					<h1>opps you don't have any favirotes
+					</h1>
+				{% else %}
+					<div class="container_card">
+						{% for offre in favoris %}
+
+							{% set offreur = offre.getOffreur() %}
+							<div class="card">
+								<div class="card__header">
+									<div class="like-and-views">
+										<div class="like">
+											{% if offre in favoris  %}
+												<a type="btn" href="{{ path('app_deslike', {'id_offre': offre.id }) }}">
+													<i class="fa-solid fa-heart fa-lg" style="color: #b50819;"></i>
+													{{offre.getFavoris()|length }}
+												</a>
+											{% else %}
+												<a href="{{ path('app_like', {'id_offre': offre.id }) }}">
+													<i class="fa-regular fa-heart fa-lg"></i>
+													{{offre.getFavoris()|length }}
+												</a>
+											{% endif %}
+										</div>
+										<div class="views">
+											<i class="fa-regular fa-eye fa-lg"></i>
+											{{ offre.getVues() }}
+										</div>
+									</div>
+								</div>
+								<a href="{{path('app_offre_details',{'id_offre': offre.id})}}">
+									<img src="{{ asset('/uploads/images/offres/' ~ offre.image1) }}" alt="card__image" class="card__image">
+									<div class="card__body">
+										<span class="tag tag-brown">{{ offre.categorie }}</span>
+										<h4>{{ offre.getNom() }}</h4>
+										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+									</div>
+									<div class="card__footer">
+										<div class="user">
+											<img src="{{ offreur.getPhotoProfil() }}" alt="user__image" class="user__image">
+											<div class="user__info">
+												<h5>{{ offreur.getNom() }}</h5>
+											</div>
+										</div>
+									</div>
+								</a>
+							</div>
+						{% endfor %}
+					</div>
+				{% endif %}
+				{#start Pagination#}
+             <div class="d-flex justify-content-center">
+             {% do favoris.setPageRange(2) %}
+             {{knp_pagination_render(favoris,'frontoffice/offre/pagination.html.twig')}}
+             </div>
+						{#end Pagination#}
+			</div>
+		</div>
+	</div>
+	<style>
+		a {
+			text-decoration: none;
+
+		}
+
+		.container_card {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			margin-block: 2rem;
+			gap: 2rem;
+		}
+
+		.card {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: clamp(20rem, calc(20rem + 2vw), 22rem);
+			overflow: hidden;
+			box-shadow: 0 0.1rem 1rem rgba(0, 0, 0, 0.1);
+			border-radius: 1em;
+			background: #ECE9E6;
+			background: linear-gradient(to right, #FFFFFF, #ECE9E6);
+			&:hover {
+				transform: translateY(-.5%);
+				box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.2);
+			}
+		}
+
+
+		.card__header {
+			position: absolute;
+			top: 0;
+			width: 100%;
+			display: flex;
+			justify-content: space-between;
+			padding: 0.5rem;
+		}
+
+		.card__header .like-and-views {
+			display: flex;
+		}
+
+		.card__header .like,
+		.card__header .views {
+			margin-right: 1rem;
+		}
+
+		.card__image {
+			width: 100%;
+			height: 200px;
+			display: block;
+			object-fit: cover;
+		}
+
+		.card__body {
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 0.5rem;
+		}
+
+		.tag {
+			align-self: flex-start;
+			padding: 0.25em 0.75em;
+			border-radius: 1em;
+			font-size: 0.75rem;
+		}
+
+		.tag + .tag {
+			margin-left: 0.5em;
+		}
+
+		.tag-blue {
+			background: #56CCF2;
+			background: linear-gradient(to bottom, #2F80ED, #56CCF2);
+			color: #fafafa;
+		}
+
+		.tag-brown {
+			background: #D1913C;
+			background: linear-gradient(to bottom, #FFD194, #D1913C);
+			color: #fafafa;
+		}
+
+		.tag-red {
+			background: #cb2d3e;
+			background: linear-gradient(to bottom, #ef473a, #cb2d3e);
+			color: #fafafa;
+		}
+
+		.card__body h4 {
+			font-size: 1.5rem;
+			text-transform: capitalize;
+		}
+
+		.card__footer {
+			display: flex;
+			padding: 1rem;
+			margin-top: auto;
+		}
+
+		.user {
+			display: flex;
+			gap: 0.5rem;
+		}
+
+		.user__image {
+			width: 60px;
+			height: 60px;
+			border-radius: 50%;
+		}
+
+		.user__info > small {
+			color: #666;
+		}
+	</style>
+{% endblock %}

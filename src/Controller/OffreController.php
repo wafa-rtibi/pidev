@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\DemandeOffre;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +19,13 @@ use DateTime;
 
 class OffreController extends AbstractController
 {
-    // afficher tous les offres ou les offres cherchées
+    // afficher tous les offres ou les offres cherchées et non reservé
 
     #[Route('/offres', name: 'app_all_offre')]
-    public function afficherAll(Request $req, OffreRepository $rep, PaginatorInterface $paginator): Response
+    public function afficherAll(Request $req, OffreRepository $rep, PaginatorInterface $paginator,UtilisateurRepository $repo): Response
     {
         $offres = $rep->findAllNotReserved();
         $searchTerm = $req->query->get('searchTerm');
-
-
 
         if ($searchTerm) {
             $offres = $rep->search($searchTerm);
@@ -35,20 +34,24 @@ class OffreController extends AbstractController
         $pagination = $paginator->paginate(
             $offres,
             $req->query->get('page', 1), //page 1 par defaut
-            2 // deux offres par page
+            4,
         );
 
+
+        $user = $this->getUser();
+        if ($user) {
+            $email = $user->getUserIdentifier();
+        }
+        $offreur = $repo->findOneByEmail($email);
+        $favoris=$offreur->getFavorisOffres();
 
         return $this->render('frontoffice/offre/listOffre.html.twig', [
 
             'pagination' => $pagination,
+            'favoris'=>$favoris,
 
         ]);
     }
-
-
-
-
 
     // ajout d'une offre 
     #[Route('/offre/add', name: 'app_offre_add')]
@@ -122,52 +125,33 @@ class OffreController extends AbstractController
         ]);
     }
 
-
-    // modifier offre
+    // modifier offre***********************************************************************************
     #[Route('/offre/update/{id_offre}', name: 'app_update_offre')]
 
     public function modifierOffre(Request $req, $id_offre, ManagerRegistry $doctrine, OffreRepository $repo, WordFilterService $wordFilterService, UtilisateurRepository $rep): Response
     {
         $user = $this->getUser();
         if ($user) {
-
             $email = $user->getUserIdentifier();
         }
 
         $offreur = $rep->findOneByEmail($email);
-
+        $em = $doctrine->getManager();
 
         $offre = $repo->findByUserAndOffre($id_offre, $offreur->getId());
         $offre = $offre[0];
+       
 
-
-        // houni ki maydakhalech des images jdod yqodou el qdom mawwjoudin
-        $image1 = $offre->getImageFile1();
-        $image2 = $offre->getImageFile2();
-        $image3 = $offre->getImageFile3();
+        // houni ki maydakhalech des images jdod yqodou el qdom mawjoudin
+        $image1 = $offre->getImage1();
+        $image2 = $offre->getImage2();
+        $image3 = $offre->getImage3();
 
         $form = $this->createForm(OffreType::class, $offre, ['modifier' => true]);
 
         $form->handleRequest($req);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
-            //naraja3 les images el qdom fi 7alet matbadlouch les images 
-
-            if ($offre->getImageFile1() == null) {
-                $offre->setImageFile1($image1);
-            }
-
-
-            if ($offre->getImageFile2() == null) {
-                $offre->setImageFile2($image2);
-            }
-
-
-            if ($offre->getImageFile3() == null) {
-                $offre->setImageFile3($image3);
-            }
 
             $description_entree = $offre->getDescription();
             $titre_entree = $offre->getNom();
@@ -175,8 +159,24 @@ class OffreController extends AbstractController
             $offre->setDescription($wordFilterService->filterWords($description_entree));
             $offre->setNom($wordFilterService->filterWords($titre_entree));
 
+            //naraja3 les images el qdom fi 7alet matbadlouch les images 
+
+            if ($offre->getImage1() == null) {
+                $offre->setImage1($image1);
+           
+            }
+
+
+            if ($offre->getImage2() == null) {
+                $offre->setImage2($image2);
+            }
+
+
+            if ($offre->getImage3() == null) {
+                $offre->setImage3($image3);
+            }
+
             //  l'ajout lel DB
-            $em = $doctrine->getManager();
             $em->persist($offre);
             $em->flush();
 
@@ -191,26 +191,18 @@ class OffreController extends AbstractController
 
     //supression
     #[Route('/offre/delete/{id_offre}', name: 'app_delete_offre')]
-    public function supprimerOffre($id_offre, ManagerRegistry $doctrine, UtilisateurRepository $rep): Response
+    public function supprimerOffre($id_offre, ManagerRegistry $doctrine,DemandeOffreRepository $repo): Response
     {
-        $offre = $doctrine->getRepository(Offre::class)->find($id_offre);
-        $user = $this->getUser();
-
-        if ($user) {
-
-            $email = $user->getUserIdentifier();
-        }
-
-        $offreur = $rep->findOneByEmail($email);
-
-
-        if ($offre->getDemandes() != null) {
-            $offre->removeDemande($offre->getDemandes());
-        }
-
-        $offreur->removeOffre($offre); // zeyda 
-
         $em = $doctrine->getManager();
+        $offre = $doctrine->getRepository(Offre::class)->find($id_offre);
+        
+       if(count($offre->getDemandes()) > 0) {
+         foreach ($offre->getDemandes() as $demand) {
+           $em->remove($demand);
+         }
+       }
+
+       
         $em->remove($offre);
         $em->flush();
 
@@ -238,7 +230,7 @@ class OffreController extends AbstractController
 
     //afficher un seule offre
     #[Route('/offre/single/{id_offre}', name: 'app_offre_details')]
-    public function afficherDetailsOffre($id_offre, OffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi): Response
+    public function afficherDetailsOffre(ManagerRegistry $doctrine,$id_offre, OffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi): Response
     {
         $mine = false;
         $user = $this->getUser();
@@ -252,7 +244,13 @@ class OffreController extends AbstractController
 
         $offre = $rep->find($id_offre);
 
+
+      
+
         $offreur = $offre->getOffreur();
+
+        $offres = $user->getOffres();
+
 
 
         if ($offreur->getId() == $user->getId()) $mine = true;
@@ -265,11 +263,22 @@ class OffreController extends AbstractController
             $message = false;
         }
 
+        if($mine==false){
+            $offre->setVues($offre->getVues() + 1 );
+            //ay changement lazem tetb3ath lel base de donnes
+            $em = $doctrine->getManager();
+            $em->persist($offre);
+            $em->flush();
+        }
+        $favoris=$offreur->getFavorisOffres();
+        $favoris=$favoris->toArray();
         return $this->render('frontoffice/offre/single_offre.html.twig', [
             'offre' => $offre,
             'mine' => $mine,
             'offreur' => $offreur,
             'msg' => $message,
+            'offres' => $offres,
+            'favoris'=>$favoris,
         ]);
     }
 
@@ -283,7 +292,7 @@ class OffreController extends AbstractController
 
     //show offer by categories
     #[Route('/offre/categories/{category}', name: 'app_offer_categories')]
-    public function showOfferByCategories($category, OffreRepository $rep, PaginatorInterface $paginator, Request $req): Response
+    public function showOfferByCategories($category, OffreRepository $rep, PaginatorInterface $paginator, Request $req,UtilisateurRepository $repo): Response
     {
 
         $offres = $rep->findByCategory($category);
@@ -294,9 +303,17 @@ class OffreController extends AbstractController
 
 
         );
+
+        $user = $this->getUser();
+        if ($user) {
+            $email = $user->getUserIdentifier();
+        }
+        $offreur = $repo->findOneByEmail($email);
+        $favoris=$offreur->getFavorisOffres();
         return $this->render('frontoffice/offre/listOffre.html.twig', [
 
-            'pagination' => $pagination
+            'pagination' => $pagination,
+            'favoris'=>$favoris,
         ]);
     }
 }

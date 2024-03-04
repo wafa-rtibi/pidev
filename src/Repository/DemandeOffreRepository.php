@@ -31,7 +31,6 @@ class DemandeOffreRepository extends ServiceEntityRepository
             ->addSelect('o')
            ->andWhere('o.id= :val')
            ->setParameter('val',$id)
-         
            ->getQuery()
            ->getResult()
        ;

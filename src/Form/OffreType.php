@@ -16,6 +16,7 @@ class OffreType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        
         $builder
             ->add('nom')
             ->add('categorie', ChoiceType::class, [
@@ -45,7 +46,7 @@ class OffreType extends AbstractType
        
 
           ->add('imageFile1', VichImageType::class, [
-                'required' => true,
+                'required'=> $options['modifier']? false : true,
                 'label' => 'image 1'
             ]);
         

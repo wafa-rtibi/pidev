@@ -6,6 +6,7 @@ vich_uploader:
       uri_prefix: "%app.path.offres_images%"
       upload_destination: "%kernel.project_dir%/public%app.path.offres_images%"
       namer: Vich\UploaderBundle\Naming\UniqidNamer # bech kol img ykoun 3andha nom unique
-      delete_on_remove: true
       delete_on_update: false
+      delete_on_remove: true
+     
     
