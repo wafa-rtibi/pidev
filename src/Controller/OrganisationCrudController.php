@@ -108,6 +108,15 @@ class OrganisationCrudController extends AbstractController
         ]);
     }
 
+    #[Route('/showfront', name: 'app_organisation_showfront', methods: ['GET'])]
+    public function showfront(OrganisationRepository $organisationRepository): Response
+    {
+        return $this->render('frontoffice/donation/donation.html.twig', [
+            'organisations' => $organisationRepository->findAll(),
+        ]);
+    }
+
+
     #[Route('/new', name: 'app_organisation_crud_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {

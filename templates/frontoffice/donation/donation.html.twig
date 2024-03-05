@@ -29,16 +29,18 @@
 				
 				
 				<div class="row my-5">
+				{% for organisation in organisations %}
 					<div class="col-6 col-md-6 col-lg-3 mb-4">
 						<div class="feature">
 							<div class="icon">
 								<img src="images/truck.svg" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Fast &amp; Free Shipping</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>{{ organisation.nomOrganisation }}</h3>
+							<p>{{ organisation.description }}</p>
 						</div>
 					</div>
-
+  {% endfor %}
+  <!-- End Why Choose Us Section
 					<div class="col-6 col-md-6 col-lg-3 mb-4">
 						<div class="feature">
 							<div class="icon">
@@ -108,7 +110,7 @@
 							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
 						</div>
 					</div>
-
+End Why Choose Us Section -->
 				</div>
 			
 			</div>
