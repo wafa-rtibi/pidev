@@ -89,11 +89,14 @@ namespace App\Controller;
 
 use App\Entity\Organisation;
 use App\Form\OrganisationType;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 use App\Repository\OrganisationRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/organisation/crud')]
@@ -118,15 +121,43 @@ class OrganisationCrudController extends AbstractController
 
 
     #[Route('/new', name: 'app_organisation_crud_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager , SluggerInterface $slugger): Response
     {
+
         $organisation = new Organisation();
         $form = $this->createForm(OrganisationType::class, $organisation);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $imageFile = $form->get('image')->getData();
+
+
+            if ($imageFile) {
+                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
+
+
+                try {
+                    $imageFile->move(
+                        $this->getParameter('organisation-images'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'brochureFilename' property to store the PDF file name
+                // instead of its contents
+                $organisation->setImageOrganisation($newFilename);
+            }
+
             $entityManager->persist($organisation);
             $entityManager->flush();
+
+
+
 
             return $this->redirectToRoute('app_organisation_crud_index', [], Response::HTTP_SEE_OTHER);
         }

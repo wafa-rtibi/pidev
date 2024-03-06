@@ -1,0 +1,20 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <h5 class="text-center mb-4">Donate to {{ organisation.nomOrganisation }}</h5>
+                <form action="{{ path('app_donate') }}" method="post">
+                    <div class="mb-3">
+                        <label for="montant" class="form-label">Points</label>
+                        <input type="number" id="montant" name="montant" class="form-control">
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Donate</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -45,6 +45,9 @@ private ?string $rib;
     #[ORM\OneToMany(targetEntity: Dons::class, mappedBy: 'organisation')]
     private Collection $orgdons;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageOrganisation = null;
+
     public function __construct()
     {
         $this->orgdons = new ArrayCollection();
@@ -141,5 +144,18 @@ private ?string $rib;
     {
         return $this->nom_organisation ?? '';
     }
+
+    public function getImageOrganisation(): ?string
+    {
+        return $this->imageOrganisation;
+    }
+
+    public function setImageOrganisation(string $imageOrganisation): static
+    {
+        $this->imageOrganisation = $imageOrganisation;
+
+        return $this;
+    }
      
+    
 }

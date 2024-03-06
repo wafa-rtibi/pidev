@@ -87,6 +87,14 @@ class Dons
         return $this;
     }
 
-   
+    public function __toString(): string
+    {
+        $dateString = $this->date ? $this->date->format('Y-m-d') : '';
+        $donateurName = $this->donateur ? $this->donateur->getNom() : 'Unknown Donateur';
+        $organisationName = $this->organisation ? $this->organisation->getNomOrganisation() : 'Unknown Organisation';
+    
+        return "Donation - Date: $dateString, Donateur: $donateurName, Organisation: $organisationName, Montant: {$this->montant}";
+    }
+    
     
 }

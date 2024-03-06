@@ -1,0 +1,92 @@
+{% extends 'base_front.html.twig' %}
+
+{% block body %}
+
+<style>
+.organisation-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+}
+
+.organisation-image {
+    width: 100%;
+    height: 200px; /* Adjust the height as needed */
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.organisation-details h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.organisation-details .organisation-description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+}
+
+.btn-donate {
+    background-color: #fdd835; /* Yellow color */
+    color: #333; /* Text color */
+    border: none;
+}
+
+.btn-donate:hover {
+    background-color: #ffee58; /* Lighter yellow color on hover */
+}
+
+</style>
+
+    <!-- Start Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="row justify-content-between">
+                <div class="col-lg-5">
+                    <div class="intro-excerpt">
+                        <h1>Organisations</h1>
+                        <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+                        <p><a href="" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <div class="hero-img-wrap">
+                        <img src="images/couch.png" class="img-fluid">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Hero Section -->
+
+    <!-- Start Organisation Section -->
+    <div class="organisation-section">
+        <div class="container">
+            <div class="row my-5">
+                {% for organisation in organisations %}
+                    <div class="col-6 col-md-6 col-lg-3 mb-4">
+                        <div class="organisation-card">
+                            <img src="{{ asset('uploads/organisations/' ~ organisation.imageOrganisation) }}" alt="{{ organisation.nomOrganisation }}" class="img-fluid organisation-image">
+                            <div class="organisation-details">
+                                <h6>{{ organisation.nomOrganisation }}</h6>
+                                <p class="organisation-description">{{ organisation.description|slice(0, 100) }}</p>
+                                <a href="{{ path('app_donate_to_organisation', {'id': organisation.id}) }}" class="btn btn-yellow btn-block btn-donate">Donate</a> 
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- End Organisation Section -->
+
+    <!-- Other sections if needed -->
+
+{% endblock %}
