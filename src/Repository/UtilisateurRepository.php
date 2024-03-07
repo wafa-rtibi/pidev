@@ -45,4 +45,16 @@ class UtilisateurRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+     //zitou me aand wafa 
+public function findOneByEmail($email): ?Utilisateur
+   {
+       return $this->createQueryBuilder('u')
+           ->andWhere('u.email = :val')
+           ->setParameter('val', $email)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
+
 }

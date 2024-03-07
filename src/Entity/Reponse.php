@@ -14,7 +14,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 
+
 #[ORM\Entity(repositoryClass: ReponseRepository::class)]
+
+
+
+
+
+
 class Reponse
 {
     #[ORM\Id]
@@ -43,6 +50,9 @@ class Reponse
 
     #[ORM\Column]
     private ?bool $vu = false;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $compensation = null;
 
     public function getId(): ?int
     {
@@ -105,6 +115,18 @@ class Reponse
     public function setVu(bool $vu): static
     {
         $this->vu = $vu;
+
+        return $this;
+    }
+
+    public function isCompensation(): ?bool
+    {
+        return $this->compensation;
+    }
+
+    public function setCompensation(?bool $compensation): static
+    {
+        $this->compensation = $compensation;
 
         return $this;
     }

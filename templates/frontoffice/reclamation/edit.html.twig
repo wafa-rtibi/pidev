@@ -98,7 +98,7 @@
 								</div>
 								 <div  
 								 class="mb-3">   
-								 {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 96px;'}}) }}  #}
+								 {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 500px;'}}) }}  
 
 
 								 </div>  
@@ -110,7 +110,9 @@
 
 
 								{{ form_end(form) }}
-								<a href="{{ path('app_home') }}" class="btn btn-secondary">Back to Home</a>
+								
+								<!-- Button to navigate back -->
+       							 <button onclick="window.history.back()" class="btn btn-secondary">Back</button>
 							</div>
 						</div>
 

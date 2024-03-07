@@ -102,8 +102,31 @@
                                 {# </div> #}
                                 <div class="mb-3">
                                 {# Set the rows attribute to limit the visible lines in the textarea #}
-                              {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 96px;'}}) }}
+                              {{ form_row(form.description_reclamation, {'attr': {'class': 'form-control', 'rows': 6, 'style': 'resize: none; max-height: 500px;'}}) }}
                                 </div>
+
+
+               {# upload image #}
+
+                  <div class="form-group col-md-6 mt-3">
+									<td>{{form_label(form.imageFile1,"Image Reclamation ")}} <span  class="err-msg">*</span></td>
+									<td>{{form_widget(form.imageFile1)}}</td>
+									<td class="err-msg">{{form_errors(form.imageFile1)}}</td>
+									</div>
+								</tr>
+                {# pour les images #}
+								<tr>
+								<div class="form-group col-md-6 mt-3">
+									<td>{{form_label(form.imageFile2," Image Reclamation ")}}</td>
+									<td>{{form_widget(form.imageFile2)}}</td>
+									</div>
+
+                  					<div style="height: 80px;"></div>
+
+								</tr>
+
+
+
                                 <div class="mb-3">
                                     {{ form_row(form.save, { 'label': 'Submit', 'attr': {'class': 'btn btn-primary'}}) }}
                                 </div>

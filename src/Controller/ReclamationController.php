@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 use DateInterval;
+use Knp\Component\Pager\PaginatorInterface;
 
 
 
@@ -22,13 +23,22 @@ use DateInterval;
 use App\Repository\ReponseRepository;
 use App\Service\BadWordsReclamationService;
 
+
+//Mailer
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\MailerInterface;
+
+
+//bundel zeineb
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+
 class ReclamationController extends AbstractController
 {
    
-    
     //Ajouter Reclamation
     #[Route('/reclamation/add/{reclamateur_id}', name: 'app_reclamation')]
-    public function add_reclamation(Request $request, $reclamateur_id, ManagerRegistry $doctrine, ReclamationRepository $reclamationRepository,BadWordsReclamationService $BadWordsReclamationService): Response
+    public function add_reclamation(Request $request, $reclamateur_id, ManagerRegistry $doctrine, ReclamationRepository $reclamationRepository,BadWordsReclamationService $BadWordsReclamationService,MailerInterface $mailer,FlashBagInterface $flashBag): Response
     {
         // Récupération de l'utilisateur
     $user = $doctrine->getRepository(Utilisateur::class)->find($reclamateur_id);
@@ -58,7 +68,24 @@ class ReclamationController extends AbstractController
         // Enregistrement de la réclamation dans la base de données
         $em = $doctrine->getManager();
         $em->persist($complaint);
+
         $em->flush();
+       
+     
+      //l'envoi d'un email 
+        $email = (new Email())
+        ->from(new Address ('batoutbata5@gmail.com' ,"Troky"))
+        ->to($user->getEmail())
+        ->subject('New complaint assigned')
+        ->text('A new complaint has been assigned to your account. We will respond to you as soon as possible');
+
+         $mailer->send($email);
+
+         $flashBag->add('success', [
+            'message' => 'Compalint has been sent successfully.',
+            'timeout' => 8000, // Duree
+        ]);
+          
 
         // Redirection vers la liste des réclamations après l'ajout
         return $this->redirectToRoute('app_list', ['reclamateur_id' => $reclamateur_id]);
@@ -70,148 +97,9 @@ class ReclamationController extends AbstractController
         'reclamateur_id' => $reclamateur_id,
         'complaints' => $reclamationRepository->findAll(),
     ]);
+
 }
     
-    
-    //pour ajouter les reclamation avec ses info au dashboard admin
-  /* #[Route('/reclamation/dashboard', name: 'app_dashboard_reclamation')]
-    public function dashboard_reclamation(Request $request, ReclamationRepository $reclamationRepository, UtilisateurRepository $utilisateurRepository): Response
-    {
-        // Récupérer toutes les réclamations
-        $reclamations = $reclamationRepository->findAll();
-
-        // Tableau pour stocker les informations à afficher
-        $tableauReclamations = [];
-
-        // Pour chaque réclamation, récupérez les informations nécessaires
-        foreach ($reclamations as $reclamation) {
-            $id= $reclamation->getId();
-            $user = $reclamation->getReclamateur();
-            $nom = $user->getNom();
-            $prenom = $user->getPrenom();
-            $email = $user->getEmail();
-            $dateReclamation = $reclamation->getDateReclamation();
-            $typeReclamation = $reclamation->getType();
-            $descriptionReclamation = $reclamation->getDescriptionReclamation();
-            $statutReclamation=$reclamation->getStatutReclamation();
-
-            $reponse=$reclamation->getReponse(); //najm nfasskhha
-
-            // Ajoutez ces informations au tableau
-            $tableauReclamations[] = [
-                'id' => $id,
-                'nom' => $nom,
-                'prenom' => $prenom,
-                'email' => $email,
-                'dateReclamation' => $dateReclamation,
-                'typeReclamation' => $typeReclamation,
-                'descriptionReclamation' => $descriptionReclamation,
-                'statutReclamation' => $statutReclamation,
-
-                'reponse' => $reponse, //najm nfasskhha
-
-            ];
-        }
-
-        // Rendre le dashborad
-        return $this->render('frontoffice/reclamation/dashboard_reclamation.html.twig', [
-            'tableauReclamations' => $tableauReclamations,
-            'user'=>$user
-        ]);
-    }***/
-
-
-
-    #[Route('/reclamation/dashboard', name: 'app_dashboard_reclamation')]
-    public function dashboard_reclamation(Request $request): Response
-    {
-        // Récupérer le terme de recherche depuis la requête
-        $searchTerm = $request->query->get('q');
-
-         // Récupérer le type de réclamation depuis la requête
-         $typeReclamation = $request->query->get('type');
-
-        // Récupérer toutes les réclamations
-        $reclamations = $this->getDoctrine()
-            ->getRepository(Reclamation::class)
-            ->findAll();
-
-        // Tableau pour stocker les informations à afficher
-        $tableauReclamations = [];
-
-        // Pour chaque réclamation, récupérez les informations nécessaires
-        foreach ($reclamations as $reclamation) {
-            $user = $reclamation->getReclamateur();
-            $nom = $user->getNom();
-            $prenom = $user->getPrenom();
-            $email = $user->getEmail();
-            $dateReclamation = $reclamation->getDateReclamation();
-            $typeReclamationEntity = $reclamation->getType();
-            $descriptionReclamation = $reclamation->getDescriptionReclamation();
-            $statutReclamation=$reclamation->getStatutReclamation();
-
-            $reponse=$reclamation->getReponse(); //najm nfasskhha
-
-
-            // Vérifier si la réclamation correspond au terme de recherche
-            if (
-                stripos($nom, $searchTerm) !== false ||
-                stripos($prenom, $searchTerm) !== false ||
-                stripos($email, $searchTerm) !== false
-            ) {
-
-                if ($typeReclamation && $typeReclamationEntity === $typeReclamation) {
-                    // Ajouter les informations au tableau si le type de réclamation correspond
-                    $tableauReclamations[] = [
-                        'id' => $reclamation->getId(),
-                        'nom' => $nom,
-                        'prenom' => $prenom,
-                        'email' => $email,
-                        'dateReclamation' => $dateReclamation,
-                        'typeReclamation' => $typeReclamationEntity,
-                        // Autres informations de réclamation...
-                        'descriptionReclamation' => $descriptionReclamation,
-                'statutReclamation' => $statutReclamation,
-
-                'reponse' => $reponse,
-                    ];
-
-
-
-                } elseif (!$typeReclamation) {
-                    // Ajouter les informations au tableau si aucun type de réclamation n'est spécifié
-                    $tableauReclamations[] = [
-                        'id' => $reclamation->getId(),
-                        'nom' => $nom,
-                        'prenom' => $prenom,
-                        'email' => $email,
-                        'dateReclamation' => $dateReclamation,
-                        'typeReclamation' => $typeReclamationEntity,
-                        // Autres informations de réclamation...
-                        'descriptionReclamation' => $descriptionReclamation,
-                'statutReclamation' => $statutReclamation,
-
-                'reponse' => $reponse,
-                    ];
-                }
-            }
-        }
-        // Rendre le dashboard avec les réclamations filtrées
-        return $this->render('frontoffice/reclamation/dashboard_reclamation.html.twig', [
-            'tableauReclamations' => $tableauReclamations,
-            'user'=>$user,
-            'typeReclamation' => $typeReclamation, // Renvoie le type de réclamation à la vue
-            'searchTerm' => $searchTerm, // Renvoie le terme de recherche à la vue
-        ]);
-    }
-
-
-
-
-
-
-
-
 
     //Modifier reclamation 
     #[Route('/reclamation/edit/{reclamateur_id}/{id}', name: 'app_edit')]
@@ -226,6 +114,10 @@ class ReclamationController extends AbstractController
         if (!$reclamation) {
             throw $this->createNotFoundException('Reclamation not found');
         }
+        
+        // get les images  
+        $image1 = $reclamation->getImage1();
+        $image2 = $reclamation->getImage2();
 
         $form = $this->createForm(ReclamationType::class, $reclamation);
         $form->handleRequest($request);
@@ -247,69 +139,112 @@ class ReclamationController extends AbstractController
     }
 
 
-
-   //supprimer reclamation 
+      //supprimer reclamation 
    #[Route('/reclamation/delete/{reclamateur_id}/{id}', name: 'app_delete_reclamation')]
-    public function delete_reclamation(ReclamationRepository $reclamationRepository, ManagerRegistry $doctrine,int $id,int $reclamateur_id): Response
-    {
-        $entityManager = $doctrine->getManager();
-        
-        $reclamation = $reclamationRepository->find($id);
-        
-        if (!$reclamation) {
-            throw $this->createNotFoundException('Reclamation not found');
-       }
+   public function delete_reclamation(ReclamationRepository $reclamationRepository, ManagerRegistry $doctrine,int $id,int $reclamateur_id): Response
+   {
+       $entityManager = $doctrine->getManager();
+       
+       $reclamation = $reclamationRepository->find($id);
+       
+       if (!$reclamation) {
+           throw $this->createNotFoundException('Reclamation not found');
+      }
 
-       $entityManager->remove($reclamation);
-        $entityManager->flush();
+      $entityManager->remove($reclamation);
+       $entityManager->flush();
 
-        
-        return $this->redirectToRoute('app_list',['reclamateur_id' => $reclamateur_id]);
-    }
+       
+       return $this->redirectToRoute('app_list',['reclamateur_id' => $reclamateur_id]);
+   }
 
 
-  
-// sayee
-    #[Route('/reclamation/thankyou', name: 'app_reclamation_done')]
-    public function done_reclamation(): Response
-    {
-        // return $this->render('frontoffice/reclamation/thankyou.html.twig', [
-            return $this->render('frontoffice/reclamation/shouff.html.twig', [
-            'controller_name' => 'ReclamationController',
-        ]);
-    }
+
+//show reclamation pour client 
+#[Route('/reclamation/{reclamateur_id}/{id}', name: 'app_reclamation_show')]
+public function show_reclamation( $id, $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReclamationRepository $reclamationRepository,PaginatorInterface $paginator, Request $req): Response
  
-    
+{    $user = $utilisateurRepository->find($reclamateur_id);
+     $reclamation = $reclamationRepository->find($id);
+
+    if (!$user) {
+        throw $this->createNotFoundException('User not found');
+    }
+   
+    return $this->render('frontoffice/reclamation/show_reclam_client.html.twig', [
+        'reclamation' => $user,
+        'reclam'=>$reclamation,
+       
+    ]);
+}
 
 
+  //pour chaque utilisateur afficher une liste des ses reclamation
+    //l'utilisateur peut modifier et supprimer sa réclamation uniquement dans un délai de 2 heures après son envoi
+    #[Route('/listReclamations/{reclamateur_id}', name: 'app_list')]
 
-    //pour chaque utilisateur afficher une liste des ses reclamation
-    //l'utilisateur peut modifier et supprimer sa réclamation uniquement dans un délai de 2 heures après son envo
-  
-    
-  
-  /*clamations/{reclamateur_id}', name: 'app_list')]
-    public function listReclamations(Request $request, ManagerRegistry $doctrine, UtilisateurRepository $utilisateurRepository,int $reclamateur_id): Response
+    public function listReclamations(Request $request, ManagerRegistry $doctrine, UtilisateurRepository $utilisateurRepository, int $reclamateur_id,ReclamationRepository $rep,PaginatorInterface $paginator): Response
     {
         $user = $utilisateurRepository->find($reclamateur_id);
-
+    
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
-
+    
         $currentTime = new DateTime();
-        
+    
+        // Récupérer les paramètres de recherche et de filtrage depuis la requête GET
+        $date = $request->query->get('date');
+        $statut = $request->query->get('statut');
+    
+        // Appeler la méthode correspondante du repository pour obtenir les réclamations
+        $reclamations = $rep->findByDateAndStatut($reclamateur_id, $date, $statut);
+    
 
-        $reclamations = $user->getReclamations();
-  
-       return $this->render('frontoffice/reclamation/list.html.twig', [
-            'reclamations' => $reclamations,
+        $pagination = $paginator->paginate(
+            $reclamations,
+            $request->query->get('page', 1), //page 1 par defaut
+            4,
+        );
+        return $this->render('frontoffice/reclamation/list.html.twig', [
+            //'reclamations' => $reclamations,
+            'reclamations' =>  $pagination,
             'reclamateur_id' => $reclamateur_id,
             'user' => $user,
-            'currentTime' => $currentTime, 
-    
+            'currentTime' => $currentTime,
         ]);
-    }*/
+    }
+    
+    
+    
+
+//pour afficher les reclamations avec au dashboard admin
+#[Route('/reclamation/dashboard', name: 'app_dashboard_reclamation')]
+public function dashboard_reclamation( Request $request, ReclamationRepository $reclamationRepository, UtilisateurRepository $utilisateurRepository, PaginatorInterface $paginator): Response
+{
+    // Récupérer le terme de recherche à partir de la requête GET
+    $searchTerm = $request->query->get('q');
+
+    // Récupérer le type de réclamation à partir de la requête GET
+    $typeReclamation = $request->query->get('type');
+
+    // Récupérer l'ordre de tri à partir de la requête GET, avec une valeur par défaut 'asc'
+    $sort = $request->query->get('sort', 'asc');
+
+    // Appeler la méthode findByCriteria du ReclamationRepository pour récupérer les réclamations en fonction des critères
+    $reclamations = $reclamationRepository->findByCriteria($searchTerm, $typeReclamation, $sort);
+    $pagination = $paginator->paginate(
+        $reclamations,
+        $request->query->get('page', 1), //page 1 par defaut
+        4,
+    );
+    // Rendre le template Twig 'frontoffice/reclamation/dashboard_reclamation.html.twig' en passant les réclamations et l'utilisateur connecté
+    return $this->render('frontoffice/reclamation/dashboard_reclamation.html.twig', [
+        'tableauReclamations' => $pagination,
+        'user' => $this->getUser()
+    ]);
+}
+
 
     //afficher une reclamation pour admin
     #[Route('/admin/reclamation/{reclamateur_id}/{id}', name: 'app_reclamation_show_admin')]
@@ -329,70 +264,45 @@ class ReclamationController extends AbstractController
         ]);
     }
 
-    //show reclamation pour client 
-    #[Route('/reclamation/{reclamateur_id}/{id}', name: 'app_reclamation_show')]
-    public function show_reclamation( $id, $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReclamationRepository $reclamationRepository): Response
-     
-    {    $user = $utilisateurRepository->find($reclamateur_id);
-         $reclamation = $reclamationRepository->find($id);
 
-        if (!$user) {
-            throw $this->createNotFoundException('User not found');
+
+    #[Route('/reclamation/statistics', name: 'complaint_statistics')]
+    public function complaintStatistics(ReclamationRepository $reclamationRepository): Response
+    {
+        // Récupération des statistiques par type de réclamation
+        $statistics = $reclamationRepository->getReclamationStatisticsByType();
+    
+        // Configuration des données du graphique
+        $chartData = [
+            'labels' => [], // Les labels des types de réclamations
+            'datasets' => [
+                [
+                    'label' => 'Nombre de réclamations par type',
+                    'data' => [], // Le nombre de réclamations par type
+                    'backgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs de fond des barres
+                    'borderColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs des bordures des barres
+                    'borderWidth' => 1, // Largeur des bordures
+                    
+                ],
+            ],
+        ];
+    
+        // Remplissage des données du graphique
+        foreach ($statistics as $type => $count) {
+            $chartData['labels'][] = $type;
+            $chartData['datasets'][0]['data'][] = $count;
         }
-       
-        return $this->render('frontoffice/reclamation/show_reclam_client.html.twig', [
-            'reclamation' => $user,
-            'reclam'=>$reclamation
+    
+        // Rendu de la vue avec les données du graphique
+        return $this->render('/frontoffice/reclamation/statistics.html.twig', [
+            'chartData' => json_encode($chartData),
         ]);
     }
+    
+    
+   
 
 
+ }
+   
 
-
-//bech narjaa nchoufha 
-
-
-#[Route('/listReclamations/{reclamateur_id}', name: 'app_list')]
-public function listReclamations(Request $request, ManagerRegistry $doctrine, UtilisateurRepository $utilisateurRepository, $reclamateur_id): Response
-{
-    $user = $utilisateurRepository->find($reclamateur_id);
-
-    if (!$user) {
-        throw $this->createNotFoundException('User not found');
-    }
-
-    // Récupération de toutes les réclamations de l'utilisateur
-    $reclamations = $user->getReclamations();
-
-    // Filtrage des réclamations selon le type et le statut
-    $typeFilter = $request->query->get('type');
-    $statutFilter = $request->query->get('statut');
-
-    $filteredReclamations = [];
-
-    foreach ($reclamations as $reclamation) {
-        // Vérification du type
-        if ($typeFilter && $reclamation->getType() !== $typeFilter) {
-            continue; // Passer à la prochaine réclamation si le type ne correspond pas
-        }
-
-        // Vérification du statut
-        if ($statutFilter && $reclamation->getStatutReclamation() !== $statutFilter) {
-            continue; // Passer à la prochaine réclamation si le statut ne correspond pas
-        }
-
-        // Si la réclamation passe les filtres, l'ajouter aux réclamations filtrées
-        $filteredReclamations[] = $reclamation;
-    }
-
-    $currentTime = new DateTime();
-
-    return $this->render('frontoffice/reclamation/list.html.twig', [
-        'reclamations' => $filteredReclamations,
-        'reclamateur_id' => $reclamateur_id,
-        'user' => $user,
-        'currentTime' => $currentTime,
-    ]);
-}
-
-}

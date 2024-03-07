@@ -24,51 +24,71 @@
 		</div>
 	</div>
 	<!-- End Hero Section -->
-<!-- Ajoutez des champs de formulaire pour le filtrage -->
+	<!-- Ajoutez des champs de formulaire pour le filtrage -->
 
- 
 
 	<!-- Start Contact Form -->
-	<div class="untree_co-section">
-		<div class="container">
+		<div class="untree_co-section"> <div class="container">
 			<div class="block">
 				<div class="row justify-content-center">
 					<div class="col-md-8 col-lg-12 pb-4">
-						<div class="container">
+						<div
+							class="container">
+
+
+							{# code jedid men aand zeineb  #}
+
+							{% for flashMessage in app.flashes('success') %}
+								<div id="flash-message" class="alert alert-success" role="alert">
+									{{ flashMessage.message }}
+								</div>
+
+								<script>
+									// Supprimer le message flash apr s le d lai sp cifi
+setTimeout(function () {
+var flashMessage = document.getElementById('flash-message');
+if (flashMessage) {
+flashMessage.remove();
+}
+}, {{ flashMessage.timeout ?? 8000 }}); // Utilisez 5000 ms (5 secondes) comme d lai par d faut
+								</script>
+
+							{% endfor %}
+
+
 							<h2>List of Reclamations</h2>
+							
 
 
+                          
+<!-- Votre contenu HTML pour afficher les réclamations avec les options de recherche et de filtrage -->
+<div class="container my-4">
+    <form action="{{ path('app_list', {'reclamateur_id': reclamateur_id}) }}" method="get" class="row g-3 align-items-center">
+        <!-- Champs de formulaire pour la recherche -->
+        <div class="col-auto">
+            <label for="date" class="col-form-label">Search by Date:</label>
+            <input type="date" id="date" name="date" class="form-control">
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Search</button>
+        </div>
 
-
-
-		<form action="{{ path('app_list', {'reclamateur_id': user.id}) }}" method="get" class="mb-4">
-    <div class="form-row">
-        <!-- Champ de filtrage par type -->
-        <div class="col-md-3 mb-2">
-            <select name="type" class="form-control">
+        <!-- Champs de formulaire pour le filtrage -->
+        <div class="col-auto">
+            <label for="statut" class="col-form-label">Filter by Status:</label>
+            <select name="statut" class="form-select">
                 <option value="">All</option>
-                <option value="Type1" {% if app.request.query.get('type') == 'Type1' %}selected{% endif %}>arnaque</option>
-                <option value="Type2" {% if app.request.query.get('type') == 'Type2' %}selected{% endif %}>conflit</option>
-                <!-- Ajouter d'autres options de type si nécessaire -->
+                <option value="Resolved">Resolved</option>
+                <option value="Sent successfully">Sent successfully</option>
+                <!-- Ajoutez d'autres options de statut si nécessaire -->
             </select>
         </div>
-
-        <!-- Champ de filtrage par statut -->
-        <div class="col-md-3 mb-2">
-            <select name="statut" class="form-control">
-                <option value="">All</option>
-                <option value="Resolved" {% if app.request.query.get('statut') == 'Resolved' %}selected{% endif %}>Resolved</option>
-                <option value="Sent successfully" {% if app.request.query.get('statut') == 'Sent successfully' %}selected{% endif %}>Sent successfully</option>
-                <!-- Ajouter d'autres options de statut si nécessaire -->
-            </select>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary mb-3">Filter</button>
         </div>
+    </form>
+</div>
 
-        <!-- Bouton de soumission -->
-        <div class="col-md-2 mb-2">
-            <button type="submit" class="btn btn-primary">Filter</button>
-        </div>
-    </div>
-</form>
 
 							<div class="table-responsive">
 								<table class="table complaint-table">
@@ -83,56 +103,70 @@
 										</tr>
 									</thead>
 									<tbody>
-										{% for reclamation in reclamations %}
-											<tr>
-												<td>{{ reclamation.id }}</td>
-												<td>{{ reclamation.type }}</td>
-												<td>{{ reclamation.DescriptionReclamation }}</td>
-												<td>{{ reclamation.StatutReclamation }}</td>
-												<td>{{ reclamation.getDateReclamation()|date('Y-m-d H:i:s')}}</td>
-												<td>
-													<div class="card-footer text-center">
-														<td>
-															{% if reclamation.getDateReclamation() >= currentTime|date_modify('-2 hours') %}
-																<a href="{{ path('app_edit', {'id': reclamation.id, 'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-primary btn-sm">Edit</a>
-															{% endif %}
-														</td>
-														<td>
-															<a href="{{ path('app_reclamation_show', {'id': reclamation.id, 'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-secondary btn-sm">Show</a>
-														</td>
-														<td>
-															{% if reclamation.getDateReclamation() >= currentTime|date_modify('-2 hours') %}
-																<a href="{{ path('app_delete_reclamation', {'reclamateur_id': reclamation.getReclamateur().id,'id': reclamation.id}) }}" class="btn btn-danger btn-sm">Delete</a>
-															{% endif %}
-														</td>
-														<td>
-															{% if reclamation.getReponse() is not null %}
-																<a href="{{ path('app_reponse_show', {'id': reclamation.getReponse().id,'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-info btn-sm">Show Response</a>
-															{% endif %}
-														</td>
-													</div>
-												</td>
-											</tr>
-										{% endfor %}
+										{% if reclamations is empty %}
+
+											<div>
+												no reclamation is here</div>
+										{% else %}
+											{% for reclamation in reclamations %}
+												<tr>
+													<td>{{ reclamation.id }}</td>
+													<td>{{ reclamation.type }}</td>
+													<td>{{ reclamation.DescriptionReclamation }}</td>
+													<td>{{ reclamation.StatutReclamation }}</td>
+													<td>{{ reclamation.getDateReclamation()|date('d-m-Y')}}</td>
+													<td>
+														<div class="card-footer text-center">
+															<td>
+																{% if reclamation.getDateReclamation() >= currentTime|date_modify('-2 hours') %}
+																	<a href="{{ path('app_edit', {'id': reclamation.id, 'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-primary btn-sm">Edit</a>
+																{% endif %}
+															</td>
+															<td>
+																<a href="{{ path('app_reclamation_show', {'id': reclamation.id, 'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-secondary btn-sm">Show</a>
+															</td>
+															<td>
+																{% if reclamation.getDateReclamation() >= currentTime|date_modify('-2 hours') %}
+																	<a href="{{ path('app_delete_reclamation', {'reclamateur_id': reclamation.getReclamateur().id,'id': reclamation.id}) }}" class="btn btn-danger btn-sm">Delete</a>
+																{% endif %}
+															</td>
+															<td>
+																{% if reclamation.getReponse() is not null %}
+																	<a href="{{ path('app_reponse_show', {'id': reclamation.getReponse().id,'reclamateur_id': reclamation.getReclamateur().id}) }}" class="btn btn-info btn-sm">Show Response</a>
+																{% endif %}
+															</td>
+														</div>
+													</td>
+												</tr>
+
+
+											{% endfor %}
+										{% endif %}
+
 									</tbody>
 								</table>
-							</div>
-							<a href="{{ path('app_reclamation', {'reclamateur_id': reclamateur_id}) }}" class="btn btn-secondary">Back to Reclamation Form</a>
 
-							<!-- End Contact Form -->
+							</tbody>
 						</div>
+						<a href="{{ path('app_reclamation', {'reclamateur_id': reclamateur_id}) }}" class="btn btn-secondary">Back to Reclamation Form</a>
+
+						<!-- End Contact Form -->
 					</div>
 				</div>
 			</div>
 
+
 		</div>
+
+
+		   {#start Pagination#}
+             <div class="d-flex justify-content-center">
+             {% do reclamations.setPageRange(2) %}
+             {{knp_pagination_render(reclamations,'frontoffice/reclamation/pagination.html.twig')}}
+             </div>
+			{#end Pagination#}
+
 	</div>
-	<!-- End Contact Form -->
-
- 
-    
-      
-
-
-{% endblock %}
+</div>
+<!-- End Contact Form -->{% endblock %}
 

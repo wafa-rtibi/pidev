@@ -1,8 +1,4 @@
 framework:
-    # mailer:
-        # dsn: '%env(MAILER_DSN)%'
-
     mailer:
-        dsn: 'smtp://smtp.gmail.com:587'
-
-        
+        dsn: '%env(MAILER_DSN)%'
+        message_bus : false

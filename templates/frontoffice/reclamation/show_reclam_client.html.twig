@@ -50,6 +50,16 @@
 
 								</div>
 								<div style="height: 100px;"></div>
+
+								{% if reclam.image1 is not null %}
+									<img src="{{ asset('/uploads/images/reclamation/' ~ reclam.image1) }}" class="img-fluid product-thumbnail"/>
+								{% endif %}
+
+
+								{% if reclam.image2 is not null %}
+									<img src="{{ asset('/uploads/images/reclamation/' ~ reclam.image2) }}" class="img-fluid product-thumbnail"/>
+								{% endif %}
+
 								<div class="card-footer text-center ">
 									<a href="{{ path('app_list', {'reclamateur_id': reclamation.id}) }}" class="btn btn-secondary">Back to List</a>
 									{# <a href="{{ path('app_dashboard_reclamation') }}" class="btn btn-secondary">Back to List</a>  #}
@@ -63,7 +73,11 @@
 							</div>
 						</div>
 					</div>
+
+
 				</div>
+
+
 			</div>
 		</div>
 	</div>

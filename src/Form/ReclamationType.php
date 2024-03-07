@@ -11,6 +11,11 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Validator\Constraints\CustomNotBlank;
+use Vich\UploaderBundle\Form\Type\VichImageType;
+
+
+
+
 
 
 class ReclamationType extends AbstractType
@@ -31,9 +36,25 @@ class ReclamationType extends AbstractType
                     'autre'=>'autre',
 
                   ],
-                  'placeholder' => 'Choose a type',
+                  'placeholder' => 'Choose a type' ])
                   
+             
+                
+            
+            ->add('imageFile1', VichImageType::class, [
+                    'required'=> $options['modifier']? false : true,
+                    'label' => 'image 1'
+                ]);
+            
+            $builder->add('imageFile2', VichImageType::class, [
+                'required' => false,
+                'label' => 'image 2'
             ])
+            
+            
+            
+            
+                 
            
             ->add('save',SubmitType::class)
 
@@ -46,6 +67,7 @@ class ReclamationType extends AbstractType
    {
         $resolver->setDefaults([
            'data_class' => Reclamation::class,
+           'modifier' => false, // Ajout d'une option 'modifier' par défaut à false
     
        ]);
     }

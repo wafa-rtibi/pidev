@@ -21,6 +21,18 @@
 						<p class="card-text">
 							<strong>Date Reclamation:</strong>
 							{{ reclamation.dateReclamation ? reclamation.dateReclamation|date('Y-m-d') : '' }}</p>
+					
+					<div style="height: 100px;"></div>
+
+
+								 {% if reclamation.image1 is not null %} 
+									<img src="{{ asset('/uploads/images/reclamation/' ~ reclamation.image1) }}" class="img-fluid product-thumbnail"/>
+								 {% endif %} 
+
+
+								 {% if reclamation.image2 is not null %} 
+									<img src="{{ asset('/uploads/images/reclamation/' ~ reclamation.image2) }}" class="img-fluid product-thumbnail"/>
+								 {% endif %} 
 					</div>
 				</div>
 			</div>

@@ -6,7 +6,11 @@ use App\Repository\DemandeOffreRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
+
 #[ORM\Entity(repositoryClass: DemandeOffreRepository::class)]
+
+
+
 class DemandeOffre
 {
     #[ORM\Id]

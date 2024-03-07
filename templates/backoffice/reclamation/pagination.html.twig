@@ -1,0 +1,87 @@
+{% if pageCount > 1 %}
+    <style>
+        .custom-pagination .page-link {
+            color: #2c41ae;
+            background-color: #fff;
+            border: 1px solid #2c41ae;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .custom-pagination .page-link:hover,
+        .custom-pagination .page-item.active .page-link {
+            background-color: #2c41ae;
+            color: #fff;
+            border-color: #395e50;
+        }
+        .custom-pagination .page-link:first-child,
+        .custom-pagination .page-link:last-child {
+            border-radius: 5px;
+        }
+        .custom-pagination .page-item.disabled .page-link {
+            color: #6c757d;
+            background-color: #2c41ae;
+            border-color: #dee2e6;
+            pointer-events: none;
+        }
+        .custom-pagination .page-item.active .page-link {
+            z-index: 1;
+            color: #fff;
+            background-color: #2c41ae;
+            border-color: #395e50;
+        }
+        .custom-pagination .page-link:focus {
+            outline: none;
+            box-shadow: none;
+        }
+    </style>
+
+    <div class="custom-pagination">
+        {% set classAlign = (align is not defined) ? '' : align=='center' ? ' justify-content-center' : (align=='right' ? ' justify-content-end' : '') %}
+        {% set classSize = (size is not defined) ? '' : size=='large' ? ' pagination-lg' : (size=='small' ? ' pagination-sm' : '') %}
+        <div aria-label="Page navigation">
+            <ul class="pagination{{ classAlign }}{{ classSize }}">
+                {% if current != 1 %}
+                    {% if previous is defined %}
+                        <li class="page-item">
+                            <a class="page-link" rel="prev" href="{{ path(route, query|merge({(pageParameterName): previous})) }}" aria-label="{{ 'label_previous'|trans({}, 'KnpPaginatorBundle') }}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link" aria-hidden="true">&laquo;</span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+                {% for page in pagesInRange %}
+                    {% if page != current %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ path(route, query|merge({(pageParameterName): page})) }}">{{ page }}</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page }}</span>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+                {% if next is defined %}
+                    <li class="page-item">
+                        <a class="page-link" rel="next" href="{{ path(route, query|merge({(pageParameterName): next})) }}" aria-label="{{ 'label_next'|trans({}, 'KnpPaginatorBundle') }}">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link" aria-hidden="true">&raquo;</span>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endif %}

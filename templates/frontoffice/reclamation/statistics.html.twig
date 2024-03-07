@@ -1,0 +1,43 @@
+{% block body %}
+  <div style="display: flex; justify-content: center; align-items: center; height: 80vh;">
+    <div style="background-color: #fff; border: 1px solid #ccc; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 800px;">
+        <h1 style="text-align: center; margin-bottom: 20px; color: #333;">statistics of complaints by type</h1>
+        <div style="text-align: center;">
+            <canvas id="reclamationTypeChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var chartData = {{ chartData | raw }};
+        var ctx = document.getElementById('reclamationTypeChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'pie', // Changer le type de graphique en camembert (pie)
+            data: chartData,
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                       // text: 'Répartition des réclamations par type',
+                        color: '#333',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        }
+                    },
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

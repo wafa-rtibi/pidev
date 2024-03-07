@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use App\Validator\Constraints\CustomNotBlank;
 
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 class ReponseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -24,10 +26,15 @@ class ReponseType extends AbstractType
                     'rows' => 8, // Nombre de lignes
                     'cols' => 80, // Nombre de colonnes
                 ],
-            ])
-            ->add('save',SubmitType::class)
-        ;
-    }
+                ])
+                // Ajout du champ de type checkbox
+                ->add('compensation', CheckboxType::class, [
+                    'label' => 'compensation', // Libellé du champ
+                    'required' => false, // Le champ n'est pas obligatoire
+                ])
+                ->add('save', SubmitType::class)
+            ;
+        }
 
     public function configureOptions(OptionsResolver $resolver): void
     {

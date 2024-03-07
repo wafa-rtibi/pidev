@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Evenement;
+
 use App\Entity\Reponse;
 use App\Form\ReponseType;
 use App\Repository\ReponseRepository;
@@ -21,62 +23,81 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Persistence\ManagerRegistry;
 
+
+
+use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mailer\MailerInterface;
+
+//les use pour pdf
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 //#[Route('/reponse')]
 class ReponseController extends AbstractController
 { 
 
-    //ajouter reponse tkhdem hmdlh
     //Ajouter une reponse pour une reclamation l'ajout se fait avec avec l'id de la reclamation
     #[Route('/reponse/addReponse/{id}', name: 'app_reponse_new')]
-    public function addReponse(Request $request, EntityManagerInterface $entityManager, $id, ManagerRegistry $doctrine, NotificationService $notificationService): Response
+    public function addReponse(Request $request, EntityManagerInterface $entityManager, $id, ManagerRegistry $doctrine, MailerInterface $mailer): Response
     {
+        // Récupération de la réclamation en fonction de l'ID fourni dans l'URL
         $complaint = $doctrine->getRepository(Reclamation::class)->find($id);
         if (!$complaint) {
             throw $this->createNotFoundException('Complaint not found');
         }
     
+        // Récupération de l'utilisateur ayant soumis la réclamation
         $user = $complaint->getReclamateur();
     
+        // Création d'un objet DateTime pour la date actuelle
         $dateActuelle = new DateTime();
     
+        // Création d'un nouvel objet Reponse
         $reponse = new Reponse();
         $reponse->setDateReponse($dateActuelle);
-        $reponse->setReclamReponse($complaint); 
+        $reponse->setReclamReponse($complaint);
     
+        // Création du formulaire de réponse à la réclamation
         $form = $this->createForm(ReponseType::class, $reponse);
         $form->handleRequest($request);
     
+        // Vérification si le formulaire a été soumis et est valide
         if ($form->isSubmitted() && $form->isValid()) {
+            // Enregistrement de la réponse dans la base de données
             $entityManager->persist($reponse);
             $entityManager->flush();
-            
-
-            // Mettre à jour le statut de la réclamation
+    
+            // Envoi d'un e-mail de notification à l'utilisateur
+            $email = (new Email())
+                ->from(new Address ('batoutbata5@gmail.com' ,"Troky"))
+                ->to($user->getEmail())
+                ->subject(' Regarding Your Complaint - Response from Troky ')
+                ->text('We hope this email finds you well. We want to inform you that we have processed your complaint regarding');
+    
+            $mailer->send($email);
+    
+            // Mise à jour du statut de la réclamation à "Résolu"
             $complaint->setStatutReclamation('Resolved');
             $entityManager->persist($complaint);
             $entityManager->flush();
-
-
-
-               // Envoyer une notification au client
-               $clientEmail = $user->getEmail(); // Remplacez cela par le champ approprié dans votre entité Utilisateur
-               $reclamationId = $complaint->getId(); // Assurez-vous que votre entité Reclamation a une méthode getId() appropriée
-               $notificationService->sendNotification($clientEmail, $reclamationId);
-
-            
+    
+            // Redirection vers une autre page après soumission de la réponse
             return $this->redirectToRoute('app_reponse_done');
         }
     
+        // Rendu du formulaire de réponse à la réclamation
         return $this->render('frontoffice/reponse/addReponse.html.twig', [
             'form' => $form->createView(),
             'complaint' => $complaint,
         ]);
     }
+    
 
 //controller jedid
 //hne el admin ychouf reclamation o yaaml ajouter reponse f nafess l page
 #[Route('/reclamation/show_and_add_response/{reclamateur_id}/{id}', name: 'app_reclamation_show_and_add_response')]
-public function showAndAddResponse(Request $request, EntityManagerInterface $entityManager, $id, ManagerRegistry $doctrine, $reclamateur_id): Response {
+public function showAndAddResponse(Request $request, EntityManagerInterface $entityManager, $id, ManagerRegistry $doctrine, $reclamateur_id,MailerInterface $mailer): Response {
     // Récupérer la réclamation en fonction de son identifiant
     $complaint = $doctrine->getRepository(Reclamation::class)->find($id);
     
@@ -96,6 +117,9 @@ public function showAndAddResponse(Request $request, EntityManagerInterface $ent
     $reponse->setDateReponse($dateActuelle);
     $reponse->setReclamReponse($complaint); 
 
+   // $reponse->setAdmin($admin); // Associer l'administrateur à la réponse
+
+
     // Créer le formulaire pour ajouter une réponse
     $form = $this->createForm(ReponseType::class, $reponse);
     $form->handleRequest($request);
@@ -110,6 +134,16 @@ public function showAndAddResponse(Request $request, EntityManagerInterface $ent
         $complaint->setStatutReclamation('Resolved');
         $entityManager->persist($complaint);
         $entityManager->flush();
+
+
+         // Envoi d'un e-mail de notification à l'utilisateur
+         $email = (new Email())
+         ->from(new Address ('batoutbata5@gmail.com' ,"Troky"))
+         ->to($user->getEmail())
+         ->subject(' Regarding Your Complaint - Response from Troky ')
+         ->text('We hope this email finds you well. We want to inform you that we have processed your complaint regarding');
+
+        $mailer->send($email);
         
         // Rediriger vers la page de confirmation de réponse
         return $this->redirectToRoute('app_reponse_done');
@@ -124,8 +158,6 @@ public function showAndAddResponse(Request $request, EntityManagerInterface $ent
 }
 
 
-
-
     
     #[Route('/reponse/thankyou', name: 'app_reponse_done')]
     public function done_reponse(): Response
@@ -136,35 +168,38 @@ public function showAndAddResponse(Request $request, EntityManagerInterface $ent
     }
 
 
-     //tkhdem jawha behy hmdlh
-    // Pour afficher la reponse du reclamation au admin
-    //delon id de la reponse
+     
+    // afficher la reponse du reclamation au admin
+    //selon id de la reponse
     #[Route('/reponse/admin/show/{reclamateur_id}/{id}', name: 'app_reponse_admin_show')]
-    public function show_reponse_admin($id, $reclamateur_id,UtilisateurRepository $utilisateurRepository,ReponseRepository $reponseRepository): Response
-    {
+public function show_reponse_admin($id, $reclamateur_id, UtilisateurRepository $utilisateurRepository, ReponseRepository $reponseRepository): Response
+{
+    // Récupération de l'utilisateur concerné par l'identifiant
+    $user = $utilisateurRepository->find($reclamateur_id);
 
-        $user = $utilisateurRepository->find($reclamateur_id);
+    // Récupération de la réponse par son identifiant
+    $reponse = $reponseRepository->find($id);
 
-        $reponse = $reponseRepository->find($id);
-
-        if (!$user) {
-            throw $this->createNotFoundException('User not found');
-        }
-
-        return $this->render('frontoffice/reponse/show_reponse_admin.html.twig', [
-            'rep' => $reponse,
-            'reponse' => $user,
-            
-        ]);
+    // Vérification si l'utilisateur existe
+    if (!$user) {
+        // Lancer une exception si l'utilisateur n'est pas trouvé
+        throw $this->createNotFoundException('User not found');
     }
-    
 
-    //tkhdem b shyh jawha behy hmdlh
+    // Rendu de la vue avec les données de la réponse et de l'utilisateur
+    return $this->render('frontoffice/reponse/show_reponse_admin.html.twig', [
+        'rep' => $reponse,  
+        'reponse' => $user, 
+        'reclamateur_id' =>$reclamateur_id
+    ]);
+}
+
+    
     // Pour afficher la reponse du reclamation au client
    
     #[Route('/reponse/show/{reclamateur_id}/{id}', name: 'app_reponse_show')]
-public function show_reponse($id, $reclamateur_id, UtilisateurRepository $utilisateurRepository, ReponseRepository $reponseRepository, EntityManagerInterface $entityManager): Response
-{  
+   public function show_reponse($id, $reclamateur_id, UtilisateurRepository $utilisateurRepository, ReponseRepository $reponseRepository, EntityManagerInterface $entityManager): Response
+   {  
     // Récupérer l'utilisateur associé à l'identifiant du reclamateur
     $user = $utilisateurRepository->find($reclamateur_id);
 
@@ -187,16 +222,15 @@ public function show_reponse($id, $reclamateur_id, UtilisateurRepository $utilis
 
     // Rendre la vue Twig pour afficher la réponse
     return $this->render('frontoffice/reponse/show.html.twig', [
-        'rep' => $reponse, // Passer la réponse à la vue
-        'reponse' => $user, // Passer l'utilisateur à la vue
+        'rep' => $reponse, 
+        'reponse' => $user, 
     ]);
 }
 
-
-    //tkhdem b shyh hmdlh
     //la modification du reponse se faire en utlisant l'id de la reponse
     //admin faire le modification du reponse
     //aprés que l'admin a modifier  reponse el peut la consulter 
+    //si client a  deja vu la reponse l'admin ne peut pas modifier ou supprimer cette reponse
     #[Route('/reponse/edit/{reclamateur_id}/{id}', name: 'app_reponse_edit')]
     public function edit_reponse(Request $request, ManagerRegistry $doctrine, int $id,$reclamateur_id): Response
     {
@@ -251,8 +285,52 @@ public function show_reponse($id, $reclamateur_id, UtilisateurRepository $utilis
 
 
 
+    
+//pdf zeineb(bech nabaathlou pdf)
+//bech nzid el f faza mtaa el admin ynajm yzid "commentair" ala reclamation mtaa user par exemple
+//yqoul l reclamation athika testha yaawedhlou ou pas
+//naaml condition ke user yesthaq naawedhlou nabaathlou pdf ala email fih les detlais mtaa event l lazem yahdherlou
+#[Route('/reponse/event/{id}', name: 'app_generatePdf')]
+public function generatePdf(int $id, EntityManagerInterface $entityManager): Response
+{
+    // Récupérer l'événement en fonction de son ID
+    $event = $entityManager->getRepository(Evenement::class)->find($id);
 
+    // Vérifier si l'événement existe
+    if (!$event) {
+        throw $this->createNotFoundException('Event not found');
+    }
 
+    // Préparer les informations sur l'événement pour le PDF
+    $eventDetails = [
+        'id' => $event->getId(),
+        'Categorie' => $event->getCategorie(),
+        'TypeEvent' => $event->getTypeEvent(),
+        'DateDebut' => $event->getDateDebut(),
+        'DateFin' => $event->getDateFin(),
+        'Lien' => $event->getLien(),
+        'Lieu' => $event->getLieu(),
+        'Description' => $event->getDescription(),
+        'Titre' => $event->getTitre(),
+    ];
+
+    // Rendre la vue PDF avec les détails de l'événement
+    $pdfContent = $this->renderView('pdf_layout.html.twig', [
+        'eventDetails' => $eventDetails,
+    ]);
+
+    // Initialiser Dompdf et charger le contenu HTML
+    $dompdf = new Dompdf();
+    $dompdf->loadHtml($pdfContent);
+
+    // Rendre le PDF
+    $dompdf->render();
+
+    // Retourner une réponse avec le contenu PDF
+    return new Response($dompdf->output(), 200, [
+        'Content-Type' => 'application/pdf',
+    ]);
+}
 
 
 
@@ -275,14 +353,18 @@ public function show_reponse($id, $reclamateur_id, UtilisateurRepository $utilis
 
 }
 
+//lazemou ygetti id admin l aaml repondre ala reclamation
+
+//bech naaml upload image  =>saye  htta afficher image  tkhdem aand el client o aand l'admin
+
+//nlaslh filter + recherche sayeeeeeeee hmdlh hmdlh
+
+
+//pagination naslehha  syeeee
 
 
 
-//nhassen fel affichage
-
-//pagination
 
 
- 
 
 

@@ -6,6 +6,8 @@ use App\Repository\ReclamationRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
 
 use App\Validator\Constraints\CustomNotBlank;
 
@@ -15,7 +17,16 @@ use App\Validator\Constraints\CustomNotBlank;
 
 
 
+
+
 #[ORM\Entity(repositoryClass: ReclamationRepository::class)]
+
+/**
+ * @Vich\Uploadable
+ */
+#[Vich\Uploadable]
+
+
 class Reclamation
 
 {
@@ -54,6 +65,35 @@ class Reclamation
 
     #[ORM\OneToOne(mappedBy: 'reclam_reponse', cascade: ['persist', 'remove'])]
     private ?Reponse $reponse = null;
+
+
+
+
+/**
+     * @Vich\UploadableField(mapping="offres_images", fileNameProperty="images")
+     * @var File
+     */
+
+     #[Vich\UploadableField(mapping: "reclamation_images", fileNameProperty: "image1")]
+    // #[Assert\NotBlank(message: "Select a picture for your offer")] 
+      private $imageFile1= null;
+  
+      /**
+       * @Vich\UploadableField(mapping="offres_images", fileNameProperty="images")
+       * @var File
+       */
+  
+      #[Vich\UploadableField(mapping: "reclamation_images", fileNameProperty: "image2")]
+      private $imageFile2 = null;
+  
+      #[ORM\Column(nullable: true)]
+      private $image1 = null;
+  
+      #[ORM\Column(nullable: true)]
+      private ?string $image2 = null;
+  
+      
+
 
     public function getId(): ?int
     {
@@ -144,4 +184,55 @@ class Reclamation
         return $this;
     }
 
+
+    public function getImageFile1()
+    {
+        return $this->imageFile1;
+    }
+
+    public function setImageFile1(File $imageFile)
+    {
+        $this->imageFile1 = $imageFile;
+    }
+
+    public function getImageFile2()
+    {
+        return $this->imageFile2;
+    }
+
+    public function setImageFile2(File $imageFile)
+    {
+        $this->imageFile2 = $imageFile;
+    }
+   
+   
+    public function getImage1()
+    {
+        return $this->image1;
+    }
+
+    public function setImage1($image1): static
+    {
+        $this->image1 = $image1;
+
+        return $this;
+    }
+
+    public function getImage2()
+    {
+        return $this->image2;
+    }
+
+    public function setImage2($image2)
+    {
+        $this->image2 = $image2;
+
+        return $this;
+    }
+    
+
+    
+
 }
+
+
