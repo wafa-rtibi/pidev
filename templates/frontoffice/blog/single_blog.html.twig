@@ -16,34 +16,60 @@
         <span class="fa fa-brands fa-facebook-f" style="color:blue"></span><a href="#" onclick="shareOnFacebook('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Facebook</a>
         <span class="fa fa-brands fa-twitter"style="color:#1DA1F2"></span><a href="#" onclick="shareOnTwitter('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Twitter</a>
     </div>
-    </section>
+    {# </section> #}
 
-    {# commmmmmmmentaire #}
-    {# <div class="list-commentaire">
-    <ul class="commentaire-list">
-{% for commentaire in comments %}
+    <h2>Comments</h2>
+    <div class="card mb-3">
+        <div class="card-body">
+            {% for commentaire in comments %}
+            <div class="media">
+                <img src="images/person_1.jpg" alt="User Image" class="mr-3 rounded-circle" style="width: 60px;">
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">username</h5>
+                    <p class="commentcontent">{{ commentaire.contenu }}</p>
+                    <div class="d-flex justify-content-end align-items-center">
+                        <form method="post" action="{{ path('delete_commentfront', {'id': commentaire.id}) }}" class="mr-2">
+                            <button type="submit" class="btn btn-link text-danger">
+                                <i class="bi bi-trash"></i> 
+                            </button>
+                        </form>
+                        <a href="{{ path('edit_commentfront', {'id': commentaire.id}) }}" class="edit-action">
+                            <i class="fas fa-pencil-alt edit-icon" style="color: blue;"></i> 
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 
-        <li class="commentaire">
-            <div class="vcard">
-                <img src="images/person_1.jpg" alt="Image placeholder">
-            </div>
-            <div class="commentaire-body">
-            <p>{{ comment.content }}</p>
-    <p>Commenté par : {{ username[comment.id] }}</p>
-                <li class="commentaire.contenu">{{ commentaire.contenu }}</li>
-                
-                    <form method="post" action="{{ path('delete_commentfront', {'id': commentaire.id}) }}">
-                        <button type="submit" class="btn btn-link p-0 text-danger">
-                            <i class="bi bi-trash"></i>
-                        </button>
-                    </form>
-                    
-                
-            </div>
-        </li>
-{% endfor %}
-    </ul>
-    </div> #}
+                </div>
+                </li>
+<div class="form-group">
+                  
+                <div class="form-group">
+                  <a href="{{ path('add_commentfront', {'id': blog.id}) }}"  class="btn btn-dark">Post comment</a>
+                </div>
+              
+                </li>
+              </ul>
+            <!-- END comment-list -->
+
+          
+
+        </div>
+     
+        <!-- END main-content -->
+
+        
+
+      
+          
+    <div class="sharethis-inline-share-buttons"></div>
+      </div>
+    </div>
+  </section>
 
 </div>
 <script>

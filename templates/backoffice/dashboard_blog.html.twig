@@ -44,38 +44,24 @@
 			<table class="table table-bordered table-striped">
 				<thead class="thead-dark">
 					<tr>
-						<th>Last Name
-						</th>
-						<th>First Name
-						</th>
-						<th>Email
-						</th>
-						<th>Date
-						</th>
-						<th>Type
-						</th>
-						<th>Status
-						</th>
-
+						<th>Last Name</th>
+						<th>First Name</th>
+						<th>Email</th>
+						<th>Date</th>
+						<th>Type</th>
+						<th>Status</th>
 						<th>Action</th>
 					</tr>
 				</thead>
 				<tbody>
-					{% for blog
-     in tableauReclamations %}
+					{% for blog in tableaublogs %}
 						<tr>
-							<td>{{ blog
-            .nom }}</td>
-							<td>{{ blog
-            .prenom }}</td>
-							<td>{{ blog
-            .email }}</td>
-							<td>{{ blog
-            .dateReclamation|date('Y-m-d H:i:s') }}</td>
-							<td>{{ blog
-            .typeReclamation }}</td>
-							<td>{{ blog
-            .statutReclamation }}</td>
+							<td>{{ blog.nom }}</td>
+							<td>{{ blog.prenom }}</td>
+							<td>{{ blog.email }}</td>
+							<td>{{ blog.dateReclamation|date('Y-m-d H:i:s') }}</td>
+							<td>{{ blog.typeReclamation }}</td>
+							<td>{{ blog.statutReclamation }}</td>
 							<td>
 								<div class="d-flex justify-content-center">
 

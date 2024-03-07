@@ -1,10 +1,10 @@
 <?php
 
-// namespace App\Repository;
+namespace App\Repository;
 
-// use App\Entity\Commentaire;
-// use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-// use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Commentaire;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Commentaire>
@@ -14,12 +14,13 @@
  * @method Commentaire[]    findAll()
  * @method Commentaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-// class CommentaireRepository extends ServiceEntityRepository
-// {
-//     public function __construct(ManagerRegistry $registry)
-//     {
-//         parent::__construct($registry, Commentaire::class);
-//     }
+class CommentaireRepository extends ServiceEntityRepository
+{
+    public function __construct(ManagerRegistry $registry)
+    {
+        parent::__construct($registry, Commentaire::class);
+    }
+//     /////normalement l bloc hedha ykoun commenter
 // public function findCommentsByUser(Utilisateur $user)
 //     {
 //         return $this->createQueryBuilder('c')
@@ -53,4 +54,4 @@
 //            ->getOneOrNullResult()
 //        ;
 //    }
-// }
+}
