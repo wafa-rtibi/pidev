@@ -49,6 +49,7 @@ class Blog
      private $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
+
     private ?Utilisateur $auteur= null ;
 
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'blog')]
@@ -57,6 +58,9 @@ class Blog
     #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'intearactionBlog')]
     private Collection $interactions;
 
+    #[ORM\ManyToMany(targetEntity: utilisateur::class, inversedBy: 'blogfavories')]
+    private Collection $favories;
+
    
    
 
@@ -64,6 +68,7 @@ class Blog
     {
         $this->comantaires = new ArrayCollection();
         $this->interactions = new ArrayCollection();
+        $this->favories = new ArrayCollection();
        
     }
 
@@ -193,6 +198,30 @@ class Blog
     public function removeInteraction(Utilisateur $interaction): static
     {
         $this->interactions->removeElement($interaction);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, utilisateur>
+     */
+    public function getFavories(): Collection
+    {
+        return $this->favories;
+    }
+
+    public function addFavory(utilisateur $favory): static
+    {
+        if (!$this->favories->contains($favory)) {
+            $this->favories->add($favory);
+        }
+
+        return $this;
+    }
+
+    public function removeFavory(utilisateur $favory): static
+    {
+        $this->favories->removeElement($favory);
 
         return $this;
     }

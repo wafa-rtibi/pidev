@@ -1,0 +1,131 @@
+{% extends 'dashAdminBlog.html.twig' %}
+{% block body %}
+	<div class="container">
+
+
+		<div class="container">
+			<h1 class="text-center">Reclamation Table</h1>
+
+			<form action="{{ path('app_dashboard_blog') }}" method="get">
+				<div
+					class="form-group">
+					<!-- Champ de recherche par nom, prénom ou email -->
+					<div class="input-group mb-2">
+						<input type="text" class="form-control" name="q" placeholder="Search by First Name, Last Name or email" value="{{ searchTerm }}">
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-primary">Search</button>
+						</div>
+					</div>
+				</div>
+			</form>
+
+
+			<form action="{{ path('app_dashboard_blog') }}" method="get">
+				<div
+					class="form-group">
+					<!-- Menu déroulant pour filtrer par type de réclamation -->
+					<div class="input-group mb-2">
+						<select name="type" class="form-control">
+							<option value="">All</option>
+							<option value="Type1" {% if typeReclamation == 'arnaque' %} selected {% endif %}>arnaque</option>
+							<option value="Type2" {% if typeReclamation == 'conflit' %} selected {% endif %}>conflit</option>
+							<!-- Ajoutez d'autres options de type de réclamation si nécessaire -->
+						</select>
+						<div class="input-group-append">
+							<button type="submit" class="btn btn-primary">filter</button>
+						</div>
+					</div>
+				</div>
+			</form>
+
+
+		</div>
+		<div class="table-responsive">
+			<table class="table table-bordered table-striped">
+				<thead class="thead-dark">
+					<tr>
+						<th>Last Name
+						</th>
+						<th>First Name
+						</th>
+						<th>Email
+						</th>
+						<th>Date
+						</th>
+						<th>Type
+						</th>
+						<th>Status
+						</th>
+
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for blog
+     in tableauReclamations %}
+						<tr>
+							<td>{{ blog
+            .nom }}</td>
+							<td>{{ blog
+            .prenom }}</td>
+							<td>{{ blog
+            .email }}</td>
+							<td>{{ blog
+            .dateReclamation|date('Y-m-d H:i:s') }}</td>
+							<td>{{ blog
+            .typeReclamation }}</td>
+							<td>{{ blog
+            .statutReclamation }}</td>
+							<td>
+								<div class="d-flex justify-content-center">
+
+
+									<a href="{{ path('app_blog
+                    _show_and_add_response', {'id': blog
+                    .id ,'reclamateur_id':user.id}) }}" class="btn btn-primary mx-2">Add Response</a>
+
+									{# <a href="{{ path('app_blog
+                    _show_admin', {'reclamateur_id': user.id ,'id': blog
+                    .id}) }}" class="btn btn-info mx-2">Voir Détails</a>   #}
+
+
+									{% if blog
+                    .reponse is not null %}
+
+										{# ken famch reponse ala blog
+                         afmin ma ynajmch yaaml lee supp le modifier repnse #}
+
+										<a href="{{ path('app_reponse_admin_show', {'reclamateur_id': user.id, 'id': blog
+                        .reponse.id}) }}" class="btn btn-secondary mx-2">Show Response</a>
+
+										{% if not blog
+                        .reponse.vu %}
+
+											<a href="{{ path('app_reponse_edit', {'reclamateur_id': user.id, 'id': blog
+                            .reponse.id}) }}" class="btn btn-warning mx-2">Edit Response</a>
+
+											<a href="{{ path('app_delete_reponse', {'id': blog
+                            .reponse.id}) }}" class="btn btn-danger mx-2" onclick="return confirm('Are you sure you want to delete this response?')">Delete Response</a>
+
+										{% endif %}
+										{# <a href="{{ path('app_delete_reponse', {'id': blog
+                        .reponse.id}) }}" class="btn btn-danger mx-2" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette réponse ?')">Supprimer Réponse</a>  #}
+
+									{# {% else %} #}
+
+										{# <span class="text-muted">Pas de réponse</span> #}
+
+									{% endif %}
+
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+		
+
+	</div>
+{% endblock %}
+

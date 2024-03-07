@@ -1,84 +1,115 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
+<!-- Include speech recognition -->
+{# {% include 'frontoffice/blog/speech_recognition.html.twig' %} #}
 <div class="container">
-            <div class="row height d-flex justify-content-center align-items-center"style="margin-left: 20;">
-              <div class="col-md-6">
-                <div class="form">
-                  <i class="fa fa-search"></i>
-                  <input type="text" class="form-control form-input" placeholder="Search anything...">
-                  <span class="left-pan"><i class="fa fa-microphone"></i></span>
-                </div>               
-              </div>
-            </div>
-          </div>
-      <br><h1> Blog list</h1>
+    <div class="row height d-flex justify-content-center align-items-center" style="margin-left: 20;">
+        <div class="col-md-6">
+            <div class="form">
+                <i class="fa fa-search"></i>
+                <input type="text" class="form-control form-input" id="searchInput" placeholder="Search anything...">
+                <span class="left-pan" id="voiceSearch"><i class="fa fa-microphone"></i></span>
+            </div>               
+        </div>
+    </div>
+</div>
+
+<br>
+<h1>Blog list</h1>
 <!-- Start Blog Section -->
-		<div class="blog-section">
+<div class="blog-section">
     <div class="container">
-        <div class="row">
+        <div class="row" id="blogList">
             {% for blog in blogs %}
             <li>
                 <div class="col-md-6">
                     <div class="post-entry">
-                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
-                        <h2>{{ blog.titre }}</h2>
-                        <p>{{ blog.contenu }}</p></a>
+                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail">
+                            <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
+                            <h2>{{ blog.titre }}</h2>
+                            <p>{{ blog.contenu }}</p>
+                        </a>
                     </div>
                 </div>
-                <a href="{{ path('edit_blog', {'id': blog.id}) }}"style="padding: 4px 10px; border: 2px solid blue; border-radius: 5px;color: blue; font-weight: bold;">Modify</a>
-                <a href="{{ path('delete_blog', {'id': blog.id}) }}"style="padding: 4px 10px; border: 2px solid red; border-radius: 5px;color: red; font-weight: bold;">Delete</a>
+                <a href="{{ path('edit_blog', {'id': blog.id}) }}" style="padding: 4px 10px; border: 2px solid blue; border-radius: 5px;color: blue; font-weight: bold;">Modify</a>
+                <a href="{{ path('delete_blog', {'id': blog.id}) }}" style="padding: 4px 10px; border: 2px solid red; border-radius: 5px;color: red; font-weight: bold;">Delete</a>
             </li><br><br>
             {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('searchInput').addEventListener('input', function() {
+        var searchValue = this.value.toLowerCase();
+        var blogList = document.getElementById('blogList').getElementsByTagName('li');
+        for (var i = 0; i < blogList.length; i++) {
+            var blogTitle = blogList[i].getElementsByTagName('h2')[0].innerText.toLowerCase();
+            var blogContent = blogList[i].getElementsByTagName('p')[0].innerText.toLowerCase();
+            if (blogTitle.indexOf(searchValue) > -1 || blogContent.indexOf(searchValue) > -1) {
+                blogList[i].style.display = '';
+            } else {
+                blogList[i].style.display = 'none';
+            }
+        }
+    });
+
+    function startVoiceRecognition() {
+        var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+        recognition.lang = 'en-US';
+
+        recognition.onresult = function(event) {
+            var transcript = event.results[0][0].transcript.toLowerCase();
+            document.getElementById('searchInput').value = transcript; // Met à jour la valeur de l'élément input existant
+        };
+
+        recognition.start();
+    }
+
+    document.getElementById('voiceSearch').addEventListener('click', function() {
+    startVoiceRecognition();
+});
+</script>
 
 <style>
-
 .height{
-
     height: 10vh;
 }
 
 .form{
-
     position: relative;
 }
 
 .form .fa-search{
-
     position: absolute;
     top:20px;
     left: 20px;
     color: #9ca3af;
-
 }
 
 .form span{
-
     position: absolute;
     right: 17px;
     top: 13px;
     padding: 2px;
     border-left: 1px solid #d1d5db;
-
 }
 
 .left-pan{
     padding-left: 7px;
 }
 
-.left-pan i{
-   
+.left-pan i{  
    padding-left: 10px;
 }
 
 .form-input{
-
     height: 55px;
     text-indent: 33px;
     border-radius: 10px;
 }
 
 .form-input:focus{
-
     box-shadow: none;
     border:none;
 }

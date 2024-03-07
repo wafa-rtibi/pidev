@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Repository;
+// namespace App\Repository;
 
-use App\Entity\Commentaire;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+// use App\Entity\Commentaire;
+// use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+// use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Commentaire>
@@ -14,16 +14,24 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method Commentaire[]    findAll()
  * @method Commentaire[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class CommentaireRepository extends ServiceEntityRepository
-{
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Commentaire::class);
-    }
-
-//    /**
-//     * @return Commentaire[] Returns an array of Commentaire objects
-//     */
+// class CommentaireRepository extends ServiceEntityRepository
+// {
+//     public function __construct(ManagerRegistry $registry)
+//     {
+//         parent::__construct($registry, Commentaire::class);
+//     }
+// public function findCommentsByUser(Utilisateur $user)
+//     {
+//         return $this->createQueryBuilder('c')
+//             ->leftJoin('c.user', 'u')
+//             ->andWhere('u = :user')
+//             ->setParameter('user', $user)
+//             ->getQuery()
+//             ->getResult();
+//     }
+   /**
+    * @return Commentaire[] Returns an array of Commentaire objects
+    */
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('c')
@@ -45,4 +53,4 @@ class CommentaireRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-}
+// }

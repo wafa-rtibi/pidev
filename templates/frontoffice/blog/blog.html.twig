@@ -1,160 +1,135 @@
 {% extends 'base_front.html.twig' %}
+
 {% block body %}
-  
-		<!-- Start Hero Section -->
-			<div class="hero">
-				<div class="container">
-					<div class="row justify-content-between">
-						<div class="col-lg-5">
-							<div class="intro-excerpt">
-								<h1>Blog</h1>
-								<p class="mb-4"> "Stay informed and inspired with our collection of articles on sustainability and community at Troky!"</p>
-								<p><a href="{{path('create_blog')}}" class="btn btn-secondary me-2">Create</a><a href="{{path('blog_list')}}" class="btn btn-white-outline">My blog</a></p>
-							</div>
-						</div>
-						<div class="col-lg-7">
-							<div class="hero-img-wrap">
-								<img src="{{asset('frontoffice/images/blog.png')}}" class="img-fluid">
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		<!-- End Hero Section -->
-
-		
-
-		<!-- Start Blog Section -->
-		<div class="blog-section">
+<!-- Start Hero Section -->
+<div class="hero">
     <div class="container">
-        <div class="row">
-            {% for blog in blogs %}
-                <div class="col-md-6">
-                    <div class="post-entry">
-                        <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail"><img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
-                        <h2>{{ blog.titre }}</h2>
-                        <p>{{ blog.contenu }}</p></a>
-                        <!-- Other blog details -->
-                    </div>
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Blog</h1>
+                    <p class="mb-4"> "Stay informed and inspired with our collection of articles on sustainability and community at Troky!"</p>
+                    <p><a href="{{path('create_blog')}}" class="btn btn-secondary me-2">Create</a><a href="{{path('blog_list')}}" class="btn btn-white-outline">My blog</a></p>
                 </div>
+            </div>
+            <div class="col-lg-7">
+                <div class="hero-img-wrap">
+                    <img src="{{asset('frontoffice/images/blog.png')}}" class="img-fluid">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Hero Section -->
+
+<!-- Start Blog Section -->
+<div class="container">
+    <div class="row height d-flex justify-content-center align-items-center" style="margin-left: 20;">
+        <div class="col-md-6">
+            <div class="form">
+                <i class="fa fa-search"></i>
+                <input type="text" class="form-control form-input" id="searchInput" placeholder="Search anything...">
+                <span class="left-pan"><i class="fa fa-microphone"></i></span>
+            </div>               
+        </div>
+    </div>
+</div>
+	    <!-- Include speech recognition -->
+    {# {% include 'frontoffice/blog/speech_recognition.html.twig' %} #}
+<div class="blog-section">
+    <div class="container">
+        <div class="row" id="blogList">
+            {% for blog in blogs %}
+            <div class="col-md-6">
+                <div class="post-entry">
+                    <a href="{{ path('single_blog', { 'id': blog.id }) }}" class="post-thumbnail">
+                        <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image" class="img-fluid">
+                        <h2>{{ blog.titre }}</h2>
+                        <p>{{ blog.contenu }}</p>
+                    </a>
+                </div>
+            </div>
             {% endfor %}
-				{# <div class="row">
-					<div class="col-12 col-sm-6 col-md-4 mb-5">
-						<div class="post-entry">
-							<a href="{{path('single_blog')}}" class="post-thumbnail"><img src="{{asset('frontoffice/images/nature.jpg')}}" alt="Image" class="img-fluid"></a>
-							<div class="post-content-entry">
-								<h3><a href="#">Nature</a></h3>
-								<div class="meta">
-								<span>Nature's exquisite beauty resides in its simplicity and complexity...</span> <br>
-									<span>by <a href="#">mohamed trabelsi</a></span> <span>on <a href="#">jan 19, 2024</a></span>
-								</div>
-							</div>
-						</div>
-					</div> #}
-				</div>
-			</div>
-		</div>
-		<!-- End Blog Section -->	
+        </div>
+    </div>
+</div>
 
-		
+<script>
+document.getElementById('searchInput').addEventListener('input', function() {
+    filterBlogs(this.value.toLowerCase());
+});
 
-		<!-- Start Testimonial Slider 
-		<div class="testimonial-section before-footer-section">
-			<div class="container">
-				<div class="row">
-					<div class="col-lg-7 mx-auto text-center">
-						<h2 class="section-title">Testimonials</h2>
-					</div>
-				</div>
+document.querySelector('.fa.fa-microphone').addEventListener('click', function() {
+    startVoiceRecognition();
+});
 
-				<div class="row justify-content-center">
-					<div class="col-lg-12">
-						<div class="testimonial-slider-wrap text-center">
+function filterBlogs(searchValue) {
+    var blogList = document.getElementById('blogList').getElementsByClassName('post-entry');
+    for (var i = 0; i < blogList.length; i++) {
+        var blogTitle = blogList[i].getElementsByTagName('h2')[0].innerText.toLowerCase();
+        var blogContent = blogList[i].getElementsByTagName('p')[0].innerText.toLowerCase();
+        if (blogTitle.indexOf(searchValue) > -1 || blogContent.indexOf(searchValue) > -1) {
+            blogList[i].style.display = '';
+        } else {
+            blogList[i].style.display = 'none';
+        }
+    }
+}
 
-							<div id="testimonial-nav">
-								<span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
-								<span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
-							</div>
+function startVoiceRecognition() {
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    recognition.lang = 'en-US';
 
-							<div class="testimonial-slider">
-								
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
+    recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript.toLowerCase();
+        document.getElementById('searchInput').value = transcript; // Met à jour la valeur de l'élément input existant
+    };
 
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
+    recognition.start();
+}
+</script>
 
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
+<style>
+.height {
+    height: 10vh;
+}
 
-										</div>
-									</div>
-								</div> 
-								<!-- END item 
+.form {
+    position: relative;
+}
 
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
+.form .fa-search {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #9ca3af;
+}
 
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
+.form span {
+    position: absolute;
+    right: 17px;
+    top: 13px;
+    padding: 2px;
+    border-left: 1px solid #d1d5db;
+}
 
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
+.left-pan {
+    padding-left: 7px;
+}
 
-										</div>
-									</div>
-								</div> 
-								<!-- END item 
+.left-pan i {
+    padding-left: 10px;
+}
 
-								<div class="item">
-									<div class="row justify-content-center">
-										<div class="col-lg-8 mx-auto">
+.form-input {
+    height: 55px;
+    text-indent: 33px;
+    border-radius: 10px;
+}
 
-											<div class="testimonial-block text-center">
-												<blockquote class="mb-5">
-													<p>&ldquo;Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Integer convallis volutpat dui quis scelerisque.&rdquo;</p>
-												</blockquote>
-
-												<div class="author-info">
-													<div class="author-pic">
-														<img src="images/person-1.png" alt="Maria Jones" class="img-fluid">
-													</div>
-													<h3 class="font-weight-bold">Maria Jones</h3>
-													<span class="position d-block mb-3">CEO, Co-Founder, XYZ Inc.</span>
-												</div>
-											</div>
-
-										</div>
-									</div>
-								</div> 
-								<!-- END item 
-
-							</div>
-
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>-->
-		<!-- End Testimonial Slider -->
-
-		
+.form-input:focus {
+    box-shadow: none;
+    border: none;
+}
+</style>
 {% endblock %}

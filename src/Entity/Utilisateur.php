@@ -22,7 +22,9 @@ class Utilisateur
     private ?string $nom ;
 
     #[ORM\Column(length: 255)]
-    private ?string $prenom ;
+    private ?string $prenom ;  
+    // #[ORM\Column(length: 255)]
+    // private ?string $Username;
 
     #[ORM\Column(length: 255)]
     private ?string $email ;
@@ -87,6 +89,12 @@ class Utilisateur
 
     #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'participants')]
     private Collection $evenements;
+
+    #[ORM\ManyToMany(targetEntity: Blog::class, mappedBy: 'favories')]
+    private Collection $blogfavories;
+
+    #[ORM\Column(length: 255)]
+    private ?string $Username = null;
  
     public function __construct()
     {
@@ -97,6 +105,7 @@ class Utilisateur
         $this->blogs = new ArrayCollection();
         $this->intearactionBlog = new ArrayCollection();
         $this->evenements = new ArrayCollection();
+        $this->blogfavories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -477,5 +486,59 @@ class Utilisateur
         return $this;
     }
 
+    /**
+     * @return Collection<int, Blog>
+     */
+    public function getBlogfavories(): Collection
+    {
+        return $this->blogfavories;
+    }
+
+    public function addBlogfavory(Blog $blogfavory): static
+    {
+        if (!$this->blogfavories->contains($blogfavory)) {
+            $this->blogfavories->add($blogfavory);
+            $blogfavory->addFavory($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBlogfavory(Blog $blogfavory): static
+    {
+        if ($this->blogfavories->removeElement($blogfavory)) {
+            $blogfavory->removeFavory($this);
+        }
+
+        return $this;
+    }
+    // public function getUsername(): ?string
+    // {
+    //     return $this->Username;
+    // }
+
+    // public function setUsername(?string $Username): static
+    // {
+    //     // Si la valeur du username est nulle, générez-le en combinant nom et prénom
+    //     if ($Username === null) {
+    //         $Username = strtolower($this->getNom() . ' ' . $this->getPrenom());
+    //     }
+
+    //     $this->Username = $Username;
+
+    //     return $this;
+    // }
+
+    public function getUsername(): ?string
+    {
+        return $this->Username;
+    }
+
+    public function setUsername(string $Username): static
+    {
+        $this->Username = $Username;
+
+        return $this;
+    }
    
 }

@@ -1,7 +1,6 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
-
-
+<div>
  <section>
     <h1>{{ blog.titre }}</h1>
     <div class="content">
@@ -9,38 +8,44 @@
     </div>
     <div class="img">
         <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image">
-        {# <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur }}</span></a> #}
+         {# <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur}}</span></a>  #}
     </div>
-    
-{# Display existing comments #}
-    {# <h2>Comments</h2>
-    <ul>
-        {% for comment in comments %}
-            <li>{{ comment.content }}</li>
-        {% endfor %}
-    </ul>
 
-    {# Add a form for users to submit new comments #}
-    {# <h2>Add a Comment</h2>
-    <form action="{{ path('submit_comment', {'id': blog.id}) }}" method="post">
-        {{ form_widget(commentForm.contenu) }} {# Assuming you have a 'content' field in your Comment entity #}
-        {# <button type="submit">Submit</button>
-    </form>   #}
-    {# <!-- delete -->
-    <a href="{{ path('delete_commentfront', {'id': commentaire.id}) }}" class="delete-action">
-        <i class="fas fa-trash delete-icon" style="color:red;"></i>
-    </a>
-    <!-- édit -->
-    <a href="{{ path('edit_commentfront', {'id': commentaire.id}) }}" class="edit-action">
-        <i class="fas fa-pencil-alt edit-icon" style="color:blue;"></i>
-    </a> #}
    <div class="share-buttons">
    <br>
         <span class="fa fa-brands fa-facebook-f" style="color:blue"></span><a href="#" onclick="shareOnFacebook('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Facebook</a>
         <span class="fa fa-brands fa-twitter"style="color:#1DA1F2"></span><a href="#" onclick="shareOnTwitter('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Twitter</a>
     </div>
-</section>
+    </section>
 
+    {# commmmmmmmentaire #}
+    {# <div class="list-commentaire">
+    <ul class="commentaire-list">
+{% for commentaire in comments %}
+
+        <li class="commentaire">
+            <div class="vcard">
+                <img src="images/person_1.jpg" alt="Image placeholder">
+            </div>
+            <div class="commentaire-body">
+            <p>{{ comment.content }}</p>
+    <p>Commenté par : {{ username[comment.id] }}</p>
+                <li class="commentaire.contenu">{{ commentaire.contenu }}</li>
+                
+                    <form method="post" action="{{ path('delete_commentfront', {'id': commentaire.id}) }}">
+                        <button type="submit" class="btn btn-link p-0 text-danger">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </form>
+                    
+                
+            </div>
+        </li>
+{% endfor %}
+    </ul>
+    </div> #}
+
+</div>
 <script>
     function shareOnFacebook(title, url) {
         // Initialize Facebook SDK
@@ -133,6 +138,7 @@
     }
 
     h1 {
+        color: black;
         grid-area: title;
         padding-top: var(--box-y-padding);
         padding-left: var(--box-x-padding);
@@ -148,81 +154,6 @@
     .img {
         grid-area: img;
     }
-}
-
-/* Non-important styles */
-
-
-body {
-    padding: 0em;
-}
-
-h1 {
-    color: black;
-    font-size: 4em;
-    margin: 0 0 1rem;
-    font-family: serif;
-    position: relative;
-}
-
-h1::after {
-    content: '';
-    position: absolute;
-    width: 6rem;
-    background-color: hsl(0, 0, 80%);
-    height: 2px;
-    top: 0;
-    left: 0;
-}
-
-@media (min-width: 40em) {
-    h1::after {
-        left: var(--box-x-padding);
-        top: var(--box-y-padding);
-    }
-}
-
-.content {
-    color: black;
-    margin-bottom: var(--box-y-padding);
-}
-
-@media (min-width: 40em) {
-    .content {
-        margin-bottom: 0;
-    }
-}
-
-p {
-    color: black;
-    margin-top: 0;
-    margin-bottom: var(--box-y-padding);
-    line-height: 1.5;
-}
-
-.img {
-    position: relative;
-}
-
-.img a {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-}
-
-img {
-    max-width: 100%;
-    vertical-align: middle;
-    box-shadow: 0 .2em 1.2em hsla(20, 20%, 20%, 10%);
-}
-
-.attribution {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background-color: #ea4c89; /* dribbble pink */
-    color: white;
-    padding: .5em 1em;
 }
 
 </style>

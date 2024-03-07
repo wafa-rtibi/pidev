@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 use DateTime;
-use Vich\UploaderBundle\Form\Type\VichImageType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\BlogRepository;
 use App\Form\BlogType;
@@ -10,16 +9,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Form\BlogFormType;
-use App\Entity\Blog; // Import your BlogPost entity
+use App\Entity\Blog; ///////////////////// Import Blog entity
 use Doctrine\Persistence\ManagerRegistry;
+
 use Doctrine\ORM\EntityManagerInterface;
-use EasyCorp\Bundle\EasyAdminBundle\Field\File;
-use App\Entity\Commentaire;
-use App\Form\CommentType;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+
 class BlogController extends AbstractController
 {
     #[Route('/blog', name: 'app_blog')]
@@ -46,6 +40,24 @@ class BlogController extends AbstractController
         
     ]);
 }
+// #[Route('/blog/{id}', name: 'single_blog')]
+
+//         public function show( $id,ManagerRegistry $doctrine):Response{
+            
+            
+//             $BlogRepository = $doctrine->getRepository(Blog::class);
+//             $blog=$doctrine->getRepository(Blog::class)->find($id);
+//             $user = $blog->getAuteur();
+//             $auteur = $user->getNom();
+
+//             // $comments = $blog->getComantaires();
+//             return $this->render('frontoffice/blog/single_blog.html.twig', [
+//                 'blog' => $blog,
+//                 // 'comments' => $comments,
+//                 // 'auteur' => $username,
+//             ]);
+            
+//         }
 
     #[Route('/createblog', name: 'create_blog')] 
     public function addblog(Request $request, EntityManagerInterface $entityManager,  ManagerRegistry $doctrine): Response
@@ -64,10 +76,11 @@ class BlogController extends AbstractController
         $entityManager->flush();
 
         $this->addFlash('success', 'blog created successfully!');
-        return   $this->redirectToRoute('blog_list'); // Redirect to user list page
+        return   $this->render('backoffice/dashAdminBlog.html.twig'); // Redirect to user list page
     }
 
-    return $this->render('frontoffice/blog/createblog.html.twig', [
+     //return $this->render('backoffice/dashAdminBlog.html.twig', [
+        return $this->render('frontoffice/blog/createblog.html.twig', [
         'form' => $form->createView(),
         'controller_name' => 'BlogController',
     ]);
@@ -113,109 +126,6 @@ class BlogController extends AbstractController
         $em->flush();  
         return $this->redirectToRoute('app_blog');
     }
-///////////////////////////////////////////commentaire////////////////////////////////////////////////////////////////////////
-//     #[Route('/delete-commentfront/{id}', name: 'delete_commentfront')]
-//     public function deleteCommentairefront(int $id, Request $request,Security $security): Response
-//     {
-//         $entityManager = $this->getDoctrine()->getManager();
-//         $commentaire = $entityManager->getRepository(commentaire::class)->find($id);
-
-//         if (!$commentaire) {
-//             throw $this->createNotFoundException('Commentaire non trouvé avec l\'identifiant '.$id);
-//         }
-
-//         $user = $security->getUser();
-//         $adminId = 3; 
-//         if ($user && $user->getUserIdentifier() !== $adminId) {
-//             throw new AccessDeniedException('Vous n\'avez pas le droit de supprimer ce commentaire.');
-//         }
-
-//         $commentaire->getIdblog()->removeCommentaire($commentaire);
-
-//         $entityManager->remove($commentaire);
-//         $entityManager->flush();
-
-//         $referer = $request->headers->get('referer');
-//         return new RedirectResponse($referer);;
-//     }
-
-
-    
-    
-// #[Route('/add-commentfront/{id}', name: 'add_commentfront')]
-// public function addCommentairefront($id, Request $request, Security $security): Response
-// {
-//     $blog = $this->getDoctrine()->getRepository(Blog::class)->find($id);
-
-//     if (!$blog) {
-//         throw $this->createNotFoundException('Blog non trouvé avec l\'identifiant '.$id);
-//     }
-
-//     $commentaire = new Commentaire();
-
-//     $form = $this->createForm(CommentType::class, $commentaire);
-
-//     $form->handleRequest($request);
-//     if ($form->isSubmitted() && $form->isValid()) {
-//         // Récupérer l'utilisateur connecté (avec l'ID 3)
-//         $adminId = 3; // ID de l'admin statiquement défini à 3
-//         $user = $this->getDoctrine()->getRepository(Admin::class)->find($adminId);
-//         if (!$user) {
-//             throw $this->createNotFoundException('Admin non trouvé avec l\'identifiant '.$adminId);
-//         }
-
-//         // $commentaire->setIdadmin($user);
-
-//         $commentaire->setIdblog($blog);
-
-//         $entityManager = $this->getDoctrine()->getManager();
-//         $entityManager->persist($commentaire);
-//         $entityManager->flush();
-
-//         return $this->redirectToRoute('blogdetails', ['id' => $commentaire->getIdblog()->getId()]);
-
-//     }
-
-//     return $this->render('blogfront/add.html.twig', [
-//         'formadd' => $form->createView(),
-//     ]);
-// }
-// #[Route('/edit-commentfront/{id}', name: 'edit_commentfront')]
-// public function editCommentairefront($id, Request $request, Security $security): Response
-// {
-//     $entityManager = $this->getDoctrine()->getManager();
-
-//     $user = $security->getUser();
-
-//     // Si l'utilisateur n'est pas connecté ou si son ID est différent de 3, redirigez-le ou faites une autre action appropriée
-//   //  if (!$user || $user->getID() !== 3) {
-//         // Redirection, message d'erreur, etc.
-//        // throw $this->createAccessDeniedException('Vous n\'avez pas les autorisations nécessaires pour effectuer cette action.');
-//    // }
-
-//     $commentaire = $entityManager->getRepository(Commentaire::class)->find($id);
-
-//     if (!$commentaire) {
-//         throw $this->createNotFoundException('Commentaire non trouvé avec l\'identifiant '.$id);
-//     }
-
-//     $form = $this->createForm(CommentType::class, $commentaire);
-
-//     // Traiter le formulaire soumis
-//     $form->handleRequest($request);
-
-//     if ($form->isSubmitted() && $form->isValid()) {
-
-//         $entityManager->flush();
-
-//         return $this->redirectToRoute('blogdetails', ['id' => $commentaire->getIdblog()->getId()]);
-//     }
-
-//     return $this->render('blogfront/add.html.twig', [
-//         'formadd' => $form->createView(),
-//     ]);
-// }
-
 
  }
 
