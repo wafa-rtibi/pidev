@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Entity;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\UtilisateurRepository;
 use DateTime;
@@ -82,7 +83,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
 
  #[ORM\Column(length: 255)]
-    private ?DateTime $dateinscription;
+                                  private ?DateTime $dateinscription;
 
     // #[ORM\Column(length: 255, nullable:true)]
     // private ?string $photoprofil="";
@@ -108,7 +109,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     // private ?string $rib;
 
     #[ORM\Column(length: 255)]
-    private ?string $adresse;
+    private ?string $adresse="";
 
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(message: "The telephone cannot be empty.")]
@@ -169,6 +170,15 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
     #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'participants')]
     private Collection $evenements;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $googleId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $hostedDomain = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $avatar = null;
 
  
     public function __construct()
@@ -546,11 +556,10 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getIsActive(): ?bool
+    public function getIsActive(): bool
     {
         return $this->isActive;
     }
-
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
@@ -628,6 +637,42 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     public function getPassword(): ?string
     {
         return $this->mdp;
+    }
+
+    public function getGoogleId(): ?string
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId(?string $googleId): static
+    {
+        $this->googleId = $googleId;
+
+        return $this;
+    }
+
+    public function getHostedDomain(): ?string
+    {
+        return $this->hostedDomain;
+    }
+
+    public function setHostedDomain(?string $hostedDomain): static
+    {
+        $this->hostedDomain = $hostedDomain;
+
+        return $this;
+    }
+
+    public function getAvatar(): ?string
+    {
+        return $this->avatar;
+    }
+
+    public function setAvatar(?string $avatar): static
+    {
+        $this->avatar = $avatar;
+
+        return $this;
     }
 
 }

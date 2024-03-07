@@ -27,9 +27,15 @@ security:
             provider: app_user_provider
             entry_point: form_login
             form_login:
-                  login_path: app_login
-                  check_path: app_login
-                  default_target_path: app_home
+                login_path: app_login
+                check_path: app_login
+                default_target_path: app_home
+                enable_csrf: true
+                # success_handler: App\Security\LoginFormAuthenticator
+                # failure_handler: App\Security\LoginFormAuthenticator
+                #   always_use_default_target_path: true
+                #   use_referer: true
+                #   success_handler: App\Security\LoginFormAuthenticator
 
             #     username_parameter: email
             #     password_parameter: password
@@ -65,6 +71,8 @@ security:
         # access_control:
         #    - { path: ^/listuser, roles: ROLE_ADMIN }
         #    - { path: ^/home, roles: ROLE_USER }
+        # access_control:
+        #     - { path: ^/user/\d+/block, roles: ROLE_ADMIN }
 
 when@test:
     security:

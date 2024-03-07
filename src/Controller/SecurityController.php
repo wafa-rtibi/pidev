@@ -2,20 +2,46 @@
 
 namespace App\Controller;
 use App\Entity\Utilisateur;
+use App\Form\UserType;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+
 
 class SecurityController extends AbstractController
 {
+
+   
+    private $session; // Ajout de la propriété $session
+
+    public const LOGIN_ROUTE = 'app_login'; //nom de route de login
+
+    public function __construct(SessionInterface $session) //genere url
+    {
+    
+    $this->session = $session; // Assurez-vous que la propriété $session est déclarée dans la classe
+
+    }
+
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // if ($this->getUser()) {
-        //     return $this->redirectToRoute('app_home');
-        // }
+        $user = $this->getUser();
+        if ($user instanceof Utilisateur && $user->getIsActive()) {
+            return $this->redirectToRoute('app_home');
+        } elseif ($user instanceof Utilisateur && !$user->getIsActive()) {
+            // Blocked user, add flash message and redirect to login page
+            $this->addFlash('danger', 'Your account is blocked. Please contact the administrator.');
 
+            return $this->redirectToRoute('app_login');
+        }
+        // if (!$user->isActive()) {
+        //     // User is blocked, display error message
+        //     $this->addFlash('error', 'Your account is currently blocked. Please contact support.');
+        //     return $this->redirectToRoute('app_login');
+        // }
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
@@ -23,7 +49,8 @@ class SecurityController extends AbstractController
 
         return $this->render('security/login.html.twig', [
             'last_username' => $lastUsername, 
-            'error' => $error
+            'error' => $error,      
+
         ]);
     }
   

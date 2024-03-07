@@ -45,6 +45,7 @@ class UserController extends AbstractController
         // Get validated data from the form
        // dump($form->getData());
        $user->setdateinscription(new \DateTime('now'));
+       $user->setRoles(['ROLE_USER']);
 
         // Persist the user entity
         $entityManager =$doctrine->getManager();
@@ -154,6 +155,29 @@ public function listuser(Request $request, UtilisateurRepository $utilisateurRep
         'form' => $form->createView(),
         'user' => $user,
     ]);
+    }
+
+    #[Route('/block-user/{id}', name: 'block_user')]
+    public function blockUser(int $id,Utilisateur $user,EntityManagerInterface $entityManager,ManagerRegistry $doctrine ): Response
+    {   
+        $userRepository = $entityManager->getRepository(Utilisateur::class);
+        $user = $userRepository->find($id);
+        if (!$user) {
+            throw $this->createNotFoundException('User not found');
+        }
+      
+        // Vérifier si l'utilisateur actuel est administrateur
+        // $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // Mettre à jour l'attribut isActive de l'utilisateur
+        $user->setIsActive(false);
+        $entityManager =$doctrine->getManager();
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $this->addFlash('success', 'User has been blocked successfully.');
+
+        // Rediriger vers la liste des utilisateurs ou une autre page
+        return $this->redirectToRoute('app_list_user');
     }
 
     #[Route('/deleteuser/{id}', name: 'app_delete_user')]

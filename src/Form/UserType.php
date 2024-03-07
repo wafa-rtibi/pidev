@@ -10,7 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;/// hedha w li lfouq lel validation mtaa lmot de passe 
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Form\DataTransformer\PhotoProfileTransformer;
@@ -75,6 +75,10 @@ class UserType extends AbstractType
             'attr' => ['class' => 'form-control', 'placeholder' => 'Password'],
             'label' => 'Password :',
             'required' => true,
+        ])
+        ->add('isActive', CheckboxType::class, [
+            'label' => 'Active',
+            'required' => false,
         ]);
         // $builder->get('photoprofil')
         // ->addModelTransformer(new PhotoProfileTransformer())
@@ -88,8 +92,6 @@ class UserType extends AbstractType
         
         // $builder->get('photoprofil') // Now you can access the field
         //     ->addModelTransformer(new PhotoProfileTransformer());
-        
-        
     }
 
     public function configureOptions(OptionsResolver $resolver): void

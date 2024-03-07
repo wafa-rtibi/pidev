@@ -42,4 +42,19 @@ app_filter_users:
   path: /filter-users
   controller: App\Controller\UserController::filterUsers
   methods: ['POST']
-  
+
+
+connect_google:
+    path: /connect/google
+    controller: App\Controller\GoogleController::connectAction
+
+# config/routes.yaml
+
+block_user:
+    path: /block-user/{id}
+    controller: App\Controller\UserController::blockUser
+ 
+# admin_dashboard:
+#     path: /admin/dashboard
+#     controller: App\Controller\AdminController::dashboard
+
