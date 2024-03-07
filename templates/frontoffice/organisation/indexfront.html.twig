@@ -2,40 +2,66 @@
 
 {% block title %}Organisation index{% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+{% endblock %}
+
 {% block content %}
     <h1>Organisation</h1>
 
+    <div id="maCarte" style="height: 400px;"></div> <!-- Ajout de l'élément div pour la carte -->
+
     <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom_organisation</th>
-                <th>Description</th>
-                <th>RIB</th>
-                <th>Adresse</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for organisation in organisations %}
-            <tr>
-                <td>{{ organisation.id }}</td>
-                <td>{{ organisation.nomOrganisation }}</td>
-                <td>{{ organisation.description }}</td>
-                <td>{{ organisation.rib }}</td>
-                <td>{{ organisation.adresse }}</td>
-                <td>
-                    <a href="{{ path('app_organisation_crud_show', {'id': organisation.id}) }}">show</a>
-                    <a href="{{ path('app_organisation_crud_edit', {'id': organisation.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
+        <!-- Le reste du contenu de votre tableau -->
     </table>
 
     <a href="{{ path('app_organisation_crud_new') }}">Create new</a>
+
+    <!-- Inclure le fichier JavaScript de Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+         crossorigin=""></script>
+
+    <!-- Initialisez la carte -->
+    <script>
+var villes = {
+
+    "Tunis": { "lat": 36.8065, "lon": 10.1815 }
+    "Sousse": { "lat": 35.8245, "lon": 10.6346 }
+    "Sfax": { "lat": 34.7398, "lon": 10.7600}
+    "Nabeul": { "lat": 36.4513, "lon": 10.7357}
+
+    // On initiaise la carte
+        var carte = L.map('maCarte').setView([36.8065, 10.1815], 13);
+        // On charge les "twiles"
+         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    minZoom: 1,        
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(carte);
+
+// on personnalise le marqueur
+
+var icone = L.icon({
+    iconUrl: "C:\xampp\htdocs\PIDEV PROJECT\Pidev23-24\public\frontoffice\iconehome.png",
+    iconSize: [50,50],
+    iconAnchor: [25,50],
+    popupAnchor: [0,-50]
+ })
+
+
+
+
+// on parcourt les différentes villes
+    for(ville in villes){
+    //On crée le marqueur et on lui attribue une popup
+    var marqueur = L.marker([villes[ville].lat, villes[ville].lon],{icon: iconehome})
+    .addTo(carte);
+    marqueur.bindPopup ("<p>"+ville+"</p>");
+    }
+}
+    </script>
 {% endblock %}
