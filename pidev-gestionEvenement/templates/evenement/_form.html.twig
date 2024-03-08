@@ -1,0 +1,77 @@
+<script src="https://cdn.jsdelivr.net/npm/ol@v9.0.0/dist/ol.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.0.0/ol.css">
+{{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+    <div class="billing-address-form">
+        <p>
+            {{ form_widget(form.titre, {'attr': {'placeholder': 'Enter le titre ..', 'class': 'form-control'}}) }}
+            {{ form_errors(form.titre) }}
+        </p>
+        <p>
+            {{ form_widget(form.description, {'attr': {'placeholder': 'exprimez-vous .. ', 'class': 'form-control'}}) }}
+            {{ form_errors(form.description) }}
+        </p>
+        <p>
+            <div id="form_lieu">{{ form_widget(form.lieu, {'attr': {'placeholder': 'Enter le lieu ..', 'class': 'form-control'}}) }}</div>
+            {{ form_errors(form.lieu) }}
+
+        </p>
+        <p>
+            {{ form_widget(form.lien, {'attr': {'placeholder': 'Enter le lien ..', 'class': 'form-control'}}) }}
+            {{ form_errors(form.lien) }}
+        </p>
+        <p>
+            {{ form_label(form.dateDebut) }}
+            {{ form_widget(form.dateDebut, {'attr': {'placeholder': 'Enter le lien ..', 'class': 'form-control'}}) }}
+            {{ form_errors(form.dateDebut) }}
+        </p>
+        <p>
+            {{ form_label(form.dateFin) }}
+            {{ form_widget(form.dateFin, {'attr': {'placeholder': 'Enter le lien ..', 'class': 'form-control'}}) }}
+            {{ form_errors(form.dateFin) }}
+        </p>
+        <p>
+            type
+            {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+        </p>
+        <div id="map" style="width: 100%; height: 400px;"></div>
+    </div>
+<button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
+
+<script>
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM() // Utilisez OpenStreetMap comme source de tuiles
+            })
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([0, 0]), // Centre de la carte (longitude, latitude)
+            zoom: 2 // Niveau de zoom initial
+        })
+    });
+
+        map.on('click', function(event) {
+            var coordinate = event.coordinate;
+            var lonLat = ol.proj.transform(coordinate, 'EPSG:3857', 'EPSG:4326');
+
+            // Appel à l'API de géocodage de Nominatim
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' + lonLat[1] + '&lon=' + lonLat[0] + '&zoom=18&addressdetails=1', true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var address = response.display_name;
+                    console.log(address)
+                    // Mettre à jour le champ "lieu" avec l'adresse
+                    document.getElementById('form_lieu').querySelector('input').value  = address;
+                }
+            };
+            xhr.send();
+        });
+
+
+
+</script>

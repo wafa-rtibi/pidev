@@ -1,0 +1,48 @@
+{% extends 'baseback.html.twig' %}
+
+{% block body %}
+    <br><br><br><br><br>
+    <div class="conatiner-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Les evenements</h4>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive mt-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Type</th>
+                                    <th>actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for type in type %}
+                                <tr>
+                                    <td>{{ type.id }}</td>
+                                    <td>{{ type.type }}</td>
+                                    <td>
+                                        <a href="{{ path('app_type_edit', {'id': type.id}) }}">edit</a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="3">Aucun type trouvee</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+                        <a href="{{ path('app_type_new') }}" class="btn btn-primary">Create new</a>
+    </div>
+
+{% endblock %}

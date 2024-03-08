@@ -1,0 +1,37 @@
+<table class="table" >
+    <thead>
+    <tr>
+        <th>Id</th>
+        <th>Titre</th>
+        <th>Description</th>
+        <th>Lieu</th>
+        <th>Lien</th>
+        <th>Date début</th>
+        <th>Date fin</th>
+        <th>Type</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for evenement in evenements %}
+        <tr>
+            <td>{{ evenement.id }}</td>
+            <td>{{ evenement.titre }}</td>
+            <td>{{ evenement.description }}</td>
+            <td>{{ evenement.lieu }}</td>
+            <td>{{ evenement.lien }}</td>
+            <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+            <td>{{ evenement.type }}</td>
+            <td>
+                <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">Edit</a>
+                <a href="{{ path('generate_qr_code', {'link': evenement.id}) }}">Qr</a>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="6">Aucun événement trouvé</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

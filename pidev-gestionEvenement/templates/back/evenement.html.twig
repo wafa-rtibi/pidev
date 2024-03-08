@@ -1,0 +1,98 @@
+{% extends 'baseback.html.twig' %}
+
+{% block body %}
+    <br><br><br><br><br>
+    <div class="container-fluid content-inner mt-n5 py-0">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Les evenements</h4>
+                        </div>
+                        <div class="search-bar">
+                            <input type="text" id="searchInput" placeholder="Rechercher...">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive mt-4">
+                            <table class="table" id="eventTable">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Titre</th>
+                                    <th>Description</th>
+                                    <th>Lieu</th>
+                                    <th>Lien</th>
+                                    <th>Date début</th>
+                                    <th>Date fin</th>
+                                    <th>Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for evenement in evenements %}
+                                    <tr>
+                                        <td>{{ evenement.id }}</td>
+                                        <td>{{ evenement.titre }}</td>
+                                        <td>{{ evenement.description }}</td>
+                                        <td>{{ evenement.lieu }}</td>
+                                        <td>{{ evenement.lien }}</td>
+                                        <td>{{ evenement.dateDebut ? evenement.dateDebut|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>{{ evenement.dateFin ? evenement.dateFin|date('Y-m-d H:i:s') : '' }}</td>
+                                        <td>{{ evenement.type }}</td>
+                                        <td>
+                                            <a href="{{ path('app_evenement_edit', {'id': evenement.id}) }}">Edit</a>
+                                            <a href="{{ path('generate_qr_code', {'link': evenement.id}) }}">Qr</a>
+                                        </td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="6">Aucun événement trouvé</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <a class="btn btn-primary" href="{{ path('app_evenement_new') }}">Create new</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const eventTable = document.getElementById('eventTable');
+            const rows = eventTable.getElementsByTagName('tr');
+
+            searchInput.addEventListener('keyup', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+
+                for (let i = 0; i < rows.length; i++) {
+                    const cells = rows[i].getElementsByTagName('td');
+                    let found = false;
+
+                    for (let j = 0; j < cells.length; j++) {
+                        const cellText = cells[j].innerText.toLowerCase();
+                        if (cellText.includes(searchTerm)) {
+                            found = true;
+                            break;
+                        }
+                    }
+
+                    if (found) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+
+
+
+
+{% endblock %}
