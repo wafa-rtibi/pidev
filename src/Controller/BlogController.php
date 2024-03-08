@@ -177,6 +177,41 @@ public function delete($id, BlogRepository $repository)
             'blogs'=>$blog
         ]);
     }
- }
+ 
+
+//admin
+
+
+
+
+#[Route('/dashboard/blogs', name: 'app_blogs')]
+public function dashboard_bolgs(BlogRepository $blogRepository): Response
+{
+    $blogs = $blogRepository->findAll(); // Récupérer tous les blogs depuis la base de données
+
+    return $this->render('backoffice/list_all_blogs.html.twig', [
+        'blogs' => $blogs, // Passer les blogs au modèle Twig
+    ]);
+}
+
+//par defaut ki user yajouti blog yahbet direct
+//admin fel dashboard list mtaa les blogs el koll ynajm yrejecti
+
+#[Route('/admin/blog/{id}/reject', name: 'admin_blog_reject')]
+public function rejectBlog(Blog $blog): Response
+{
+    // Supprimer le blog de la base de données
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($blog);
+    $entityManager->flush();
+
+    // Rediriger vers une page de confirmation ou une autre vue
+    $this->addFlash('success', 'Le blog a été refusé avec succès.');
+
+    return $this->redirectToRoute('admin_dashboard'); // Remplacer 'admin_dashboard' par la route de votre tableau de bord administrateur
+}
+
+
+}
 
  

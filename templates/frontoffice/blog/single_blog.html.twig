@@ -1,76 +1,54 @@
 {% extends 'base_front.html.twig' %}
 {% block body %}
 <div>
- <section>
-    <h1>{{ blog.titre }}</h1>
-    <div class="content">
-        <p>{{ blog.contenu }}</p>
-    </div>
-    <div class="img">
-        <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image">
-         {# <a href="#" style="background-color:black;color:white;text-decoration:none;padding:4px 6px;font-family:-apple-system, BlinkMacSystemFont, &quot;San Francisco&quot;, &quot;Helvetica Neue&quot;, Helvetica, Ubuntu, Roboto, Noto, &quot;Segoe UI&quot;, Arial, sans-serif;font-size:12px;font-weight:bold;line-height:1.2;display:inline-block;border-radius:3px;"><span>{{ blog.auteur}}</span></a>  #}
-    </div>
+    <section>
+        <h1>{{ blog.titre }}</h1>
+        <div class="content">
+            <p>{{ blog.contenu }}</p>
+        </div>
+        <div class="img">
+            <img src="{{ asset('/uploads/images/blog/' ~ blog.image) }}" alt="Image">
+        </div>
 
-   <div class="share-buttons">
-   <br>
-        <span class="fa fa-brands fa-facebook-f" style="color:blue"></span><a href="#" onclick="shareOnFacebook('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Facebook</a>
-        <span class="fa fa-brands fa-twitter"style="color:#1DA1F2"></span><a href="#" onclick="shareOnTwitter('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Twitter</a>
-    </div>
-    {# </section> #}
+        <div class="share-buttons">
+            <br>
+            <span class="fa fa-brands fa-facebook-f" style="color:blue"></span><a href="#" onclick="shareOnFacebook('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Facebook</a>
+            <span class="fa fa-brands fa-twitter"style="color:#1DA1F2"></span><a href="#" onclick="shareOnTwitter('{{ blog.titre }}', '{{ app.request.schemeAndHttpHost ~ app.request.requestUri }}');">Share on Twitter</a>
+        </div>
 
-    <h2>Comments</h2>
-    <div class="card mb-3">
-        <div class="card-body">
-            {% for commentaire in comments %}
-            <div class="media">
-                <img src="images/person_1.jpg" alt="User Image" class="mr-3 rounded-circle" style="width: 60px;">
-                <div class="media-body">
-                    <h5 class="mt-0 mb-1">username</h5>
-                    <p class="commentcontent">{{ commentaire.contenu }}</p>
-                    <div class="d-flex justify-content-end align-items-center">
-                        <form method="post" action="{{ path('delete_commentfront', {'id': commentaire.id}) }}" class="mr-2">
-                            <button type="submit" class="btn btn-link text-danger">
-                                <i class="bi bi-trash"></i> 
-                            </button>
-                        </form>
-                        <a href="{{ path('edit_commentfront', {'id': commentaire.id}) }}" class="edit-action">
-                            <i class="fas fa-pencil-alt edit-icon" style="color: blue;"></i> 
-                        </a>
+        <h2>Comments</h2>
+        <div class="card mb-3">
+            <div class="card-body"> 
+                <div class="media">
+                    {% for commentaire in comments %}
+                    <img src="images/person_1.jpg" alt="User Image" class="mr-3 rounded-circle" style="width: 60px;">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">username</h5>
+                        <p class="commentcontent">{{ commentaire.contenu }}</p>
+                        <div class="d-flex justify-content-end align-items-center">
+                            <form method="post" action="{{ path('delete_commentfront', {'id': commentaire.id}) }}" class="mr-2">
+                                <button type="submit" class="btn btn-link text-danger">
+                                    <i class="bi bi-trash"></i> 
+                                </button>
+                            </form>
+                            <a href="{{ path('edit_commentfront', {'id': commentaire.id}) }}" class="edit-action">
+                                <i class="fas fa-pencil-alt edit-icon" style="color: blue;"></i> 
+                            </a>
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-</div>
 
-                </div>
-                </li>
-<div class="form-group">
-                  
-                <div class="form-group">
-                  <a href="{{ path('add_commentfront', {'id': blog.id}) }}"  class="btn btn-dark">Post comment</a>
-                </div>
-              
-                </li>
-              </ul>
-            <!-- END comment-list -->
-
-          
-
+        <div class="form-group">   
+            <div class="form-group">
+                <a href="{{ path('add_commentfront', {'id': blog.id}) }}"  class="btn btn-dark">Post comment</a>
+            </div>
         </div>
-     
-        <!-- END main-content -->
+    </section>
 
-        
-
-      
-          
     <div class="sharethis-inline-share-buttons"></div>
-      </div>
-    </div>
-  </section>
-
 </div>
 <script>
     function shareOnFacebook(title, url) {
@@ -178,8 +156,29 @@
     }
 
     .img {
-        grid-area: img;
-    }
+    grid-area: img;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.img img {
+    max-width: 100%; /* Ensure image does not exceed container width */
+}
+
+}
+{# comments #}
+section {
+    display: flex;
+    flex-direction: column;
+}
+
+.card.mb-3,
+.form-group {
+    margin-top: 20px; /* Adjust spacing between elements */
+}
+h2 {
+    color: green; /* Set the text color to green */
 }
 
 </style>

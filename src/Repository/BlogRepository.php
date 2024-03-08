@@ -45,4 +45,24 @@ class BlogRepository extends ServiceEntityRepository
            ->getOneOrNullResult()
        ;
    }
+   //zet.ha nos liiiiiiiiiiiil 
+   public function findBySearchTermAndDate($searchTerm, $date)
+    {
+        $queryBuilder = $this->createQueryBuilder('b')
+            ->orderBy('b.datePublication', 'DESC');
+
+        if (!empty($searchTerm)) {
+            $queryBuilder
+                ->andWhere('b.titre LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        if (!empty($date)) {
+            $queryBuilder
+                ->andWhere('b.datePublication = :date')
+                ->setParameter('date', $date);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

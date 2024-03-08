@@ -61,8 +61,7 @@ class Blog
     #[ORM\ManyToMany(targetEntity: utilisateur::class, inversedBy: 'blogfavories')]
     private Collection $favories;
 
-   
-   
+
 
     public function __construct()
     {
@@ -226,6 +225,6 @@ class Blog
         return $this;
     }
 
-
+  
    
 }
