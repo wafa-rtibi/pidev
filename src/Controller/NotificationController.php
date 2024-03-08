@@ -14,7 +14,7 @@ class NotificationController extends AbstractController
 {
 
     //afficher notification
-    #[Route( '/notif',name: 'app_show_notif')]
+    #[Route( '/home',name: 'app_show_notif')]
     public function showNotification(NotificationRepository $repo, UtilisateurRepository $rep,Request $req): Response
     {
         $user = $this->getUser();
@@ -28,6 +28,6 @@ class NotificationController extends AbstractController
 
         // return $this->render($referer, ['notifications'=>$notifications]);
 
-                 return $this->render('base_front.html.twig', ['notifications'=>$notifications]);
+                 return $this->render('frontoffice/home/home.html.twig', ['notifications'=>$notifications]);
             }
 }

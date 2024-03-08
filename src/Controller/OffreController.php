@@ -321,7 +321,6 @@ class OffreController extends AbstractController
     #[Route('/offre/dashbord', name: 'app_admin_offre')]
     public function dashbordAdminOffre (ManagerRegistry $doctrine,PaginatorInterface $paginator, Request $req, UtilisateurRepository $repo,OffreRepository $rep): Response
     {   
-        
 
         $offres=$doctrine->getRepository(Offre::class)->findAll();
         $total_offre=count($offres);
@@ -335,10 +334,37 @@ class OffreController extends AbstractController
             $req->query->get('page', 1),
             4
         );
+         // Récupération des statistiques par type de réclamation
+         $statistics = $rep->getOffreStatisticsByType();
+    
+         // Configuration des données du graphique
+         $chartData = [
+             'labels' => [], // Les labels des types de réclamations
+             'datasets' => [
+                 [
+                     'label' => 'Nombre de réclamations par type',
+                     'data' => [], // Le nombre de réclamations par type
+                     'backgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs de fond des barres
+                     'borderColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs des bordures des barres
+                     'borderWidth' => 1, // Largeur des bordures
+                     
+                 ],
+             ],
+         ];
+     
+         // Remplissage des données du graphique
+         foreach ($statistics as $etat => $count) {
+             $chartData['labels'][] = $etat;
+             $chartData['datasets'][0]['data'][] = $count;
+         }
         return $this->render('backoffice/offre/dashboard.html.twig', [
             'offres'=>$pagination,
-            'total_offre'=>$total_offre
+            'total_offre'=>$total_offre,
+            'chartData' => json_encode($chartData),
         ]);
     }
+
+
+   
 
 }

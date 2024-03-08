@@ -56,32 +56,52 @@
 										</div>
 									</div>
 								</div>
-								<a href="{{path('app_offre_details',{'id_offre': offre.id})}}">
-									<img src="{{ asset('/uploads/images/offres/' ~ offre.image1) }}" alt="card__image" class="card__image">
-									<div class="card__body">
-										<span class="tag tag-brown">{{ offre.categorie }}</span>
-										<h4>{{ offre.getNom() }}</h4>
-										<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-									</div>
-									<div class="card__footer">
-										<div class="user">
-											<img src="{{ offreur.getPhotoProfil() }}" alt="user__image" class="user__image">
-											<div class="user__info">
-												<h5>{{ offreur.getNom() }}</h5>
+								{% if offre.getEtat() == "reservé" %}
+									<a href="#">
+										<img src="{{ asset('/uploads/images/offres/' ~ offre.image1) }}" alt="card__image" class="card__image">
+										<div class="card__body">
+											<span class="tag tag-red">oppps reserved !!!</span>
+											<h4>{{ offre.getNom() }}</h4>
+											<p>{{offre.getDescription()}}</p>
+										</div>
+										<div class="card__footer">
+											<div class="user">
+												<img src="{{ offreur.getPhotoProfil() }}" alt="user__image" class="user__image">
+												<div class="user__info">
+													<h5>{{ offreur.getNom() }}</h5>
+												</div>
 											</div>
 										</div>
-									</div>
-								</a>
+									</a>
+
+								{% else %}
+									<a href="{{path('app_offre_details',{'id_offre': offre.id})}}">
+										<img src="{{ asset('/uploads/images/offres/' ~ offre.image1) }}" alt="card__image" class="card__image">
+										<div class="card__body">
+											<span class="tag tag-brown">{{ offre.categorie }}</span>
+											<h4>{{ offre.getNom() }}</h4>
+											<p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+										</div>
+										<div class="card__footer">
+											<div class="user">
+												<img src="{{ offreur.getPhotoProfil() }}" alt="user__image" class="user__image">
+												<div class="user__info">
+													<h5>{{ offreur.getNom() }}</h5>
+												</div>
+											</div>
+										</div>
+									</a>
+								{% endif %}
 							</div>
 						{% endfor %}
 					</div>
 				{% endif %}
 				{#start Pagination#}
-             <div class="d-flex justify-content-center">
-             {% do favoris.setPageRange(2) %}
-             {{knp_pagination_render(favoris,'frontoffice/offre/pagination.html.twig')}}
-             </div>
-						{#end Pagination#}
+				<div class="d-flex justify-content-center">
+					{% do favoris.setPageRange(2) %}
+					{{knp_pagination_render(favoris,'frontoffice/offre/pagination.html.twig')}}
+				</div>
+				{#end Pagination#}
 			</div>
 		</div>
 	</div>

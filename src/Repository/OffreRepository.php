@@ -138,4 +138,22 @@ class OffreRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    //stat
+    public function getOffreStatisticsByType(): array
+{
+    // Logique pour obtenir les statistiques par type de réclamation
+    $queryBuilder = $this->createQueryBuilder('o')
+        ->select('o.etat', 'COUNT(o.id) as count')
+        ->groupBy('o.etat');
+
+    $results = $queryBuilder->getQuery()->getResult();
+
+    $statistics = [];
+    foreach ($results as $result) {
+        $statistics[$result['etat']] = $result['count'];
+    }
+
+    return $statistics;
+}
 }
