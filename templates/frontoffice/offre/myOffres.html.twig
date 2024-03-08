@@ -34,7 +34,7 @@
 								{% endif %}
 								<h3 class="product-title">{{ offre.categorie }}</h3>
 								<strong class="product-price">{{ offre.nom }}</strong>
-								<div class="delete-update">
+								
 									<a href="{{ path('app_update_offre', {'id_offre': offre.id}) }}">
 										<button class="btn btn-dark">Update</button>
 									</a>
@@ -63,11 +63,8 @@
 										</div>
 									</div>
 								</div>
-								<span class="icon-cross">
-									<i class="fa-solid fa-angles-right fa-xl" style="color: #ffffff;"></i>
-								</span>
 							</a>
-						</div>
+						
 						<!-- End Column 1 -->
 					{% endfor %}
 				{% endif %}

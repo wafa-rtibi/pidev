@@ -111,6 +111,9 @@ class Utilisateur implements UserInterface ,PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(mappedBy: 'recepient', targetEntity: Messages::class, orphanRemoval: true)]
     private Collection $received;
+
+    #[ORM\OneToMany(mappedBy: 'recipient', targetEntity: Notification::class)]
+    private Collection $notifications;
  
     public function __construct()
     {
@@ -125,6 +128,7 @@ class Utilisateur implements UserInterface ,PasswordAuthenticatedUserInterface
         $this->favoris_offres = new ArrayCollection();
         $this->sent = new ArrayCollection();
         $this->received = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -674,6 +678,36 @@ class Utilisateur implements UserInterface ,PasswordAuthenticatedUserInterface
             // set the owning side to null (unless already changed)
             if ($received->getRecepient() === $this) {
                 $received->setRecepient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): static
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): static
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getRecipient() === $this) {
+                $notification->setRecipient(null);
             }
         }
 

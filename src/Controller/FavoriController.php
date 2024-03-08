@@ -5,6 +5,7 @@ namespace App\Controller;
 use Knp\Component\Pager\PaginatorInterface;
 use App\Entity\Offre;
 use App\Repository\UtilisateurRepository;
+use App\Service\NotificationManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +17,7 @@ class FavoriController extends AbstractController
     //like => ajout lel favoris addFavoris offre lel user ,addFavori user
 
     #[Route('/like/{id_offre}', name: 'app_like')]
-    public function like($id_offre,UtilisateurRepository $rep,ManagerRegistry $doctrine,Request $req): Response
+    public function like($id_offre,UtilisateurRepository $rep,ManagerRegistry $doctrine,Request $req,NotificationManager $notificationManager): Response
     {
         $offre=$doctrine->getRepository(Offre::class)->find($id_offre);
     
@@ -31,6 +32,11 @@ class FavoriController extends AbstractController
         $em = $doctrine->getManager();
         $em->persist($offre);
         $em->flush();
+
+        $message =  $offreur->getNom()."  like your offer ".$offre->getNom();
+
+        // Appel du service de notification pour envoyer la notification
+        $notificationManager->sendNotification($offre->getOffreur(), $message);
     
           // Récupérer l'URL referer pour rediriger l'utilisateur vers la même page
           $referer = $req->headers->get('referer');

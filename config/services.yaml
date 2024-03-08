@@ -9,6 +9,10 @@ parameters:
 services:
   App\Service\WordFilterService:
     autowire: true
+  App\Service\NotificationManager:
+    autowire: true
+    public: true
+    arguments: ['@doctrine.orm.entity_manager']
   # default configuration for services in *this* file
   _defaults:
     autowire: true # Automatically injects dependencies in your services.
@@ -30,6 +34,8 @@ services:
       - "../src/DependencyInjection/"
       - "../src/Entity/"
       - "../src/Kernel.php"
-
+  # OpenAI\Client:
+  #       arguments:
+  #           $apiKey: '%env(OPENAI_API_KEY)%'
   # add more service definitions when explicit configuration is needed
   # please note that last definitions always *replace* previous ones

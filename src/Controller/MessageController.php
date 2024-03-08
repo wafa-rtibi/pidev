@@ -6,6 +6,7 @@ use App\Entity\Messages;
 use App\Entity\Utilisateur;
 use App\Repository\MessagesRepository;
 use App\Repository\UtilisateurRepository;
+use App\Service\NotificationManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,7 +58,7 @@ class MessageController extends AbstractController
      // envoyer message
      #[Route('/send/message/{id_user}', name: 'app_message_send')]
 
-     public function send($id_user,Request $req,ManagerRegistry $doctrine,UtilisateurRepository $repo): Response
+     public function send($id_user,Request $req,ManagerRegistry $doctrine,UtilisateurRepository $repo,NotificationManager $notificationManager): Response
      {
         $message=new Messages();
 
@@ -78,6 +79,12 @@ class MessageController extends AbstractController
         $em= $doctrine->getManager();
         $em->persist($message);
         $em->flush();
+
+        $message = "Vous avez reçu une nouvelle message de " . $sender->getNom();
+
+        // Appel du service de notification pour envoyer la notification
+        $notificationManager->sendNotification($recepient, $message);
+        
         return $this->redirectToRoute('app_message_show',['id_user'=>$id_user]);
      }
 

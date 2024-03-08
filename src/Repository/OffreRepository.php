@@ -36,6 +36,23 @@ class OffreRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    //******mes offres non reservé *******//
+
+    public function findByUserNotReserved($id): array
+    {
+        return $this->createQueryBuilder('o')
+            ->join('o.offreur', 'u')
+            ->addSelect('u')
+            ->where('u.id = :val')
+            ->andWhere('o.etat = :etat')
+            ->setParameter('etat', 'publié')
+            ->setParameter('val', $id)
+            ->orderBy('o.date_publication', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
     public function findByUserAndOffre($id_offre, $id_user): ?array
     {
         return $this->createQueryBuilder('o')

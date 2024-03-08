@@ -21,16 +21,16 @@ class OffreType extends AbstractType
             ->add('nom')
             ->add('categorie', ChoiceType::class, [
                 'choices' => [
-                    'Biens matériels' => 'Biens matériels',
-                    'Aliments et produits agricoles' => 'Aliments et produits agricoles',
+                    'Material goods' => 'Biens matériels',
+                    'Food and agricultural products' => 'Aliments et produits agricoles',
                     'Services' => 'Services',
-                    'Habillement et articles personnels' => 'Habillement et articles personnels',
-                    'Articles ménagers' => 'Articles ménagers',
-                    'Outils et équipements' => 'Outils et équipements',
-                    'Œuvres d\'art et objets artisanaux' => 'Œuvres d\'art et objets artisanaux',
-                    'Produits numériques' => 'Produits numériques ',
-                    'Articles de loisirs' => 'Articles de loisirs',
-                    'Produits de santé et de bien-être' => 'Produits de santé et de bien-être'
+                    'Clothing and personal items' => 'Habillement et articles personnels',
+                    'Household items' => 'Articles ménagers',
+                    'Tools and equipment' => 'Outils et équipements',
+                    'Works of art and handicrafts' => 'Œuvres d\'art et objets artisanaux',
+                    'Digital Products' => 'Produits numériques ',
+                    'Leisure items' => 'Articles de loisirs',
+                    'Health and wellness products' => 'Produits de santé et de bien-être'
                 ]
             ])
             ->add('description')

@@ -7,6 +7,7 @@ use App\Entity\Offre;
 use App\Entity\Utilisateur;
 use App\Repository\DemandeOffreRepository;
 use App\Repository\UtilisateurRepository;
+use App\Service\NotificationManager;
 use DatePeriod;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
@@ -203,7 +204,7 @@ class DemandeController extends AbstractController
 
     #[Route('/demande/send/{id_offre}', name: 'app_demande_send')]
 
-    public function sendDemande($id_offre, ManagerRegistry $doctrine, UtilisateurRepository $rep,Request $req): Response
+    public function sendDemande($id_offre, ManagerRegistry $doctrine, UtilisateurRepository $rep,Request $req,NotificationManager $notificationManager): Response
     {
         $date = new DateTime();
         $demande = new DemandeOffre();
@@ -221,7 +222,7 @@ class DemandeController extends AbstractController
         $opposite = $doctrine->getRepository(Offre::class)->find($id_opposite);
         $demandeur = $rep->findOneByEmail($email);
 
-
+    
         //l'ajout 
         $demande->setStatut('en attende');
         $demande->setDateCreation(new DateTime());
@@ -236,6 +237,10 @@ class DemandeController extends AbstractController
         $demandeur->addDemandeOffre($demande);
 
 
+        $message = "Vous avez reçu une nouvelle demande de " . $demandeur->getNom() ."pour l'offre" .$offre->getNom();
+
+        // Appel du service de notification pour envoyer la notification
+        $notificationManager->sendNotification($offre->getOffreur() , $message);
 
 
 
@@ -260,5 +265,36 @@ class DemandeController extends AbstractController
             'offre'=>$offre,
         ]);
     }
+
+      //suprimme mes demande si en attende 
+      #[Route('/remove/demande/{id_demande}', name: 'app_demande_remove')]
+      public function removeDemande($id_demande, DemandeOffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi, ManagerRegistry $doctrine): Response
+      {
+        $user = $this->getUser();
+
+        if ($user) {
+
+            $email = $user->getUserIdentifier();
+        }
+
+
+        $current_user = $repo->findOneByEmail($email);
+        $demande_supprime=$doctrine->getRepository(DemandeOffre::class)->find($id_demande);
+      
+        $em=$doctrine->getManager();
+        if($demande_supprime->getStatut() != 'accepté' && $demande_supprime->getStatut() != null ){
+        $current_user->removeDemandeOffre($demande_supprime);
+        $em->remove($demande_supprime);
+        $em->flush();}
+        $demandes = $current_user->getDemandeOffres();
+        $demandes = $demandes->toArray();
+      
+      
+        return $this->render('frontoffice/offre/demandeEnvoyeList.html.twig', [
+            'demansesEnvoye' => $demandes,
+
+        ]);
+         
+      }
 
 }

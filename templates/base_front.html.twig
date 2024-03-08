@@ -17,7 +17,7 @@
 		<meta name="description" content=""/>
 		<meta name="keywords" content="bootstrap, bootstrap4"/>
 		{% block css %}
-		
+
 			<!-- Bootstrap CSS -->
 			<link href="{{asset('frontoffice/css/bootstrap.min.css')}}" rel="stylesheet">
 			<link href="{{asset('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css')}}" rel="stylesheet">
@@ -25,7 +25,7 @@
 			<link href="{{asset('frontoffice/css/style.css')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/scss/style.scss')}}" rel="stylesheet">
 			<link href="{{asset('frontoffice/css/error.css')}}" rel="stylesheet">
-          <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+			<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 
 		{% endblock %}
 
@@ -124,27 +124,48 @@
 							</div>
 						</li>
 						<li>
+							{# <a class="nav-link">
+																						<i class="fa-regular fa-bell fa-xl"></i>
+																					</a>  #}
+							<div class="dropdown">
+								<a class="nav-link"  id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" href="{{path('app_show_notif')}}">
+									 <i class="fa-regular fa-bell fa-xl"></i>
 
+								</a>
+								   {% if notifications is not defined %}
+								          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+								         <a> you dont have any notifications </a>
+										 </ul>
+								   {% else %}
+										<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+										   {% if notifications is empty  %}
+											    <li>
+												<a> you dont have any notifications </a>
+												</li>  
+											{% else %}	
+												{% for notif in notifications %}
+												<li>
+													<a class="dropdown-item " href="#" style="color: #000;">{{notif.getMessage()}}</a>
+												</li>
+												{% endfor %}
+									{% endif %}
+										</ul>
+								  {% endif %}
+							</div>
 
-							<a class="nav-link">
-								<i class="fa-regular fa-bell fa-xl"></i>
-
-
-							</a>
 						</li>
-						<li>
-							<a class="nav-link" href="{{path('app_message')}}">
-								<i class="fa-regular fa-envelope fa-xl"></i>
-							</i>
-						</li>
-					</a>
-				</li>
-			</ul>
-
-
-		</div>
+					</li>
+					<li>
+						<a class="nav-link" href="{{path('app_message')}}">
+							<i class="fa-regular fa-envelope fa-xl"></i>
+						</i>
+					</li>
+				</a>
+			</li>
+		</ul>
 	</body>
-</html></div></nav><!-- End Header/Navigation -->{% block body %}<!-- Start Hero Section --><div class="hero">
+</html></div></body></html></div></nav><!-- End Header/Navigation -->
+{% block body %}<!-- Start Hero Section --><div class="hero">
 <div class="container">
 	<div class="row justify-content-between">
 		<div class="col-lg-5">
@@ -558,145 +579,91 @@
 	</div>
 
 
-</div></div></div><!-- End Blog Section -->{% endblock %}<!-- Start Footer Section --><footer class="footer-section"><div class="container relative"><div class="sofa-img">
-<img src="{{asset('frontoffice/images/footer.png')}}" alt="Image" class="img-fluid" width="300" height="300"></div>{# <div class="row">
-	    <div class="col-lg-8">
-	        <div class="subscription-form">
-	            <h3 class="d-flex align-items-center">
-	                <span class="me-1"><i class="fa-regular fa-envelope fa-xl"></i></span>
-	                <span>Subscribe to Newsletter</span>
-	            </h3>
-	
-	
-	            <form action="#" class="row g-3">
-	                <div class="col-auto">
-	                    <input type="text" class="form-control" placeholder="Enter your name">
-	                </div>
-	                <div class="col-auto">
-	                    <input type="email" class="form-control" placeholder="Enter your email">
-	                </div>
-	                <div class="col-auto">
-	                    <button class="btn btn-primary">
-	                        <span class="fa fa-paper-plane"></span>
-	                    </button>
-	                </div>
-	            </form>
-	
-	
-	        </div>
-	    </div>
-	</div> #}<div class="row g-5 mb-5">
-<div class="col-lg-4">
-	<div class="mb-4 footer-logo-wrap">
-		<a href="#" class="footer-logo">Troky<span>.</span>
-		</a>
-	</div>
-	<p class="mb-4">Troky, the online bartering application that facilitates exchanges between individuals. Browse offers, find what you need, and trade without spending money. Simple, sustainable, and community-driven.</p>
-
-
-	<ul class="list-unstyled custom-social">
-		<li>
-			<a href="#">
-				<span class="fa fa-brands fa-facebook-f"></span>
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<span class="fa fa-brands fa-twitter"></span>
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<span class="fa fa-brands fa-instagram"></span>
-			</a>
-		</li>
-		<li>
-			<a href="#">
-				<span class="fa fa-brands fa-linkedin"></span>
-			</a>
-		</li>
-	</ul>
-</div>
-
-
-<div class="col-lg-8">
-	<div class="row links-wrap">
-		<div class="col-6 col-sm-6 col-md-3">
-			<ul class="list-unstyled">
-				<li>
-					<a href="{{path('app_about')}}">About us</a>
-				</li>
-				<li>
-					<a href="{{path('app_donation')}}">Donations</a>
-				</li>
-				<li>
-					<a href="{{path('app_blog')}}">Blog</a>
-				</li>
-				<li>
-					<a href="{{path('app_reclamation')}}">Contact us</a>
-				</li>
-			</ul>
-		</div>
-
-
-		<div class="col-6 col-sm-6 col-md-3">
-			<ul class="list-unstyled">
-				<li>
-					<a href="#">Support</a>
-				</li>
-				<li>
-					<a href="#">Knowledge base</a>
-				</li>
-				<li>
-					<a href="#">Live chat</a>
-				</li>
-			</ul>
-		</div>
-
-
-		<div class="col-6 col-sm-6 col-md-3">
-			<ul class="list-unstyled">
-				<li>
-					<a href="#works">
-						How It Works</a>
-				</li>
-				<li>
-					<a href="{{path('app_about')}}">Our team</a>
-				</li>
-				<li>
-					<a href="#">Leadership</a>
-				</li>
-				<li>
-					<a href="#">Privacy Policy</a>
-				</li>
-			</ul>
-		</div>
-
-
-	</div>
-</div></div><div class="border-top copyright">
-<div class="row pt-4">
-	<div class="col-lg-6">
-		<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>
-				document.write(new Date().getFullYear());
-			</script>. All Rights Reserved.
-
-
-		</p>
-	</div>
-
-
-	<div class="col-lg-6 text-center text-lg-end">
-		<ul class="list-unstyled d-inline-flex ms-auto">
-			<li class="me-4">
-				<a href="#">Terms &amp; Conditions</a>
-			</li>
-			<li>
-				<a href="#">Privacy Policy</a>
-			</li>
-		</ul>
-	</div>
-
-
-</div></div></div></footer><!-- End Footer Section -->{% block js %}
-<script src="{{asset('frontoffice/js/bootstrap.bundle.min.js')}}"></script><script src="{{asset('frontoffice/js/tiny-slider.js')}}"></script><script src="{{asset('frontoffice/js/custom.js')}}"></script><script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>{% endblock %}</body></html>
+</div></div></div><!-- End Blog Section -->{% endblock %}
+<!-- Start Footer Section --><footer class="footer-section"><div class="container relative"><div class="sofa-img"><img src="{{asset('frontoffice/images/footer.png')}}" alt="Image" class="img-fluid" width="300" height="300"></div>{# <div class="row">
+			    <div class="col-lg-8">
+			        <div class="subscription-form">
+			            <h3 class="d-flex align-items-center">
+			                <span class="me-1"><i class="fa-regular fa-envelope fa-xl"></i></span>
+			                <span>Subscribe to Newsletter</span>
+			            </h3>
+			
+			
+			            <form action="#" class="row g-3">
+			                <div class="col-auto">
+			                    <input type="text" class="form-control" placeholder="Enter your name">
+			                </div>
+			                <div class="col-auto">
+			                    <input type="email" class="form-control" placeholder="Enter your email">
+			                </div>
+			                <div class="col-auto">
+			                    <button class="btn btn-primary">
+			                        <span class="fa fa-paper-plane"></span>
+			                    </button>
+			                </div>
+			            </form>
+			
+			
+			        </div>
+			    </div>
+			</div> #}<div class="row g-5 mb-5"><div class="col-lg-4"><div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Troky<span>.</span></a></div><p class="mb-4">Troky, the online bartering application that facilitates exchanges between individuals. Browse offers, find what you need, and trade without spending money. Simple, sustainable, and community-driven.</p><ul class="list-unstyled custom-social"><li>
+<a href="#">
+	<span class="fa fa-brands fa-facebook-f"></span>
+</a></li><li>
+<a href="#">
+	<span class="fa fa-brands fa-twitter"></span>
+</a></li><li>
+<a href="#">
+	<span class="fa fa-brands fa-instagram"></span>
+</a></li><li>
+<a href="#">
+	<span class="fa fa-brands fa-linkedin"></span>
+</a></li></ul></div><div class="col-lg-8"><div class="row links-wrap"><div class="col-6 col-sm-6 col-md-3">
+<ul class="list-unstyled">
+	<li>
+		<a href="{{path('app_about')}}">About us</a>
+	</li>
+	<li>
+		<a href="{{path('app_donation')}}">Donations</a>
+	</li>
+	<li>
+		<a href="{{path('app_blog')}}">Blog</a>
+	</li>
+	<li>
+		<a href="{{path('app_reclamation')}}">Contact us</a>
+	</li>
+</ul></div><div class="col-6 col-sm-6 col-md-3">
+<ul class="list-unstyled">
+	<li>
+		<a href="#">Support</a>
+	</li>
+	<li>
+		<a href="#">Knowledge base</a>
+	</li>
+	<li>
+		<a href="#">Live chat</a>
+	</li>
+</ul></div><div class="col-6 col-sm-6 col-md-3">
+<ul class="list-unstyled">
+	<li>
+		<a href="#works">
+			How It Works</a>
+	</li>
+	<li>
+		<a href="{{path('app_about')}}">Our team</a>
+	</li>
+	<li>
+		<a href="#">Leadership</a>
+	</li>
+	<li>
+		<a href="#">Privacy Policy</a>
+	</li>
+</ul></div></div></div></div><div class="border-top copyright"><div class="row pt-4"><div class="col-lg-6"><p class="mb-2 text-center text-lg-start">Copyright &copy;<script>
+	document.write(new Date().getFullYear());
+</script>. All Rights Reserved.</p></div><div class="col-lg-6 text-center text-lg-end"><ul class="list-unstyled d-inline-flex ms-auto">
+<li class="me-4">
+	<a href="#">Terms &amp; Conditions</a>
+</li>
+<li>
+	<a href="#">Privacy Policy</a>
+</li></ul></div></div></div></div></footer><!-- End Footer Section -->{% block js %}<script src="{{asset('frontoffice/js/bootstrap.bundle.min.js')}}"></script><script src="{{asset('frontoffice/js/tiny-slider.js')}}"></script><script src="{{asset('frontoffice/js/custom.js')}}"></script><script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>{% endblock %}</body></html>

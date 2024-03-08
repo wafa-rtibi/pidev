@@ -22,7 +22,7 @@ class OffreController extends AbstractController
     // afficher tous les offres ou les offres cherchées et non reservé
 
     #[Route('/offres', name: 'app_all_offre')]
-    public function afficherAll(Request $req, OffreRepository $rep, PaginatorInterface $paginator,UtilisateurRepository $repo): Response
+    public function afficherAll(Request $req, OffreRepository $rep, PaginatorInterface $paginator, UtilisateurRepository $repo): Response
     {
         $offres = $rep->findAllNotReserved();
         $searchTerm = $req->query->get('searchTerm');
@@ -43,12 +43,12 @@ class OffreController extends AbstractController
             $email = $user->getUserIdentifier();
         }
         $offreur = $repo->findOneByEmail($email);
-        $favoris=$offreur->getFavorisOffres();
+        $favoris = $offreur->getFavorisOffres();
 
         return $this->render('frontoffice/offre/listOffre.html.twig', [
 
             'pagination' => $pagination,
-            'favoris'=>$favoris,
+            'favoris' => $favoris,
 
         ]);
     }
@@ -140,7 +140,7 @@ class OffreController extends AbstractController
 
         $offre = $repo->findByUserAndOffre($id_offre, $offreur->getId());
         $offre = $offre[0];
-       
+
 
         // houni ki maydakhalech des images jdod yqodou el qdom mawjoudin
         $image1 = $offre->getImage1();
@@ -163,7 +163,6 @@ class OffreController extends AbstractController
 
             if ($offre->getImage1() == null) {
                 $offre->setImage1($image1);
-           
             }
 
 
@@ -191,18 +190,18 @@ class OffreController extends AbstractController
 
     //supression
     #[Route('/offre/delete/{id_offre}', name: 'app_delete_offre')]
-    public function supprimerOffre($id_offre, ManagerRegistry $doctrine,DemandeOffreRepository $repo): Response
+    public function supprimerOffre($id_offre, ManagerRegistry $doctrine, DemandeOffreRepository $repo): Response
     {
         $em = $doctrine->getManager();
         $offre = $doctrine->getRepository(Offre::class)->find($id_offre);
-        
-       if(count($offre->getDemandes()) > 0) {
-         foreach ($offre->getDemandes() as $demand) {
-           $em->remove($demand);
-         }
-       }
 
-       
+        if (count($offre->getDemandes()) > 0) {
+            foreach ($offre->getDemandes() as $demand) {
+                $em->remove($demand);
+            }
+        }
+
+
         $em->remove($offre);
         $em->flush();
 
@@ -211,7 +210,7 @@ class OffreController extends AbstractController
 
     // page de message d'ajout d'une offre
     #[Route('/offre/sucess', name: 'app_Offre_added')]
-    public function afficherMessage(ManagerRegistry $doctrine, UtilisateurRepository $rep): Response
+    public function afficherMessage(UtilisateurRepository $rep): Response
     {
         // $user = $doctrine->getRepository(Utilisateur::class)->find($id);*
         $user = $this->getUser();
@@ -230,7 +229,7 @@ class OffreController extends AbstractController
 
     //afficher un seule offre
     #[Route('/offre/single/{id_offre}', name: 'app_offre_details')]
-    public function afficherDetailsOffre(ManagerRegistry $doctrine,$id_offre, OffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi): Response
+    public function afficherDetailsOffre(ManagerRegistry $doctrine, $id_offre, OffreRepository $rep, UtilisateurRepository $repo, DemandeOffreRepository $repi): Response
     {
         $mine = false;
         $user = $this->getUser();
@@ -245,11 +244,11 @@ class OffreController extends AbstractController
         $offre = $rep->find($id_offre);
 
 
-      
+
 
         $offreur = $offre->getOffreur();
 
-        $offres = $user->getOffres();
+        $offres = $rep->findByUserNotReserved($user->getId());        //******* mes offres non reserve *********//
 
 
 
@@ -263,22 +262,22 @@ class OffreController extends AbstractController
             $message = false;
         }
 
-        if($mine==false){
-            $offre->setVues($offre->getVues() + 1 );
+        if ($mine == false) {
+            $offre->setVues($offre->getVues() + 1);
             //ay changement lazem tetb3ath lel base de donnes
             $em = $doctrine->getManager();
             $em->persist($offre);
             $em->flush();
         }
-        $favoris=$offreur->getFavorisOffres();
-        $favoris=$favoris->toArray();
+        $favoris = $offreur->getFavorisOffres();
+        $favoris = $favoris->toArray();
         return $this->render('frontoffice/offre/single_offre.html.twig', [
             'offre' => $offre,
             'mine' => $mine,
             'offreur' => $offreur,
             'msg' => $message,
             'offres' => $offres,
-            'favoris'=>$favoris,
+            'favoris' => $favoris,
         ]);
     }
 
@@ -292,7 +291,7 @@ class OffreController extends AbstractController
 
     //show offer by categories
     #[Route('/offre/categories/{category}', name: 'app_offer_categories')]
-    public function showOfferByCategories($category, OffreRepository $rep, PaginatorInterface $paginator, Request $req,UtilisateurRepository $repo): Response
+    public function showOfferByCategories($category, OffreRepository $rep, PaginatorInterface $paginator, Request $req, UtilisateurRepository $repo): Response
     {
 
         $offres = $rep->findByCategory($category);
@@ -309,11 +308,37 @@ class OffreController extends AbstractController
             $email = $user->getUserIdentifier();
         }
         $offreur = $repo->findOneByEmail($email);
-        $favoris=$offreur->getFavorisOffres();
+        $favoris = $offreur->getFavorisOffres();
         return $this->render('frontoffice/offre/listOffre.html.twig', [
 
             'pagination' => $pagination,
-            'favoris'=>$favoris,
+            'favoris' => $favoris,
         ]);
     }
+
+    // dashbord admin offre 
+
+    #[Route('/offre/dashbord', name: 'app_admin_offre')]
+    public function dashbordAdminOffre (ManagerRegistry $doctrine,PaginatorInterface $paginator, Request $req, UtilisateurRepository $repo,OffreRepository $rep): Response
+    {   
+        
+
+        $offres=$doctrine->getRepository(Offre::class)->findAll();
+        $total_offre=count($offres);
+        $searchTerm = $req->query->get('searchTerm');
+
+        if ($searchTerm) {
+            $offres = $rep->search($searchTerm);
+        }
+        $pagination = $paginator->paginate(
+            $offres,
+            $req->query->get('page', 1),
+            4
+        );
+        return $this->render('backoffice/offre/dashboard.html.twig', [
+            'offres'=>$pagination,
+            'total_offre'=>$total_offre
+        ]);
+    }
+
 }

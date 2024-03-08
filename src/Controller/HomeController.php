@@ -11,6 +11,8 @@ class HomeController extends AbstractController
     #[Route('/home', name: 'app_home')]
     public function index(): Response
     {
+
+        
         return $this->render('frontoffice/home/home.html.twig', [
             'controller_name' => 'HomeController',
         ]);
