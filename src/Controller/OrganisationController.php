@@ -26,6 +26,21 @@ class OrganisationController extends AbstractController
         ]);
     }
 
+    #[Route('/organisation/search', name: 'app_organisation_search')]
+public function search(Request $request, OrganisationRepository $organisationRepository): Response
+{
+    $query = $request->query->get('query');
+
+    // Rechercher des organisations en fonction de la requête
+    $organisations = $organisationRepository->search($query);
+
+    // Rendre le template avec les résultats de la recherche
+    return $this->render('organisation/index.html.twig', [
+        'organisations' => $organisations,
+        'query' => $query,
+    ]);
+}
+
     #[Route('/donate_to_organisation/{id}', name: 'app_donate_to_organisation')]
     public function donateToOrganisation(Request $request, Organisation $organisation): Response
     {

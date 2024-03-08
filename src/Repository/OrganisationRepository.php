@@ -21,6 +21,15 @@ class OrganisationRepository extends ServiceEntityRepository
         parent::__construct($registry, Organisation::class);
     }
 
+    public function search(string $query): array
+{
+    return $this->createQueryBuilder('o')
+        ->andWhere('o.nom_organisation LIKE :query')
+        ->setParameter('query', '%'.$query.'%')
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return Organisation[] Returns an array of Organisation objects
 //     */

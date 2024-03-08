@@ -13,8 +13,8 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Type;
-use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
-use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
+// use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
+// use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
 
 class OrganisationType extends AbstractType
 {
@@ -64,12 +64,11 @@ class OrganisationType extends AbstractType
             ->add('adresse', TextType::class, [
                 'label' => 'Adresse',
                 'required' => true,
-            ])
-            // Ajout du champ Captcha
-            ->add('captcha', Recaptcha3Type::class, [
-                'constraints' => new Recaptcha3(),
-                'action_name' => 'app_organisation_crud_new', // Spécifiez le nom de la route ici
             ]);
+            // ->add('captcha', Recaptcha3Type::class, [
+            //     'constraints' => new Recaptcha3(),
+            //     'action_name' => 'organisation/crud/new', // Spécifiez le nom de la route ici
+            // ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

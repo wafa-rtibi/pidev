@@ -34,83 +34,39 @@ class DonationController extends AbstractController
     
     
 
-    #[Route('/donate', name: 'app_donate')]
-    public function donate(Request $request, EntityManagerInterface $entityManager, UtilisateurRepository $userRepository,OrganisationRepository $orgr): Response
+    #[Route('/donate/{id}', name: 'app_donate')]
+    public function donate(Request $request, EntityManagerInterface $entityManager, UtilisateurRepository $userRepository, OrganisationRepository $orgr, $id): Response
     {
-        $user=$userRepository->findOneBy(['nom'=>'Souhail']);
-        // dd($user);
-
-        // Get the logged-in user (donateur)
-        $donateur = $user->getNom(); // Assuming you're using Symfony's built-in user authentication system
+        $user = $userRepository->findOneBy(['nom' => 'Souhail']);
+        $organisation = $orgr->findOneBy(['id' => $id]);
     
         // Create a new instance of the Donation entity
         $donation = new Dons();
+        $donation->setDonateur($user); // Assuming the relation is correctly set up in your entity
+        $donation->setOrganisation($organisation); // Set the organisation
+        $donation->setDate(new DateTime()); // Set the current date
     
         // Create the form for donation
         $form = $this->createForm(DonsType::class, $donation);
-    
-        // Handle form submission
         $form->handleRequest($request);
     
-        if ($form->isSubmitted() ) {
-            // Create a new instance of Utilisateur
-            // $user = new Utilisateur();
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Persist and flush inside this block
+            $entityManager->persist($donation);
+            $entityManager->flush();
     
-            // Set user properties using setter methods
-            // $user->setNom('John');
-            // $user->setPrenom('Doe');
-            // $user->setEmail('john.doe@example.com');
-            // $user->setMdp('password'); // You should hash passwords for security
-            // $user->setDateInscription(new DateTime()); // Assuming you have imported DateTime class
-            // $user->setPhotoProfil('profile.jpg');
-            // $user->setRib(1234567890);
-            // $user->setAdresse('123 Main St, City');
-            // $user->setTel(123456789);
-            // $user->setNote(0);
-            // $user->setStatut('débutant');
-            // $user->setRole(['utilisateur']);
-            // $user->setIsActive(false);
-            // $user->setSalt("qosdhqiygdqgyz"); // You may set salt based on your application logic
-    
-            // Dump the Utilisateur object
-            // dump($user);
-    
-            // Set the Utilisateur object as the donateur for the donation
-          
-    
-            // Flash success message
             $this->addFlash('success', 'Donation submitted successfully.');
     
             // Redirect to donation listing page
             return $this->redirectToRoute('app_donation');
         }
-        //else return $this->createForm('form'->$form->createView());
-        $donation->setDonateur($user);
     
-        // Set other donation data
-         $donation->setMontant($form->get('montant')->getData());
-        
-        // $organisation=$orgr->find($ido);
-      $organisation= $orgr->findoneby(['nom_organisation'=> 'SOS GAMMARTH']);
-    //   dd($organisation);
-        $donation->setOrganisation($organisation);
-        $donation->setDate(new DateTime());
-
-        // Persist and flush the donation entity
-        $entityManager->persist($donation);
-        $entityManager->flush();
-        $this->addFlash('success', 'Donation submitted successfully.');
-        return $this->redirectToRoute('app_donation');
-
-    
-        // If form is not submitted or invalid, retrieve and display form errors
-        // $errors = [];
-        // foreach ($form->getErrors(true, true) as $error) {
-        //     $errors[] = $error->getMessage();
-        
-    
-        // Return error message as JSON response
-       // return new JsonResponse(['error' => 'Error occurred while submitting the donation form.', 'errors' => $errors], JsonResponse::HTTP_BAD_REQUEST);
+        // Render the form view when first accessing the page or if the form is not submitted or not valid
+        return $this->render('organisation/donation_form.twig', [
+            'form' => $form->createView(),
+            'organisation' => $organisation // Pass the organisation to the view for additional context if needed
+        ]);
     }
+    
 }
 
