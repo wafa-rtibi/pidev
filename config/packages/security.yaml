@@ -48,7 +48,7 @@ security:
 
             logout: 
                   path: app_logout
-                  target: /
+                  target: /login
             
             # remember_me:
             #     secret: '%kernel.secret%'

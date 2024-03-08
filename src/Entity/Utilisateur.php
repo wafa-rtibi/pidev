@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: "utilisateur")]
 #[Vich\Uploadable]
 
-class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
+class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Column(length: 255)]
     #[ORM\Id]
@@ -83,7 +83,7 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
 
 
  #[ORM\Column(length: 255)]
-                                  private ?DateTime $dateinscription;
+                                           private ?DateTime $dateinscription;
 
     // #[ORM\Column(length: 255, nullable:true)]
     // private ?string $photoprofil="";
@@ -137,14 +137,11 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?bool $isActive = true;
 
-    
- 
     #[ORM\Column(length: 255)]
     private ?string $salt = '0741485';
 
-
-
-
+    #[ORM\Column(nullable: true)]
+    private ?array $googleUser = [];
 
     #[ORM\OneToMany(targetEntity: Dons::class, mappedBy: 'donateur')]
     private Collection $dons;
@@ -181,10 +178,11 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
     private ?string $avatar = null;
 
  
+ 
     public function __construct()
     {
-        $this->id = null; // Initialize ID
-
+        $this->id; // Initialize ID
+        $this->roles = ['ROLE_USER']; 
         $this->dons = new ArrayCollection();
         $this->offres = new ArrayCollection();
         $this->commentaires = new ArrayCollection();
@@ -515,6 +513,18 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function setGoogleUser(?array $googleUser): self
+    {
+        $this->googleUser = $googleUser;
+
+        return $this;
+    }
+
+    public function getGoogleUser(): ?array
+    {
+        return $this->googleUser;
+    }
+
     // public function getNote(): ?int
     // {
     //     return $this->note;
@@ -675,4 +685,5 @@ class Utilisateur implements UserInterface,PasswordAuthenticatedUserInterface
         return $this;
     }
 
+   
 }

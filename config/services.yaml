@@ -24,11 +24,17 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
-    
+    # hwi_oauth.user.provider:
+    #     class: HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider
+    #     arguments:
+    #         $class: App\Entity\Utilisateur
+    #         $properties:
+    #             'google': 'google'
+    #             'app_user_provider': 'app_user_provider'
 
 
-    # Register the EmailVerifier service if it's not already defined
+    # # Register the EmailVerifier service if it's not already defined
   
 
-    # add more service definitions when explicit configuration is needed
-    # please note that last definitions always *replace* previous ones
+    # # add more service definitions when explicit configuration is needed
+    # # please note that last definitions always *replace* previous ones

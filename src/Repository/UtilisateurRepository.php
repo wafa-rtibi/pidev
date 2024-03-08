@@ -59,6 +59,8 @@ public function findOneById($id): ?Utilisateur
     ;
 }
 
+
+
 public function findOneByEmail($email): ?Utilisateur
 {
     return $this->createQueryBuilder('u')

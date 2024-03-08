@@ -29,7 +29,7 @@
       
       
   </head>
-  <body class="  ">
+  {% block body %}
 
     
     <aside class="sidebar sidebar-default sidebar-white sidebar-base navs-rounded-all ">
@@ -1318,8 +1318,8 @@
                 <span class="mt-2">Color</span>
               </div>
               <div class=" text-center">
-                 <img src="backoffice/html/assets/images/settings/dark/12.png" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
-                 <img src="backoffice/html/assets/images/settings/light/12.png" alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                 <img src="{{asset('backoffice/html/assets/images/settings/dark/12.png')}}" alt="sticky" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
+                 <img src="{{asset('backoffice/html/assets/images/settings/light/12.png')}}"  alt="sticky" class="mode light-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar" data-name="navbar-type" data-value="navs-sticky">
                 <span class="mt-2">Sticky</span>
               </div>
               <div class="text-center">
@@ -1336,7 +1336,7 @@
       </div>
     </div>
 
-    <!-- Library Bundle Script -->
+     <!-- Library Bundle Script -->
     <script src="backoffice/html/assets/js/core/libs.min.js"></script>
     
     <!-- External Library Bundle Script -->
@@ -1362,9 +1362,11 @@
     <script src="backoffice/html/assets/js/plugins/form-wizard.js"></script>
     
     <!-- AOS Animation Plugin-->
+
+    <img src="{{asset('backoffice/html/assets/images/settings/dark/10.png')}}" alt="color" class="mode dark-img img-fluid btn-border p-0 flex-column mb-2" data-setting="navbar" data-target=".iq-navbar-header" data-name="navbar-type" data-value="navs-bg-color">
     
     <!-- App Script -->
     <script src="backoffice/html/assets/js/hope-ui.js" defer></script>
     
-  </body>
+{% endblock %}
 </html>

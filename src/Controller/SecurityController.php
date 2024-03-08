@@ -3,12 +3,16 @@
 namespace App\Controller;
 use App\Entity\Utilisateur;
 use App\Form\UserType;
-
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException; // For enhanced security
+
 
 
 class SecurityController extends AbstractController
@@ -22,9 +26,14 @@ class SecurityController extends AbstractController
     public function __construct(SessionInterface $session) //genere url
     {
     
-    $this->session = $session; // Assurez-vous que la propriété $session est déclarée dans la classe
+    $this->session = $session;
+ // Assurez-vous que la propriété $session est déclarée dans la classe
 
     }
+
+
+
+    
 
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
@@ -54,7 +63,8 @@ class SecurityController extends AbstractController
         ]);
     }
   
-    #[Route(path: '/logout', name: 'app_logout')]
+    //  
+    #[Route(path: '/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');

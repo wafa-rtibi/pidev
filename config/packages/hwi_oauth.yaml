@@ -1,0 +1,19 @@
+hwi_oauth:
+    firewall_names: [main]
+
+    resource_owners:
+        google:
+            type: google
+            client_id: '%env(GOOGLE_CLIENT_ID)%'
+            client_secret: '%env(GOOGLE_CLIENT_SECRET)%'
+            scope: ' email profile'  # Adjust scopes as needed
+            paths:
+                login: /connect/google
+                check: /connect/google/check
+                callback: /login/check-google
+            options:
+                csrf: true
+                refresh_on_expire: true
+
+
+

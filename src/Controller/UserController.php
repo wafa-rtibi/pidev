@@ -15,15 +15,32 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\UtilisateurRepository;  
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException; // Import the class
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Throwable;
+
 
 class UserController extends AbstractController
 {
+
+    private Security $security ;
+    // public function __construct(Security $security)
+    // {
+    //     $this->security = $security;
+    // }
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
 
     #[Route('/user', name: 'app_user')]
     public function index(): Response
@@ -65,7 +82,7 @@ class UserController extends AbstractController
     ]);
     }
         
-    #[Route('/listuser', name: 'app_list_user')]
+#[Route('/listuser', name: 'app_list_user')]
 public function listuser(Request $request, UtilisateurRepository $utilisateurRepository): Response
 {
     $search = $request->query->get('search');
@@ -80,51 +97,80 @@ public function listuser(Request $request, UtilisateurRepository $utilisateurRep
         'search' => $search,
         'status' => $status,
     ]);
+
+
 }
 
 
-//     #[Route('/listuser', name: 'app_list_user')]
-// public function listuser(Request $request, ManagerRegistry $doctrine, UtilisateurRepository $utilisateurRepository): Response
+// #[Route('/showprofile', name: 'app_show_user_profile')]
+// public function userProfile(UtilisateurRepository $utilisateurRepository): Response
 // {
-//     $search = $request->query->get('search');
-//     $status = $request->query->get('status');
+//     // Get the connected user
+//     $user = $this->getUser();
 
-//     $users = [];
-
-//     // Use the injected 'UtilisateurRepository'
-//     if ($search && $status !== null) {
-//         $users = $utilisateurRepository->filterBySearchAndStatus($search, $status);
-//     } else if ($search) {
-//         $users = $utilisateurRepository->findBySearch($search);
-//     } else {
-//         // Default: retrieve all users if no search term
-//         $users = $doctrine->getRepository(Utilisateur::class)->findAll();
+//     if (!$user instanceof Utilisateur) {
+//         return $this->redirectToRoute('app_login'); // Redirect to login if not logged in
 //     }
 
-//     return $this->render('backoffice/user/user-list.html.twig', [
-//         'controller_name' => 'UserController',
-//         'users' => $users,
-//         'search' => $search,
-//         'status' => $status,
+//     // Fetch the connected user's data using the ID
+//     $utilisateur = $utilisateurRepository->find($user->getId());
+
+//     // Render the profile template with the user data
+//     return $this->render('security/profile.html.twig', [
+//         'utilisateur' => $utilisateur,
 //     ]);
 // }
- 
 
-    
-    // #[Route('/listuser', name: 'app_list_user')]
-    // public function listuser(ManagerRegistry $doctrine): Response
-    // {
 
-    //     $user= $doctrine->getRepository(Utilisateur::class);
-    //     $users=$user->findAll();
 
-    //     return $this->render('backoffice/user/user-list.html.twig', [
-    //         'controller_name' => 'UserController',
-    //         'users' => $users,
+#[Route('/showprofile', name: 'app_show_user_profile')]
+public function userProfile(UtilisateurRepository $utilisateurRepository): Response
+{
+    try {
+        // Get the connected user
+        $user = $this->getUser();
 
-    //     ]);    
+        // // Redirect to login if not logged in (check for null and type)
+        // if (!$user || !$user instanceof Utilisateur) {
+        //     return $this->redirectToRoute('app_login');
+        // }
+
+        // Optional: Fetch additional user data from repository if needed
+        // $utilisateur = $utilisateurRepository->find($user->getId());
+
+        return $this->render('frontoffice/user/profile.html.twig', [
+            'user' => $user,
+        ]);
+    } catch (Throwable $e) {
+        $this->addFlash('error', $e->getMessage());
+        return $this->redirectToRoute('app_home'); // Redirect to a safe location on error
+    }
+}
+
+
+
+  
+
+  // // Get the connected user
+    // $user = $this->getUser();
+
+    // if (!$user instanceof Utilisateur) {
+    //     return $this->redirectToRoute('app_login'); // Redirect to login if not logged in
     // }
- 
+
+    // // Fetch the connected user's data using the ID
+    // $utilisateur = $utilisateurRepository->find($user->getId());
+
+    // // Check if user was found (optional)
+    // if (!$utilisateur) {
+    //     throw new NotFoundHttpException("User not found."); // Handle user not found case
+    // }
+
+    // // Render the profile template with the user data
+    // return $this->render('security/profile.html.twig', [
+    //     'utilisateur' => $utilisateur,
+    // ]);
+   
 
 
 
@@ -157,8 +203,14 @@ public function listuser(Request $request, UtilisateurRepository $utilisateurRep
     ]);
     }
 
+
+
+    
+   
+
+
     #[Route('/block-user/{id}', name: 'block_user')]
-    public function blockUser(int $id,Utilisateur $user,EntityManagerInterface $entityManager,ManagerRegistry $doctrine ): Response
+    public function blockUser(int $id,Utilisateur $user,EntityManagerInterface $entityManager,ManagerRegistry $doctrine , MailerInterface $Mailer): Response
     {   
         $userRepository = $entityManager->getRepository(Utilisateur::class);
         $user = $userRepository->find($id);
@@ -174,8 +226,15 @@ public function listuser(Request $request, UtilisateurRepository $utilisateurRep
         $entityManager =$doctrine->getManager();
         $entityManager->persist($user);
         $entityManager->flush();
-        $this->addFlash('success', 'User has been blocked successfully.');
+        $email = (new Email())
+            ->from('amaraoumayma0@gmail.com')
+            ->to('raedmaaloul3@gmail.com')
+            ->subject('You Are blocked :)!')
+            ->text(' Clawzed ');
 
+        $Mailer->send($email);
+        $this->addFlash('success', 'User has been blocked successfully.');
+        
         // Rediriger vers la liste des utilisateurs ou une autre page
         return $this->redirectToRoute('app_list_user');
     }
@@ -185,41 +244,43 @@ public function listuser(Request $request, UtilisateurRepository $utilisateurRep
     {
         $userRepository = $entityManager->getRepository(Utilisateur::class);
         $user = $userRepository->find($id);
-      
-        
         $entityManager =$doctrine->getManager();
         $entityManager->remove($user);
         $entityManager->flush();  
         return $this->redirectToRoute('app_list_user');
     
-}
+    }
 
 
-#[Route('/profile', name: 'app_user_profile')] 
-public function profile(Request $request,Security $security, EntityManagerInterface $em): Response
+#[Route('/profile/{id}', name: 'app_user_profile')] 
+public function profile(int $id,EntityManagerInterface $entityManager,Request $request,Security $security, EntityManagerInterface $em): Response
 {
     // Get the current user (assuming you are using Symfony's security)
-    $user = $security->getUser();
-
-        $editForm = $this->createFormBuilder($user)
-            ->add('nom', TextType::class)
-            ->add('submit', SubmitType::class, ['label' => 'Modifier'])
-            ->getForm();
-            $editForm->handleRequest($request);
-
-            if ($editForm->isSubmitted() && $editForm->isValid()) {
-                $em->persist($user);
-                $em->flush();
+    $userRepository = $entityManager->getRepository(Utilisateur::class);
+    $user = $userRepository->findOneById($id);
     
-                $this->addFlash('success', 'Votre profil a été modifié avec succès.');
-    
-                return $this->redirectToRoute('profile');
-            }
-    return $this->render('frontoffice/user/profile.html.twig', [
+    // Create the form with Edit button
+    $form = $this->createForm(UserType::class, $user);
+    $form->handleRequest($request);  
+    $form->add('Edit', SubmitType::class);
+
+    // Handle form submission
+ 
+    if ($form->isSubmitted() && $form->isValid()) {
+
+        $entityManager->persist($user);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'User updated successfully!');
+        return $this->redirectToRoute('app_list_user');
+        }
+     
+    // Render the edit form
+    return $this->render('backoffice/user/user-edit.html.twig', [
+        'form' => $form->createView(),
         'user' => $user,
-        'edit_profile_form' => $editForm->createView(),
     ]);
-}
+    }
 
 
 public function search(Request $request, EntityManagerInterface $em): Response
@@ -241,5 +302,4 @@ public function search(Request $request, EntityManagerInterface $em): Response
         ]);
     }
     
-
 }
