@@ -9,6 +9,7 @@ use App\Repository\OrganisationRepository;
 use App\Entity\Organisation;
 use App\Form\DonsType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Extension\Core\Type\Recaptcha3Type;
 
 
 class OrganisationController extends AbstractController
@@ -27,24 +28,28 @@ class OrganisationController extends AbstractController
     }
 
     #[Route('/organisation/search', name: 'app_organisation_search')]
-public function search(Request $request, OrganisationRepository $organisationRepository): Response
-{
-    $query = $request->query->get('query');
+    public function search(Request $request, OrganisationRepository $organisationRepository): Response
+    {
+        $query = $request->query->get('query');
 
-    // Rechercher des organisations en fonction de la requête
-    $organisations = $organisationRepository->search($query);
+        // Rechercher des organisations en fonction de la requête
+        $organisations = $organisationRepository->search($query);
 
-    // Rendre le template avec les résultats de la recherche
-    return $this->render('organisation/index.html.twig', [
-        'organisations' => $organisations,
-        'query' => $query,
-    ]);
-}
+        // Rendre le template avec les résultats de la recherche
+        return $this->render('organisation/index.html.twig', [
+            'organisations' => $organisations,
+            'query' => $query,
+        ]);
+    }
 
     #[Route('/donate_to_organisation/{id}', name: 'app_donate_to_organisation')]
     public function donateToOrganisation(Request $request, Organisation $organisation): Response
     {
-        $form = $this->createForm(DonsType::class);
+        $form = $this->createForm(DonsType::class)
+            ->add('captcha', Recaptcha3Type::class, [ /* Ensure that 'Recaptcha3Type' is imported */
+                // Add your Recaptcha3Type options here
+            ]);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
