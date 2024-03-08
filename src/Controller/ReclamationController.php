@@ -30,7 +30,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\MailerInterface;
 
 
-//bundel zeineb
+
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class ReclamationController extends AbstractController
@@ -82,7 +82,7 @@ class ReclamationController extends AbstractController
          $mailer->send($email);
 
          $flashBag->add('success', [
-            'message' => 'Compalint has been sent successfully.',
+            'message' => 'Your complaint has been registered in our system',
             'timeout' => 8000, // Duree
         ]);
           
@@ -238,8 +238,7 @@ public function dashboard_reclamation( Request $request, ReclamationRepository $
         $request->query->get('page', 1), //page 1 par defaut
         4,
     );
-    // Rendre le template Twig 'frontoffice/reclamation/dashboard_reclamation.html.twig' en passant les réclamations et l'utilisateur connecté
-    return $this->render('frontoffice/reclamation/dashboard_reclamation.html.twig', [
+    return $this->render('backoffice/reclamation/dashboard_reclamation.html.twig', [
         'tableauReclamations' => $pagination,
         'user' => $this->getUser()
     ]);
@@ -279,8 +278,10 @@ public function dashboard_reclamation( Request $request, ReclamationRepository $
                 [
                     'label' => 'Nombre de réclamations par type',
                     'data' => [], // Le nombre de réclamations par type
-                    'backgroundColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs de fond des barres
-                    'borderColor' => ['#FF6384', '#36A2EB', '#FFCE56'], // Couleurs des bordures des barres
+
+
+                    'backgroundColor' => ['#6a6a6a','#ffc107','#198754'], // Couleurs de fond des barres
+                    'borderColor' => ['#6a6a6a','#ffc107','#198754'], // Couleurs des bordures des barres
                     'borderWidth' => 1, // Largeur des bordures
                     
                 ],
@@ -294,7 +295,7 @@ public function dashboard_reclamation( Request $request, ReclamationRepository $
         }
     
         // Rendu de la vue avec les données du graphique
-        return $this->render('/frontoffice/reclamation/statistics.html.twig', [
+        return $this->render('/backoffice/reclamation/statistics.html.twig', [
             'chartData' => json_encode($chartData),
         ]);
     }

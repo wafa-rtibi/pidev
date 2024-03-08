@@ -280,87 +280,8 @@ public function show_reponse_admin($id, $reclamateur_id, UtilisateurRepository $
    
     }
  
- 
-
-
-
-
-    
-//pdf zeineb(bech nabaathlou pdf)
-//bech nzid el f faza mtaa el admin ynajm yzid "commentair" ala reclamation mtaa user par exemple
-//yqoul l reclamation athika testha yaawedhlou ou pas
-//naaml condition ke user yesthaq naawedhlou nabaathlou pdf ala email fih les detlais mtaa event l lazem yahdherlou
-#[Route('/reponse/event/{id}', name: 'app_generatePdf')]
-public function generatePdf(int $id, EntityManagerInterface $entityManager): Response
-{
-    // Récupérer l'événement en fonction de son ID
-    $event = $entityManager->getRepository(Evenement::class)->find($id);
-
-    // Vérifier si l'événement existe
-    if (!$event) {
-        throw $this->createNotFoundException('Event not found');
-    }
-
-    // Préparer les informations sur l'événement pour le PDF
-    $eventDetails = [
-        'id' => $event->getId(),
-        'Categorie' => $event->getCategorie(),
-        'TypeEvent' => $event->getTypeEvent(),
-        'DateDebut' => $event->getDateDebut(),
-        'DateFin' => $event->getDateFin(),
-        'Lien' => $event->getLien(),
-        'Lieu' => $event->getLieu(),
-        'Description' => $event->getDescription(),
-        'Titre' => $event->getTitre(),
-    ];
-
-    // Rendre la vue PDF avec les détails de l'événement
-    $pdfContent = $this->renderView('pdf_layout.html.twig', [
-        'eventDetails' => $eventDetails,
-    ]);
-
-    // Initialiser Dompdf et charger le contenu HTML
-    $dompdf = new Dompdf();
-    $dompdf->loadHtml($pdfContent);
-
-    // Rendre le PDF
-    $dompdf->render();
-
-    // Retourner une réponse avec le contenu PDF
-    return new Response($dompdf->output(), 200, [
-        'Content-Type' => 'application/pdf',
-    ]);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
-
-//lazemou ygetti id admin l aaml repondre ala reclamation
-
-//bech naaml upload image  =>saye  htta afficher image  tkhdem aand el client o aand l'admin
-
-//nlaslh filter + recherche sayeeeeeeee hmdlh hmdlh
-
-
-//pagination naslehha  syeeee
 
 
 
