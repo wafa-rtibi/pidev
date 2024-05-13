@@ -81,7 +81,7 @@ class UserController extends AbstractController
 
     ]);
     }
-        
+ //hedhy feha errur        
 #[Route('/listuser', name: 'app_list_user')]
 public function listuser(Request $request, UtilisateurRepository $utilisateurRepository): Response
 {
@@ -173,7 +173,7 @@ public function userProfile(UtilisateurRepository $utilisateurRepository): Respo
    
 
 
-
+//css à corrigé
     #[Route('/edituser/{id}', name: 'app_edit_user')]         
     public function edituser(Request $request, int $id, EntityManagerInterface $entityManager, ManagerRegistry $doctrine ): Response
     {// Fetch the user to be edited
@@ -251,7 +251,7 @@ public function userProfile(UtilisateurRepository $utilisateurRepository): Respo
     
     }
 
-
+//no route found
 #[Route('/profile/{id}', name: 'app_user_profile')] 
 public function profile(int $id,EntityManagerInterface $entityManager,Request $request,Security $security, EntityManagerInterface $em): Response
 {

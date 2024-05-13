@@ -68,3 +68,19 @@ block_user:
 #     path: /admin/dashboard
 #     controller: App\Controller\AdminController::dashboard
 
+
+single_blog:
+    path: '/blog/{id}'
+    controller: 'App\Controller\BlogController::show'
+
+# config/routes.yaml
+
+submit_comment:
+    path: '/blog/{id}/comment'
+    controller: App\Controller\BlogController::submitComment
+    methods: ['POST']
+    
+# search
+speech_recognition:
+    path: /speech-recognition
+    controller: App\Controller\SpeechRecognitionController::index

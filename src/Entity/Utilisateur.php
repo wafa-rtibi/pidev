@@ -181,7 +181,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
  
     public function __construct()
     {
-        $this->id; // Initialize ID
+        $this->id = null;
         $this->roles = ['ROLE_USER']; 
         $this->dons = new ArrayCollection();
         $this->offres = new ArrayCollection();
@@ -462,7 +462,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->intearactionBlog->contains($intearactionBlog)) {
             $this->intearactionBlog->add($intearactionBlog);
-            $intearactionBlog->addInteraction($this);
+            // $intearactionBlog->addInteraction($this);
         }
 
         return $this;
@@ -471,12 +471,14 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeIntearactionBlog(Blog $intearactionBlog): self
     {
         if ($this->intearactionBlog->removeElement($intearactionBlog)) {
-            $intearactionBlog->removeInteraction($this);
+            // $intearactionBlog->removeInteraction($this);
         }
 
         return $this;
     }
 
+
+    
     // public function getRib(): ?int
     // {
     //     return $this->rib;

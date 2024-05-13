@@ -1,0 +1,31 @@
+{% extends 'dashAdminBlog.html.twig' %}
+{% block body %}
+<h3 class="text-center">Blog List</h3>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Blog</th>
+                    {# <th scope="col">Nom de l'auteur</th> #}
+                    <th scope="col">Publication Date</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Action</th> <!-- Nouvelle colonne -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for blog in blogs %}
+                    <tr>
+                        <td><a href="{{ path('single_blog', {'id': blog.id}) }}">{{ blog.id }}</a></td>
+                        {# <td>{{ blog.auteur.nom }}</td> #}
+                        <td>{{ blog.datePublication|date('d/m/Y H:i:s') }}</td>
+                        <td>{{ blog.titre }}</td>
+                        <td>
+                            <a href="{{ path('delete_blog', {'id': blog.id}) }}" class="btn btn-danger">delete</a>
+                            <a href="{{ path('single_blog', {'id': blog.id}) }}" class="btn btn-primary">Display Details</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
