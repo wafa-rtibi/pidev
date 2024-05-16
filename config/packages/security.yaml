@@ -1,19 +1,16 @@
 security:
     enable_authenticator_manager: true
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
+        App\Entity\Utilisateur:
+            id: 'App\Security\CustomPasswordHasher'
+
     providers:
-        #users_in_memory: { memory: null }
-        
         app_user_provider:
             entity:
                 class: App\Entity\Utilisateur
                 property: email
 
-    # security:
-    #     csrf_protection: true
     firewalls:
         dev:       
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -21,81 +18,15 @@ security:
         main:
             lazy: true
             custom_authenticator: App\Security\LoginFormAuthenticator
-            # guard:
-            #     authenticators:
-            #         - App\Security\LoginFormAuthenticator
             provider: app_user_provider
-            entry_point: form_login
+            entry_point: App\Security\LoginFormAuthenticator
             form_login:
                 login_path: app_login
                 check_path: app_login
                 default_target_path: app_home
                 enable_csrf: true
-                # success_handler: App\Security\LoginFormAuthenticator
-                # failure_handler: App\Security\LoginFormAuthenticator
-                #   always_use_default_target_path: true
-                #   use_referer: true
-                #   success_handler: App\Security\LoginFormAuthenticator
-
-            #     username_parameter: email
-            #     password_parameter: password
-            #     enable_csrf: true
-            #     # always_use_default_target_path: true
-            #     use_referer: true
-            #     failure_path: app_login  #login_failure_route_name
-            #     target_path_parameter: go_to
-            #     failure_path_parameter: back_to
 
             logout: 
-                  path: app_logout
-                  target: /login
-            
-            # remember_me:
-            #     secret: '%kernel.secret%'
-            #     always_remember_me: true
- 
-
-                # path: app_logout
-                # custom_authenticator: App\Security\LoginFormAuthenticator
-                # where to redirect after logout
-                # target: app_any_route
-
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-        # access_control:
-        #    - { path: ^/listuser, roles: ROLE_ADMIN }
-        #    - { path: ^/home, roles: ROLE_USER }
-        # access_control:
-        #     - { path: ^/user/\d+/block, roles: ROLE_ADMIN }
-
-when@test:
-    security:
-        hide_user_not_found: false
-        password_hashers:
-            # By default, password hashers are resource intensive and take time. This is
-            # important to generate secure password hashes. In tests however, secure hashes
-            # are not important, waste resources and increase test times. The following
-            # reduces the work factor to the lowest possible values.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
-                legacy:
-            algorithm: sha256
-            encode_as_base64: false
-            iterations: 1
-
-        App\Entity\Utilisateur:
-            # the new hasher, along with its options
-            algorithm: sodium
-            migrate_from:
-                - bcrypt # uses the "bcrypt" hasher with the default options
-                - legacy # uses the "legacy" hasher configured above
-
+                path: app_logout
+                target: app_login
+    

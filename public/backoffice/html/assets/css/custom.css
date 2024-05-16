@@ -334,7 +334,7 @@ hr {
   color: #3a57e8;
 }
 .bd-aside .btn:focus {
-  -webkit-box-shadow: 0 0 0 0.063rem rgba(58, 87, 232, 0.7);
+  -webkit-box-shadow: 0 0 0 0.063rem #3a57e8b3;
           box-shadow: 0 0 0 0.063rem rgba(58, 87, 232, 0.7);
 }
 .bd-aside .btn[aria-expanded=true] .right-icon {

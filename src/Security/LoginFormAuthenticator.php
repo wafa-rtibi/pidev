@@ -27,12 +27,14 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface; // Ajout de l'importation manquante
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
 
 use Doctrine\ORM\EntityManagerInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator implements AuthenticationEntryPointInterface 
 {
-         use TargetPathTrait;
+    use TargetPathTrait;
          private $csrfTokenManager;
          private $entityManager;
          private $tokenStorage; // Ajout de la propriété $tokenStorage
@@ -46,6 +48,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator implements A
         $this->entityManager = $entityManager;
         $this->tokenStorage = $tokenStorage; // Injection de $tokenStorage
         $this->session = $session; // Assurez-vous que la propriété $session est déclarée dans la classe
+        $this->csrfTokenManager = $csrfTokenManager;
 
     }
 
@@ -69,62 +72,169 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator implements A
     
 
 
-    public function authenticate(Request $request): Passport //passport element de symfony qui permet de gerer l'auth des utilisateurs fih email, paasword w token
-    {
-        $email = $request->request->get('email', ''); //requpere email
-        $password = $request->request->get('password', '');
+   // public function authenticate(Request $request): Passport //passport element de symfony qui permet de gerer l'auth des utilisateurs fih email, paasword w token
+    //{
+      //  $email = $request->request->get('email', ''); //requpere email
+      //  $password = $request->request->get('password', '');
 
         // $userRepository = $this->entityManager->getRepository(Utilisateur::class);
         // $user = $userRepository->findOneBy(['email' => $email]);
-        $userRepository = $this->entityManager->getRepository(Utilisateur::class);
-        $user = $userRepository->findOneBy(['email' => $email]);
+        //$userRepository = $this->entityManager->getRepository(Utilisateur::class);
+        //$user = $userRepository->findOneBy(['email' => $email]);
     
-        if (!$user || !$user->getIsActive()) {
-            throw new CustomUserMessageAuthenticationException('Your account is blocked. Please contact the administrator.');
-        }
-        $request->getSession()->set(Security::LAST_USERNAME, $email); //insere dernier user taper dans la session
-        return new Passport(
-            new UserBadge($email),
-            new PasswordCredentials($request->request->get('password', '')),
-            [
-                new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')), //jeton securité
-                new RememberMeBadge(),
-            ]
-        );
-    }
+        //if (!$user || !$user->getIsActive()) {
+         //   throw new CustomUserMessageAuthenticationException('Your account is blocked. Please contact the administrator.');
+        //}
+        //$request->getSession()->set(Security::LAST_USERNAME, $email); //insere dernier user taper dans la session
+        //return new Passport(
+        //    new UserBadge($email),
+        //    new PasswordCredentials($request->request->get('password', '')),
+        //    [
+         //       new CsrfTokenBadge('authenticate', $request->request->get('_csrf_token')), //jeton securité
+         //       new RememberMeBadge(),
+         //   ]
+        //);
+   // }
     
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName,): ?Response
-    {
- 
-    $user = $token->getUser();
 
-    if ($user instanceof Utilisateur ) {
-        if ($user->getIsActive()) {
+   public function authenticate(Request $request): PassportInterface
+   {
+       $email = $request->request->get('email', '');
+   
+       $request->getSession()->set(Security::LAST_USERNAME, $email);
+   
+       $csrfToken = $request->request->get('_csrf_token');
+   
+       if (!$csrfToken) {
+           throw new CustomUserMessageAuthenticationException('CSRF token is missing.');
+       }
+   
+       // Debugging information
+       var_dump($csrfToken);
+   
+       if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('authenticate', $csrfToken))) {
+           throw new CustomUserMessageAuthenticationException('Invalid CSRF token.');
+       }
+   
+       return new Passport(
+           new UserBadge($email),
+           new PasswordCredentials($request->request->get('password', '')),
+           [new CsrfTokenBadge('authenticate', $csrfToken)]
+       );
+   }
+   
+   // public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName,): ?Response
+   // {
+ 
+    //$user = $token->getUser();
+
+    //if ($user instanceof Utilisateur ) {
+      //  if ($user->getIsActive()) {
+
             // Utilisateur actif, procéder comme d'habitude
-            if (in_array('ROLE_ADMIN', $user->getRoles())) {
+      //      if (in_array('ROLE_ADMIN', $user->getRoles())) {
+      //          return new RedirectResponse($this->urlGenerator->generate('app_list_user'));
+      //      } elseif (in_array('ROLE_USER', $user->getRoles())) {
+      //          return new RedirectResponse($this->urlGenerator->generate('app_home'));
+      //      }
+      //  } else {
+           // Blocked user, log out and redirect to login page
+      //     $this->tokenStorage->setToken(null);
+      //     $request->getSession()->invalidate();
+     //      return new RedirectResponse($this->urlGenerator->generate('app_login'));  // Redirect to login page
+     ////   }
+   // }
+     //   if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+      //      return new RedirectResponse($targetPath);
+      //  } //traj3ek win konet ekher mara connectit 
+
+        //return new RedirectResponse($this->urlGenerator->generate('app_home')); // Default redirect to home page
+
+    //    return new RedirectResponse('/'); // Default redirect
+
+        //throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
+    //}
+
+    // public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    // {
+    //     $user = $token->getUser();
+    
+    //     if ($user instanceof Utilisateur) {
+    //         // Redirect users based on their roles
+    //         if (in_array('ROLE_ADMIN', $user->getRoles())) {
+    //             return new RedirectResponse($this->urlGenerator->generate('app_list_user'));
+    //         } elseif (in_array('ROLE_USER', $user->getRoles())) {
+    //             return new RedirectResponse($this->urlGenerator->generate('app_home'));
+    //         }
+    //     }
+    
+    //     // Default redirect
+    //     return new RedirectResponse('/');
+    // }
+    
+
+
+
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
+    {
+        $user = $token->getUser();
+
+        if ($user instanceof Utilisateur) {
+            $roles = $user->getRoles();
+
+            if (in_array('ROLE_ADMIN', $roles, true)) {
                 return new RedirectResponse($this->urlGenerator->generate('app_list_user'));
-            } elseif (in_array('ROLE_USER', $user->getRoles())) {
+            } elseif (in_array('ROLE_USER', $roles, true)) {
                 return new RedirectResponse($this->urlGenerator->generate('app_home'));
             }
-        } else {
-           // Blocked user, log out and redirect to login page
-           $this->tokenStorage->setToken(null);
-           $request->getSession()->invalidate();
-           
-           return new RedirectResponse($this->urlGenerator->generate('app_login'));  // Redirect to login page
         }
-    }
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($targetPath);
-        } //traj3ek win konet ekher mara connectit 
 
-        // For example:
-         return new RedirectResponse($this->urlGenerator->generate('app_home')); //yhezek lel home ki auth tet3ada s7i7a
-        //throw new \Exception('TODO: provide a valid redirect inside ' . __FILE__);
+        // Default redirect
+        return new RedirectResponse('/');
     }
+    
+
+    private function parseRoles($roles): array
+{
+    if (is_string($roles)) {
+        // Check if the string is a JSON array
+        $decodedRoles = json_decode($roles, true);
+
+        if (json_last_error() === JSON_ERROR_NONE) {
+            return $decodedRoles;
+        }
+
+        // If not JSON, assume it's a simple serialized string array
+        $roles = str_replace(['[', ']', '"'], '', $roles);
+        return explode(',', $roles);
+    }
+
+    // If roles are already an array
+    return $roles;
+}
+
+    //protected function getLoginUrl(Request $request): string
+    //{
+    //    return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+    //}
 
     protected function getLoginUrl(Request $request): string
     {
-        return $this->urlGenerator->generate(self::LOGIN_ROUTE);
+        return $this->urlGenerator->generate('app_login');
     }
+
+    public function supports(Request $request): bool
+    {
+        return $request->attributes->get('_route') === 'app_login' && $request->isMethod('POST');
+    }
+
+
+
+    public function getPassword($credentials): ?string
+    {
+        return $credentials['password'];
+    }
+
+   
+
 }

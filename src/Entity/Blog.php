@@ -2,53 +2,72 @@
 
 namespace App\Entity;
 
+use Symfony\Component\HttpFoundation\File\File;
 use App\Repository\BlogRepository;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+/**
+ * @Vich\Uploadable
+ */
+#[Vich\Uploadable]
 #[ORM\Entity(repositoryClass: BlogRepository::class)]
 class Blog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    private ?int $id ;
+    private ?int $id = null ;
 
 
     #[ORM\Column(length: 255)]
-    private ?string $contenu ;
+    private ?string $contenu= null ;
 
     #[ORM\Column(length: 255)]
-    private ?string $titre ;
+    private ?string $titre= null ;
 
     #[ORM\Column()]
     private ? DateTime $date_publication ;
 
-   
+   /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    
+     #[ORM\Column()]
+    private  $image ;
 
-    #[ORM\Column(length: 255)]
-    private ?string $langue = null;
+
+   /**
+     * @Vich\UploadableField(mapping="blog_images", fileNameProperty="image")
+     * 
+     * @var File|null
+     */
+    #[Vich\UploadableField(mapping: "blog_images", fileNameProperty: "image")]
+     private $imageFile = null;
 
     #[ORM\ManyToOne(inversedBy: 'blogs')]
-    private ?Utilisateur $auteur ;
+
+    private ?Utilisateur $auteur= null ;
 
     #[ORM\OneToMany(targetEntity: Commentaire::class, mappedBy: 'blog')]
-    private Collection $comantaires;
+    private Collection $comantaires ;
 
-    #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'intearactionBlog')]
-    private Collection $interactions;
+    // #[ORM\ManyToMany(targetEntity: Utilisateur::class, inversedBy: 'intearactionBlog')]
+    // private Collection $interactions;
 
-    #[ORM\Column()]
-    private ? bool $statut = false ;
+    // #[ORM\ManyToMany(targetEntity: utilisateur::class, inversedBy: 'blogfavories')]
+    // private Collection $favories;
 
-   
+
 
     public function __construct()
     {
         $this->comantaires = new ArrayCollection();
-        $this->interactions = new ArrayCollection();
+        // $this->interactions = new ArrayCollection();
+        // $this->favories = new ArrayCollection();
        
     }
 
@@ -92,20 +111,29 @@ class Blog
 
         return $this;
     }
-
-  
-
-    public function getLangue(): ?string
+    public function setImageFile(File $imageFile)
     {
-        return $this->langue;
+        $this->imageFile = $imageFile;
     }
 
-    public function setLangue(string $langue): static
+    public function getImageFile()
     {
-        $this->langue = $langue;
+        return $this->imageFile;
+    }
 
+    public function setImage($image): static
+    {
+        $this->image = $image;
         return $this;
     }
+
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+
+   
 
     public function getAuteur(): ?Utilisateur
     {
@@ -149,45 +177,54 @@ class Blog
         return $this;
     }
 
-    /**
-     * @return Collection<int, Utilisateur>
-     */
-    public function getInteractions(): Collection
-    {
-        return $this->interactions;
-    }
+    // /**
+    //  * @return Collection<int, Utilisateur>
+    //  */
+    // public function getInteractions(): Collection
+    // {
+    //     return $this->interactions;
+    // }
 
-    public function addInteraction(Utilisateur $interaction): static
-    {
-        if (!$this->interactions->contains($interaction)) {
-            $this->interactions->add($interaction);
-        }
+    // public function addInteraction(Utilisateur $interaction): static
+    // {
+    //     if (!$this->interactions->contains($interaction)) {
+    //         $this->interactions->add($interaction);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function removeInteraction(Utilisateur $interaction): static
-    {
-        $this->interactions->removeElement($interaction);
+    // public function removeInteraction(Utilisateur $interaction): static
+    // {
+    //     $this->interactions->removeElement($interaction);
 
-        return $this;
-    }
+    //     return $this;
+    // }
 
-    public function getStatut(): ?bool
-    {
-        return $this->statut;
-    }
+    // /**
+    //  * @return Collection<int, utilisateur>
+    //  */
+    // public function getFavories(): Collection
+    // {
+    //     return $this->favories;
+    // }
 
-    public function setStatut(bool $statut): static
-    {
-        $this->statut = $statut;
+    // public function addFavory(utilisateur $favory): static
+    // {
+    //     if (!$this->favories->contains($favory)) {
+    //         $this->favories->add($favory);
+    //     }
 
-        return $this;
-    }
+    //     return $this;
+    // }
+
+    // public function removeFavory(utilisateur $favory): static
+    // {
+    //     $this->favories->removeElement($favory);
+
+    //     return $this;
+    // }
 
   
-
-   
-
    
 }

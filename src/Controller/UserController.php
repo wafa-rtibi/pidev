@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException; // Import the class
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Throwable;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 
 class UserController extends AbstractController
@@ -83,8 +84,20 @@ class UserController extends AbstractController
     }
         
 #[Route('/listuser', name: 'app_list_user')]
-public function listuser(Request $request, UtilisateurRepository $utilisateurRepository): Response
+public function listuser(Request $request, UtilisateurRepository $utilisateurRepository,Security $security): Response
 {
+    // Check if the user has the required role to access the /listuser route
+    // if (!$security->isGranted('ROLE_ADMIN')) {
+    //     // Redirect the user to the login page
+    //     return $this->redirectToRoute('app_login');
+    // }
+    $user = $security->getUser();
+
+
+    // if (!$user || !in_array('ROLE_ADMIN', $user->getRoles(), true)) {
+    //     return new RedirectResponse($this->generateUrl('app_home'));
+    // }
+
     $search = $request->query->get('search');
     $status = $request->query->get('status');
 
@@ -230,7 +243,7 @@ public function userProfile(UtilisateurRepository $utilisateurRepository): Respo
             ->from('amaraoumayma0@gmail.com')
             ->to('raedmaaloul3@gmail.com')
             ->subject('You Are blocked :)!')
-            ->text(' Clawzed ');
+            ->text(' Admin has blocked you  ');
 
         $Mailer->send($email);
         $this->addFlash('success', 'User has been blocked successfully.');

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speech Recognition Example</title>
+</head>
+<body>
+<div class="container">
+    <div class="row height d-flex justify-content-center align-items-center" style="margin-left: 20;">
+        <div class="col-md-6">
+            <div class="form">
+                <i class="fa fa-search"></i>
+                <input type="text" class="form-control form-input" id="searchInput" placeholder="Search anything...">
+                <span class="left-pan"><i class="fa fa-microphone"></i></span>
+            </div>               
+        </div>
+    </div>
+</div>
+
+<script>
+// Function to start voice recognition
+function startVoiceRecognition() {
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    recognition.lang = 'en-US';
+
+    recognition.onresult = function(event) {
+        var transcript = event.results[0][0].transcript.toLowerCase();
+        document.getElementById('searchInput').value = transcript;
+    };
+
+    recognition.start();
+}
+
+// Add event listener to the microphone icon for starting voice recognition
+document.querySelector('.fa.fa-microphone').addEventListener('click', function() {
+    startVoiceRecognition();
+});
+</script>
+
+</body>
+</html>

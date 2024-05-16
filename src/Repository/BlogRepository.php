@@ -24,25 +24,45 @@ class BlogRepository extends ServiceEntityRepository
 //    /**
 //     * @return Blog[] Returns an array of Blog objects
 //     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('b.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+   public function findByExampleField($value): array
+   {
+       return $this->createQueryBuilder('b')
+           ->andWhere('b.exampleField = :val')
+           ->setParameter('val', $value)
+           ->orderBy('b.id', 'ASC')
+           ->setMaxResults(10)
+           ->getQuery()
+           ->getResult()
+       ;
+   }
 
-//    public function findOneBySomeField($value): ?Blog
-//    {
-//        return $this->createQueryBuilder('b')
-//            ->andWhere('b.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+   public function findOneBySomeField($value): ?Blog
+   {
+       return $this->createQueryBuilder('b')
+           ->andWhere('b.exampleField = :val')
+           ->setParameter('val', $value)
+           ->getQuery()
+           ->getOneOrNullResult()
+       ;
+   }
+   //zet.ha nos liiiiiiiiiiiil 
+   public function findBySearchTermAndDate($searchTerm, $date)
+    {
+        $queryBuilder = $this->createQueryBuilder('b')
+            ->orderBy('b.datePublication', 'DESC');
+
+        if (!empty($searchTerm)) {
+            $queryBuilder
+                ->andWhere('b.titre LIKE :searchTerm')
+                ->setParameter('searchTerm', '%' . $searchTerm . '%');
+        }
+
+        if (!empty($date)) {
+            $queryBuilder
+                ->andWhere('b.datePublication = :date')
+                ->setParameter('date', $date);
+        }
+
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

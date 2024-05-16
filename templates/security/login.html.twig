@@ -109,8 +109,7 @@
                                         <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required>
                                       {# <label for="inputPassword">Password</label>
                                       <input type="password" name="password" id="inputPassword" class="form-control" autocomplete="current-password" required> #}
-                                    <input type="hidden" name="_csrf_token"
-                                  value="{{ csrf_token('authenticate') }}">
+                                   
                                     </div>
                                  </div>
                              
@@ -126,7 +125,8 @@
                               </div>
                               <div class="d-flex justify-content-center">
                                  <input type="hidden" name="_target_path" value="{{ path('app_home') }}">
-
+                                 <input type="hidden" name="_csrf_token"
+                                  value="{{ csrf_token('authenticate') }}">
                                  <button type="submit" class="btn btn-success">Sign In</button>
                               </div>
                               <p class="text-center my-3">or sign in with other accounts?</p>

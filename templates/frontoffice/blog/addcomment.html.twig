@@ -1,0 +1,56 @@
+{% extends 'base_front.html.twig' %}
+{% block body %}
+{{ form_start(formadd, {'attr': {'class': 'my-4'}}) }}
+    <div class="form-group mb-4">
+        {{ form_label(formadd.contenu, 'Message', {'label_attr': {'class': 'font-weight-bold'}}) }}
+        {{ form_widget(formadd.contenu, {'attr': {'class': 'form-control', 'rows': 8, 'placeholder': 'Enter your message'}}) }}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary btn-block rounded-pill py-3"style="font-size: 14px;" >Confirm</button>
+    </div>
+{{ form_end(formadd) }}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+<style>
+/* CSS for the form */
+.form-group {
+    margin-bottom: 20px; /* Adjust spacing between form groups */
+}
+
+.form-control {
+    width: 10%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    border: none;
+    border-radius: 30px;
+    background-color: green; /* Change button background color to green */
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: darkgreen; /* Change button background color on hover */
+}
+
+
+</style>
+{% endblock %}
+
+

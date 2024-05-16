@@ -29,7 +29,7 @@ class Commentaire
     {
         return $this->id;
     }
-
+   
     public function getContenu(): ?string
     {
         return $this->contenu;

@@ -20,10 +20,19 @@ class CommentaireRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commentaire::class);
     }
-
-//    /**
-//     * @return Commentaire[] Returns an array of Commentaire objects
-//     */
+//     /////normalement l bloc hedha ykoun commenter
+// public function findCommentsByUser(Utilisateur $user)
+//     {
+//         return $this->createQueryBuilder('c')
+//             ->leftJoin('c.user', 'u')
+//             ->andWhere('u = :user')
+//             ->setParameter('user', $user)
+//             ->getQuery()
+//             ->getResult();
+//     }
+   /**
+    * @return Commentaire[] Returns an array of Commentaire objects
+    */
 //    public function findByExampleField($value): array
 //    {
 //        return $this->createQueryBuilder('c')

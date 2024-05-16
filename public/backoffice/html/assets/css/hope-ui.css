@@ -2169,7 +2169,7 @@ progress {
 .table {
   --bs-table-color: #8A92A6;
   --bs-table-bg: transparent;
-  --bs-table-border-color: #eee;
+  --bs-table-border-color: rgb(238, 238, 238);
   --bs-table-accent-bg: transparent;
   --bs-table-striped-color: #8A92A6;
   --bs-table-striped-bg: rgba(138, 146, 166, 0.03);

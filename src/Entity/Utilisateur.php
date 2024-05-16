@@ -83,7 +83,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
 
 
  #[ORM\Column(length: 255)]
-                                           private ?DateTime $dateinscription;
+private ?DateTime $dateinscription;
 
     // #[ORM\Column(length: 255, nullable:true)]
     // private ?string $photoprofil="";
@@ -131,8 +131,10 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
 
 
 
-    #[ORM\Column(length: 255)]
-    private ?array $roles = [];
+   //#[ORM\Column(length: 255)]
+   #[ORM\Column]
+   private array $roles = [];
+
 
     #[ORM\Column(length: 255)]
     private ?bool $isActive = true;
@@ -155,8 +157,8 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reclamation::class, mappedBy: 'reclamateur')]
     private Collection $reclamations;
 
-    #[ORM\ManyToOne(inversedBy: 'participants')]
-    private ?Evenement $evenement ;
+    // #[ORM\ManyToOne(inversedBy: 'participants')]
+    // private ?Evenement $evenement ;
 
     #[ORM\OneToMany(targetEntity: Blog::class, mappedBy: 'auteur')]
     private Collection $blogs;
@@ -165,8 +167,8 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $intearactionBlog;
 
 
-    #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'participants')]
-    private Collection $evenements;
+    // #[ORM\ManyToMany(targetEntity: Evenement::class, mappedBy: 'participants')]
+    // private Collection $evenements;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $googleId = null;
@@ -181,7 +183,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
  
     public function __construct()
     {
-        $this->id; // Initialize ID
+        $this->id = null;
         $this->roles = ['ROLE_USER']; 
         $this->dons = new ArrayCollection();
         $this->offres = new ArrayCollection();
@@ -189,7 +191,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
         $this->reclamations = new ArrayCollection();
         $this->blogs = new ArrayCollection();
         $this->intearactionBlog = new ArrayCollection();
-        $this->evenements = new ArrayCollection();
+        //$this->evenements = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -462,7 +464,7 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->intearactionBlog->contains($intearactionBlog)) {
             $this->intearactionBlog->add($intearactionBlog);
-            $intearactionBlog->addInteraction($this);
+            // $intearactionBlog->addInteraction($this);
         }
 
         return $this;
@@ -471,12 +473,14 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeIntearactionBlog(Blog $intearactionBlog): self
     {
         if ($this->intearactionBlog->removeElement($intearactionBlog)) {
-            $intearactionBlog->removeInteraction($this);
+            // $intearactionBlog->removeInteraction($this);
         }
 
         return $this;
     }
 
+
+    
     // public function getRib(): ?int
     // {
     //     return $this->rib;
@@ -600,32 +604,9 @@ class Utilisateur  implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Evenement>
+     *@return Collection<int, Evenement>
      */
-    public function getEvenements(): Collection
-    {
-        return $this->evenements;
-    }
-
-    public function addEvenement(Evenement $evenement): static
-    {
-        if (!$this->evenements->contains($evenement)) {
-            $this->evenements->add($evenement);
-            $evenement->addParticipant($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEvenement(Evenement $evenement): static
-    {
-        if ($this->evenements->removeElement($evenement)) {
-            $evenement->removeParticipant($this);
-        }
-
-        return $this;
-    }
-
+   
     public function getUsername(): ?string
     {
         return $this->Username;
